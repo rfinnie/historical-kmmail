@@ -28,8 +28,8 @@
               <tr align="center"> 
                 <td class="toolbar"> | <a href="http://www.sourceforge.net/">SourceForge</a> 
                   | <a href="https://sourceforge.net/projects/kmmail/">Project</a> 
-                  | <a href="#sshots">Screen Shots</a> | <a href="#users">Users</a> 
-                  |</td>
+                  | <a href="#sshots">Screen Shots</a> | <a href="#announce">Announcements</a> 
+                  | <a href="#users">Users</a> |</td>
               </tr>
             </table>
             <table width="100%" border="0" cellspacing="0" cellpadding="5">
@@ -42,7 +42,7 @@
                     <tr> 
                       <td class="light"> 
                         <? include('http://sourceforge.net/export/projhtml.php?group_id=32721&mode=full&no_table=1'); ?>
-                        </td>
+                      </td>
                     </tr>
                   </table>
                 </td>
@@ -54,7 +54,7 @@
                     <tr> 
                       <td class="light"> 
                         <? include('http://sourceforge.net/export/projnews.php?group_id=32721&limit=5&flat=1&show_summaries=1'); ?>
-                        </td>
+                      </td>
                     </tr>
                   </table>
                   <br>
@@ -96,51 +96,56 @@
                       <td class="toolbar"><a name="announce"></a><b>Announcements</b></td>
                     </tr>
                     <tr> 
-                      <td class="light">
-<p>I provide an announcement list for new versions of kmMail.  This list is extremely low volume, and is encouraged for anybody who uses kmMail.</p>
-<form method=POST action="http://lists.sourceforge.net/lists/subscribe/kmmail-announce">
-  <table border="0" cellspacing="2" cellpadding="2" width="100%">
-    <tr> 
-      <td align="right" width="55%"><b>Your email address:</b></td>
-      <td width="33%"> 
-        <input type="Text" name="email" size="30">
-      </td>
-      <td width="12%">&nbsp;</td>
-    </tr>
-    <tr> 
-      <td colspan="3">You must enter a privacy password. This provides only mild 
-        security, but should prevent others from messing with your subscription. 
-        <b>Do not use a valuable password</b> as it will occasionally be emailed 
-        back to you in cleartext. Once a month, your password will be emailed 
-        to you as a reminder. </td>
-    </tr>
-    <tr> 
-      <td align="right"><b>Pick a password:</b></td>
-      <td> 
-        <input type="Password" name="pw" size="15">
-      </td>
-      <td rowspan="2"> 
-        <input type="Submit" name="email-button" value="Subscribe">
-      </td>
-    </tr>
-    <tr> 
-      <td align="right"><b>Reenter password to confirm:</b></td>
-      <td> 
-        <input type="Password" name="pw-conf" size="15">
-        <input type=hidden name="digest" value="0">
-      </td>
-    </tr>
-  </table>
-</form>
-<p>You can administer this page by using the "Mailing Lists" link at the left.</p>
-
+                      <td class="light"> 
+                        <p>I provide an announcement list for new versions of 
+                          kmMail. This list is extremely low volume, and is encouraged 
+                          for anybody who uses kmMail.</p>
+                        <form method=POST action="http://lists.sourceforge.net/lists/subscribe/kmmail-announce">
+                          <table border="0" cellspacing="2" cellpadding="2" width="100%">
+                            <tr> 
+                              <td align="right" width="55%"><b>Your email address:</b></td>
+                              <td width="33%"> 
+                                <input type="Text" name="email" size="30">
+                              </td>
+                              <td width="12%">&nbsp;</td>
+                            </tr>
+                            <tr> 
+                              <td colspan="3">You must enter a privacy password. 
+                                This provides only mild security, but should prevent 
+                                others from messing with your subscription. <b>Do 
+                                not use a valuable password</b> as it will occasionally 
+                                be emailed back to you in cleartext. Once a month, 
+                                your password will be emailed to you as a reminder. 
+                              </td>
+                            </tr>
+                            <tr> 
+                              <td align="right"><b>Pick a password:</b></td>
+                              <td> 
+                                <input type="Password" name="pw" size="15">
+                              </td>
+                              <td rowspan="2"> 
+                                <input type="Submit" name="email-button" value="Subscribe">
+                              </td>
+                            </tr>
+                            <tr> 
+                              <td align="right"><b>Reenter password to confirm:</b></td>
+                              <td> 
+                                <input type="Password" name="pw-conf" size="15">
+                                <input type=hidden name="digest" value="0">
+                              </td>
+                            </tr>
+                          </table>
+                        </form>
+                        <p>You can administer this page by using the "Mailing 
+                          Lists" link at the left.</p>
                       </td>
                     </tr>
                   </table>
                   <br>
                   <table width="100%" border="0" cellpadding="3" cellspacing="1" class="backblack">
                     <tr> 
-                      <td class="toolbar"><a name="users"></a><b>kmMail Users Around The World</b></td>
+                      <td class="toolbar"><a name="users"></a><b>kmMail Users 
+                        Around The World</b></td>
                     </tr>
                     <tr> 
                       <td class="light"> I am still working on gathering a kmMail 
@@ -151,7 +156,7 @@
                 </td>
               </tr>
             </table>
-            </td>
+          </td>
         </tr>
       </table>
     </td>
