@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.4 2001/03/20 22:20:08 ryan Exp $
+// @(#) $Id: message.php,v 1.5 2001/03/21 00:48:37 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -9,7 +9,6 @@ $imap = new km_imap($username, $password);
 $folder = ($folder ? $folder : $config[imap_mainbox]);
 $imap->connect($folder);
 $msginfo = $imap->retrieve_message_info($msgno);
-#$msgbody = $imap->retrieve_message_body($msgno);
 
 
 ?>
