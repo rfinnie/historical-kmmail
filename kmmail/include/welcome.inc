@@ -1,6 +1,8 @@
-<p>This is a new installation of <a href="http://www.kmmail.org/">kmMail</a>.  kmMail is a web-based mail
+<p><img src="images/img_bigenvelope.gif" alt="Logo" width="120"
+height="88" align="left" border="0">This is a new installation of <a
+href="http://www.kmmail.org/">kmMail</a>.  kmMail is a web-based mail
 reader, written in PHP and based on the core functionality of <a
-href="http://www.keftamail.com/">Keftamail</a>.  It focses on speed, ease
+href="http://www.keftamail.com/">Keftamail</a>.  It focuses on speed, ease
 of use, and MIME compliance.  kmMail is not a fully featured client, but a
 framework for adding into existing functionality.  However, kmMail is
 complete enough that it can be used standalone with no problem.</p>
