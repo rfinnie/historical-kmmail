@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.16 2001/09/07 22:18:55 ryanf Exp $
+// @(#) $Id: compose.php,v 1.17 2001/09/08 01:06:28 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -55,6 +55,9 @@ if($submit) {
   $mail->send();
   if($config['display_folders'] && $config['use_sentbox']) {
     $mail->add_sent_mail();
+  }
+  if($msgno && !$config['is_pop3']) {
+    $imap->set_replied(array($msgno));
   }
   header("Location: mailbox.php");
   exit;

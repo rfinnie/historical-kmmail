@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.22 2001/09/07 22:28:35 ryanf Exp $
+// @(#) $Id: imap.inc,v 1.23 2001/09/08 04:10:40 ryanf Exp $
 
 include_once('include/settings.inc');
 
@@ -157,6 +157,12 @@ class km_imap {
       'cc_array' => $cc_array
     );
     return $out;
+  }
+
+  function set_replied($msgs) {
+    for($i = 0; $i < count($msgs); $i++) {
+      imap_setflag_full($this->mbox, $msgs[$i], '\\Answered', SE_UID);
+    }
   }
 
   function delete_messages($msgs) {
