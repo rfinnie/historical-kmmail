@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.24 2001/09/07 22:29:37 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.25 2001/09/07 22:34:03 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -69,6 +69,7 @@ $imap->disconnect();
                   <? if($offset > 1) { $newoffset = (($offset - $return) < 1 ? 0 : ($offset - $return)); ?>
                   <a href="mailbox.php?folder=<? echo $folder; ?>&amp;offset=<? echo $newoffset; ?>">&lt;&lt;</a> |
                   <? } ?>
+                  <a href="index.php?folder=<? echo urlencode($folder); ?>">Welcome</a> |
                   <a href="mailbox.php?folder=<? echo urlencode($folder); ?>">Mailbox</a> |
                   <? if($config['display_folders']) { ?>
                   <a href="folders.php?folder=<? echo urlencode($folder); ?>">Folders</a> |
