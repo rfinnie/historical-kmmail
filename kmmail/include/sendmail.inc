@@ -1,10 +1,10 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.4 2001/04/01 05:40:56 ryan Exp $
+// @(#) $Id: sendmail.inc,v 1.5 2001/04/01 05:53:07 ryan Exp $
 
 class km_sendmail {
 
   // The messae the user sees if his client cannot support multipart/mixed
-  var $non_mime = "If you see this text, your email client is not MIME compliant.";
+  var $non_mime = "  This message is in MIME format.  The first part should be readable text,\n  while the remaining parts are likely unreadable without MIME-aware tools.";
   // MIME type of body -- text/html or text/plain
   var $email_type = "text/html";
   // Cc value
