@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.2.8.1 2002/11/25 07:49:17 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.2.8.2 2002/11/25 22:02:50 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
@@ -129,14 +129,19 @@ function expSentry() {
                   <td><b>Date</b></td>
                 </tr>
                 <?
-//pre_print_r($msgs);
 for($i = 0; $i < count($msgs); $i++) {
+  if(strlen($msgs[$i]['subject']) > 80) {
+    $msgs[$i]['subject'] = substr($msgs[$i]['subject'], 0, 80) . '...';
+  }
+  if(strlen($msgs[$i]['from']) > 25) {
+    $msgs[$i]['from'] = substr($msgs[$i]['from'], 0, 25) . '...';
+  }
   if($msgs[$i][deleted]) {
     $bgclass = "messagelist-deleted";
   } elseif($config['is_pop3']) {
     $bgclass = "messagelist-read";
-  } elseif($msgs[$i][unread]) {
-    $bgclass = "messagelist-unread";
+//  } elseif($msgs[$i][unread]) {
+//    $bgclass = "messagelist-unread";
   } else {
     $bgclass = "messagelist-read";
   }
@@ -145,12 +150,14 @@ for($i = 0; $i < count($msgs); $i++) {
                   <td> 
                     <input type="checkbox" name="<? echo ($msgs[$i][deleted] ? 'un' : ''); ?>delete_msg[<? echo $msgs[$i][msgno]; ?>]" />
                   </td>
-                  <td><a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgs[$i][msgno]; ?>"><? echo htmlentities((stristr($folder, $config['imap_sentbox']) ? $msgs[$i][to] : $msgs[$i][from])); ?></a></td>
+                  <td><? echo ($msgs[$i][unread] ? '<b>' : ''); ?><a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgs[$i][msgno]; ?>"><? echo htmlentities((stristr($folder, $config['imap_sentbox']) ? $msgs[$i][to] : $msgs[$i][from])); ?></a><? echo ($msgs[$i][unread] ? '</b>' : ''); ?></td>
                   <td> <? echo ($msgs[$i]['count_mime']['message/rfc822'] ? '<img src="images/img_envelope.gif" width="15" height="11" alt="*" class="normal" />' : ''); ?> 
                     <? echo ($msgs[$i]['count_disposition']['attachment'] ? '<img src="images/img_file.gif" width="11" height="15" alt="*" class="normal" />' : ''); ?> 
                     <? echo ($msgs[$i]['count_mime']['text/html'] ? '<img src="images/img_world.gif" width="13" height="13" alt="*" class="normal" />' : ''); ?> 
                     <? echo ($msgs[$i]['replied'] ? '<img src="images/img_replied.gif" width="7" height="10" alt="*" class="normal" />' : ''); ?> 
-                    <? echo htmlentities($msgs[$i][subject]); ?> </td>
+                    <? echo ($msgs[$i]['to_personal'] ? '+' : ''); ?>
+                    <? echo ($msgs[$i][unread] ? ('<b>' . htmlentities($msgs[$i][subject]) . '</b>') : htmlentities($msgs[$i][subject])); ?>
+                  </td>
                   <td><? echo km_human_readable_size($msgs[$i][size], 1); ?></td>
                   <?
                     $msg_date = date("m/d/Y", $msgs[$i]['udate']);

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
+// @(#) $Id: imap.inc.php,v 1.1.1.1.8.1 2002/11/25 07:49:18 ryanf Exp $
 
 include_once('include/settings.inc.php');
 
@@ -213,8 +213,9 @@ class km_imap {
   }
 
   function retrieve_message_list($offset = 1, $return = 5) {
-    global $config;
+    global $config, $username;
 
+    $fromaddr = $username.'@'.$config['host'];
     $out = array();
     $msg_array = imap_sort($this->mbox, SORTARRIVAL, 1, SE_UID);
     $msg_array = array_slice($msg_array, $offset - 1, $return);
@@ -234,6 +235,18 @@ class km_imap {
         'deleted' => ($msg->Deleted == 'D'),
         'replied' => ($msg->Answered == 'A')
       );
+      $out[$i]['to_personal'] = 0;
+      for($j = 0; $j < count($msg->to); $j++) {
+        if(($msg->to[$j]->mailbox . '@' . $msg->to[$j]->host) == $fromaddr) {
+          $out[$i]['to_personal'] = 1;
+        }
+      }
+      for($j = 0; $j < count($msg->cc); $j++) {
+        if(($msg->cc[$j]->mailbox . '@' . $msg->cc[$j]->host) == $fromaddr) {
+          $out[$i]['to_personal'] = 1;
+        }
+      }
+
       if(!$this->config['is_pop3']) {
         $partcount = $this->parts_count($msg_array[$i]);
         $out[$i]['count_mime'] = $partcount['mime'];
