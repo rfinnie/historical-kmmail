@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.2 2001/03/05 15:17:41 ryan Exp $
+// @(#) $Id: message_show.inc,v 1.3 2001/03/21 00:48:44 ryan Exp $
 
 class km_message_show {
   var $cid_list;
@@ -440,14 +440,21 @@ if(count($msginfo[cc_array]) > 0) {
           }
         }
   
-        $from = $msg->from[0];
-        $to = $action == "reply" ? "$from->mailbox@$from->host" : "";
+        if($action == "reply") {
+          if($msg->reply_toaddress) {
+            $to = htmlentities($msg->reply_toaddress);
+          } elseif($msg->fromaddress) {
+            $to = $msg->fromaddress;
+          } elseif($msg->senderaddress) {
+            $to = $msg->fromaddress;
+          }
+        }
     
         $struct = imap_fetchstructure($mailbox,$msgnum, FT_UID);
         $body = $this->find_first_text($mailbox, $msgnum, $struct, "");
         if($body != "") {
           $body = preg_replace("/^/m", ">", $body);
-          $fromaddress = ($from->personal ? $from->personal : "$from->mailbox@$from->host");
+          $fromaddress = $to;
           $body = "\n\n\nOn $msg->date, $fromaddress said:\n" . $body;
         }
   }
