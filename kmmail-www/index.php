@@ -48,6 +48,22 @@
                   </table>
                 </td>
                 <td> 
+<?
+if($confirm == 1) {
+  ?>
+                  <table width="100%" border="0" cellpadding="3" cellspacing="1" class="backblack">
+                    <tr> 
+                      <td class="toolbar"><b>Thank You</b></td>
+                    </tr>
+                    <tr> 
+                      <td class="light"> Your site information has been submitted 
+                        to the site maintainer.</td>
+                    </tr>
+                  </table>
+                  <br>
+  <?
+}
+?>
                   <table width="100%" border="0" cellpadding="3" cellspacing="1" class="backblack">
                     <tr> 
                       <td class="toolbar"><b>News</b></td>
@@ -102,7 +118,7 @@
                           kmMail. This list is extremely low volume, and is encouraged 
                           for anybody who uses kmMail.</p>
                         <form method=POST action="http://lists.sourceforge.net/lists/subscribe/kmmail-announce">
-                          <table border="0" cellspacing="2" cellpadding="2" width="100%">
+                          <table border="0" cellspacing="0" cellpadding="2" width="100%">
                             <tr> 
                               <td align="right" width="55%"><b>Your email address:</b></td>
                               <td width="33%"> 
@@ -149,12 +165,45 @@
                         Around The World</b></td>
                     </tr>
                     <tr> 
-                      <td class="light"> I am still working on gathering a kmMail 
-                        users list. If you use kmMail on your site and would like 
-                        to be listed here, please follow <a href="http://sourceforge.net/survey/survey.php?group_id=32721&survey_id=12198">this 
-                        link</a> to a survey for kmMail installers. There is a 
-                        text field to leave your site name and address. I also 
-                        encourage you to sign up for the newsletter above.</td>
+                      <td class="light"> 
+                        <p>I am still working on gathering a kmMail users list. 
+                          If you use kmMail on your site and would like to be 
+                          listed here, please fill out the form below.</p>
+                        <form method="post" action="mailaddurl.php">
+                          <table width="100%" border="0" cellpadding="2" cellspacing="0">
+                            <tr> 
+                              <td><b>Your name:</b></td>
+                              <td align="right"> 
+                                <input type="text" name="f_name" size="30">
+                              </td>
+                            </tr>
+                            <tr> 
+                              <td><b>Your email address:</b></td>
+                              <td align="right"> 
+                                <input type="text" name="f_email" size="30">
+                              </td>
+                            </tr>
+                            <tr> 
+                              <td><b>Your site name:</b></td>
+                              <td align="right"> 
+                                <input type="text" name="f_site" size="30">
+                              </td>
+                            </tr>
+                            <tr> 
+                              <td><b>Your site URL (not the kmMail location):</b></td>
+                              <td align="right"> 
+                                <input type="text" name="f_url" size="30">
+                              </td>
+                            </tr>
+                            <tr align="center"> 
+                              <td colspan="2"> 
+                                <input type="submit" name="Submit" value="Submit">
+                              </td>
+                            </tr>
+                          </table>
+                        </form>
+                        
+                      </td>
                     </tr>
                   </table>
                 </td>
