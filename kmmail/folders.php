@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: folders.php,v 1.6 2001/04/01 07:35:56 ryan Exp $
+// @(#) $Id: folders.php,v 1.7 2001/04/01 07:43:34 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -116,7 +116,7 @@ if($noninbox > 0) {
     }
   }
   ?>
-              </select> to <input name="newfolder" size="20" /> <input type="submit" value="Create" />
+              </select> to <input name="newfolder" size="20" /> <input type="submit" value="Rename" />
             </form>
   <?
 }
