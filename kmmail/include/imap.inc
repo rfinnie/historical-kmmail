@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.8 2001/04/02 06:06:51 ryan Exp $
+// @(#) $Id: imap.inc,v 1.9 2001/04/10 22:29:26 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -70,31 +70,28 @@ class km_imap {
 
   function retrieve_mailboxes_short() {
     $imap_string = $this->create_imap_string();
+    $mailpath = $this->config[imap_mailpath];
+    $s_imap_string = str_replace("/", "\/", $imap_string);
+    $s_mailpath = str_replace("/", "\/", $mailpath);
     $list = imap_listmailbox($this->mbox, $imap_string . $this->config[imap_mailpath], '*');
     $list[] = $imap_string . "INBOX";
     sort($list);
     $out = array();
     for($i = 0; $i < count($list); $i++) {
-      $name = str_replace($imap_string, "", $list[$i]);
-      $name = str_replace($this->config[imap_mailpath], "", $name);
+      $name = preg_replace("/^$s_imap_string(($s_mailpath)?)/", "", $list[$i]);
       $out[] = $name;
     }
     return $out;
   }
 
   function retrieve_mailboxes() {
-    $imap_string = $this->create_imap_string();
-    $list = imap_listmailbox($this->mbox, $imap_string . $this->config[imap_mailpath], '*');
-    $list[] = $imap_string . "INBOX";
-    sort($list);
+    $list = $this->retrieve_mailboxes_short();
     $out = array();
     for($i = 0; $i < count($list); $i++) {
-      $name = str_replace($imap_string, "", $list[$i]);
-      $name = str_replace($this->config[imap_mailpath], "", $name);
-      imap_reopen($this->mbox, $list[$i]);
-      $info=imap_mailboxmsginfo($this->mbox);
+      imap_reopen($this->mbox, $this->create_imap_string($list[$i]));
+      $info = imap_mailboxmsginfo($this->mbox);
       $out[$i] = array(
-        'name' => $name,
+        'name' => $list[$i],
         'unread' => $info->Unread,
         'size' => $info->Size,
         'msgs' => $info->Nmsgs
