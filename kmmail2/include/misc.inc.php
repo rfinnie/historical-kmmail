@@ -1,8 +1,47 @@
 <?
-// @(#) $Id: misc.inc,v 1.15 2001/11/21 23:46:29 ryanf Exp $
+// @(#) $Id: misc.inc.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
+
+function stripslashes_array(&$the_array_element, $the_array_element_key, $data) {
+  $the_array_element = stripslashes($the_array_element);
+}
+if(get_magic_quotes_gpc() == 1) {
+  while(list($key, $val) = each($_COOKIE)) {
+    if(is_array($val)) {
+      array_walk($val, 'stripslashes_array', '');
+      $$key = $val;
+    } else {
+      $$key = stripslashes($val);
+    }
+  }
+  while(list($key, $val) = each($_POST)) {
+    if(is_array($val)) {
+      array_walk($val, 'stripslashes_array', '');
+      $$key = $val;
+    } else {
+      $$key = stripslashes($val);
+    }
+  }
+  while(list($key, $val) = each($_GET)) {
+    if(is_array($val)) {
+      array_walk($val, 'stripslashes_array', '');
+      $$key = $val;
+    } else {
+      $$key = stripslashes($val);
+    }
+  }
+} else {
+  while(list($key, $val) = each($_COOKIE)) {
+    $$key = $val;
+  }
+  while(list($key, $val) = each($_POST)) {
+    $$key = $val;
+  }
+  while(list($key, $val) = each($_GET)) {
+    $$key = $val;
+  }
+}
 
 include_once('include/settings.inc.php');
-include_once('include/imap.inc.php');
 
 function bc_array_search($needle, $haystack) {
   if(in_array($needle, $haystack)) {
@@ -67,10 +106,6 @@ function km_send_udp_stat_packet() {
   @fclose($fp);
 }
 
-function stripslashes_array(&$the_array_element, $the_array_element_key, $data) { 
-  $the_array_element = stripslashes($the_array_element); 
-} 
-
 function get_offset() {
   global $config;
   $os = date('Z') / 60;
@@ -97,30 +132,12 @@ function get_offset_minutes() {
   return $os;
 }
 
-if(get_magic_quotes_gpc() == 1) { 
-  switch($REQUEST_METHOD) { 
-    case "POST": 
-      while (list ($key, $val) = each ($HTTP_POST_VARS)) { 
-        if( is_array($val) ) { 
-          array_walk($val, 'stripslashes_array', ''); 
-          $$key = $val; 
-        } else { 
-          $$key = stripslashes($val); // double $$ so the variable gets changed globally 
-        } 
-      } 
-      break; 
-    case "GET": 
-      while (list ($key, $val) = each ($HTTP_GET_VARS)) { 
-        if( is_array($val) ) { 
-          array_walk($val, 'stripslashes_array', ''); 
-          $$key = $val; 
-        } else { 
-          $$key = stripslashes($val); // double $$ so the variable gets changed globally 
-        } 
-      } 
-      break; 
-  } 
+function pre_print_r($array) {
+  print "<pre>";
+  print_r($array);
+  print "</pre><hr>\n";
 }
+
 
 $config['is_pop3'] = (preg_match("/\/pop3$/", $config['imap_host']) ? 1 : 0);
 if($config['is_pop3'] && ($config['display_folders'])) {

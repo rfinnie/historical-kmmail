@@ -19,7 +19,7 @@ function auth_login($username, $password, $profile) {
 
 
 function check_imap_auth() {
-  global $config, $profiles, $profiles_defaults, $mainauth, $mainlogout, $username, $password, $profile, $PHP_SELF;
+  global $config, $profiles, $profiles_defaults, $mainauth, $mainlogout, $username, $password, $profile;
 
   if($mainlogout) {
     session_destroy();
@@ -50,7 +50,7 @@ function check_imap_auth() {
         if(!$_SESSION['browse_folder']) {
           $_SESSION['browse_folder'] = $config['imap_mainbox'];
         }
-        header("Location: $HTTP_SELF");
+        header('Location: ' . $_SERVER['PHP_SELF']);
         exit();
       } else {
         $auth_error = $imap->last_error();

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.26 2001/11/21 23:46:29 ryanf Exp $
+// @(#) $Id: imap.inc.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
 
 include_once('include/settings.inc.php');
 
@@ -311,9 +311,4 @@ class km_imap {
   }
 }
 
-function pre_print_r($array) {
-  print "<pre>";
-  print_r($array);
-  print "</pre><hr>\n";
-}
 ?>

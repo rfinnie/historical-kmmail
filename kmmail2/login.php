@@ -1,9 +1,8 @@
 <?
-// @(#) $Id: login_error.php,v 1.3 2001/09/07 00:16:24 ryanf Exp $
-include_once('include/settings.inc.php');
-include_once('include/misc.inc.php');
-include_once('include/auth.inc.php');
-include_once('include/imap.inc.php');
+// @(#) $Id: login.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
+
+// WARNING: This file is included from within a function in auth.inc.php
+// and therefor does not have global status.
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -39,7 +38,7 @@ include_once('include/imap.inc.php');
               <?
             }
             ?>
-            <form method="post" action="<? echo $PHP_SELF; ?>">
+            <form method="post" action="<? echo $_SERVER['PHP_SELF']; ?>">
               <input type="hidden" name="mainauth" value="true" />
               <table border="0">
                 <tr>

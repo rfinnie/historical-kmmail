@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
+// @(#) $Id: compose.php,v 1.2 2002/11/25 04:41:36 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
@@ -28,10 +28,10 @@ if($submit) {
       'msgnum' => $msgno
     );
   }
-  if(($HTTP_POST_FILES['attach']['name'] == "") || (strtolower($HTTP_POST_FILES['attach']['name']) == "none")) {
+  if(($_FILES['attach']['name'] == "") || (strtolower($_FILES['attach']['name']) == "none")) {
     $attach_array = array();
   } else {
-    $attach_array = array($HTTP_POST_FILES['attach']);
+    $attach_array = array($_FILES['attach']);
   }
   if($rn) {
     $from = "\"$rn\" <$fromaddr>";
@@ -116,7 +116,7 @@ $imap->disconnect();
               </tr>
             </table>
             <p /> 
-            <form enctype="multipart/form-data" method="post" action="<? echo $PHP_SELF; ?>">
+            <form enctype="multipart/form-data" method="post" action="<? echo $_SERVER['PHP_SELF']; ?>">
               <table width="100%" border="0" cellspacing="1" cellpadding="3" class="backblack">
                 <?
 if($msgno) {

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: addressbook.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
+// @(#) $Id: addressbook.php,v 1.2 2002/11/25 04:41:36 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
@@ -79,7 +79,7 @@ $msgs = $imap->retrieve_message_list(1, 10000);
               </tr>
             </table>
             <p />
-            <form method="post" action="<? echo $PHP_SELF; ?>">
+            <form method="post" action="<? echo $_SERVER['PHP_SELF']; ?>">
               <input type="hidden" name="addrfolder" value="<? echo $addrfolder; ?>" />
               <table width="100%" border="0" cellpadding="2" cellspacing="1" class="backblack">
                 <tr align="center" class="messagelist-top"> 
