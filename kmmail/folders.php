@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: folders.php,v 1.3 2001/03/05 15:17:32 ryan Exp $
+// @(#) $Id: folders.php,v 1.4 2001/03/20 22:20:08 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -11,46 +11,45 @@ $imap->disconnect();
 
 
 ?>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>kmMail - Folders</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" href="css/style.css" type="text/css">
+<title><? echo $config[title]; ?> - Folders</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
 </head>
-<body bgcolor="#FFFFFF" text="#000000" background="images/bg.gif">
-<table border=0 cellpadding=1 cellspacing=0 bgcolor="#000000" width=600 align="center">
-  <tr> 
-    <td> 
-      <table border=0 cellpadding=5 cellspacing=0 bgcolor="#DEDFD6" width=598>
-        <tr> 
-          <td align="center"> 
-            <table border=0 cellpadding=0 cellspacing=0 width="100%" background="images/titlebg.gif">
-              <tr> 
-                <td align="left"><img src="images/titleleft.gif" width="48" height="26" border="0"></td>
-                <td align="center"> 
-                  <div class="header1">kmMail - Folders</div>
-                </td>
-                <td align="right"><img src="images/titleright.gif" width="48" height="26" border="0"></td>
+<body class="normal">
+<table border="0" cellpadding="1" cellspacing="0" width="600" class="backblack">
+  <tr>
+    <td>
+      <table border="0" cellpadding="5" cellspacing="0" width="598" class="main">
+        <tr>
+          <td class="titleheader">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
+              <tr>
+                <td align="left"><img src="images/titleleft.gif" width="48" height="26" alt="*" class="normal" /></td>
+                <td class="titleheader"><? echo $config[title]; ?> - Folders</td>
+                <td align="right"><img src="images/titleright.gif" width="48" height="26" alt="*" class="normal" /></td>
               </tr>
             </table>
           </td>
         </tr>
-        <tr> 
-          <td> 
-            <table width="100%" border=0 cellpadding=1 cellspacing=1 bgcolor="#000000">
-              <tr align="center"> 
-                <td bgcolor="#C0C0C0">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;Folders&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;Reply&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;Forward&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
+        <tr>
+          <td class="normal">
+            <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
+              <tr align="center">
+                <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;Reply&nbsp;</td>
+                <td class="toolbar">&nbsp;Forward&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
               </tr>
             </table>
-            <p> 
-            <table width="100%" border=0 cellpadding=2 cellspacing=1 bgcolor="#000000">
-              <tr align="center" bgcolor="#C0C0C0"> 
+            <p /> 
+            <table width="100%" border="0" cellpadding="2" cellspacing="1" class="backblack">
+                <tr align="center" class="messagelist-top">
                 <td><b>Mailbox</b></td>
                 <td><b>Messages</b></td>
                 <td><b>New</b></td>
@@ -59,7 +58,7 @@ $imap->disconnect();
               <?
 for($i = 0; $i < count($boxes); $i++) {
   ?> 
-              <tr bgcolor="#FFFFFF"> 
+              <tr class="messagelist-read"> 
                 <td><a href="mailbox.php?folder=<? echo urlencode($boxes[$i][name]); ?>"><? echo $boxes[$i][name]; ?></a></td>
                 <td><? echo $boxes[$i][msgs]; ?></td>
                 <td><? echo $boxes[$i][unread]; ?></td>

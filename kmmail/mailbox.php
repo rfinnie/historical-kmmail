@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.3 2001/03/05 15:17:32 ryan Exp $
+// @(#) $Id: mailbox.php,v 1.4 2001/03/20 22:20:08 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -22,48 +22,46 @@ $foo = $imap->retrieve_mailboxes();
 $imap->disconnect();
 $count = count($msgs);
   ?>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>kmMail - Mailbox</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" href="css/style.css" type="text/css">
+<title><? echo $config[title]; ?> - Messages</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
 </head>
-<body bgcolor="#FFFFFF" text="#000000" background="images/bg.gif">
-<table border=0 cellpadding=1 cellspacing=0 bgcolor="#000000" width=600 align="center">
-  <tr> 
-    <td> 
-      <table border=0 cellpadding=5 cellspacing=0 bgcolor="#DEDFD6" width=598>
-        <tr> 
-          <td align="center"> 
-            <table border=0 cellpadding=0 cellspacing=0 width="100%" background="images/titlebg.gif">
-              <tr> 
-                <td align="left"><img src="images/titleleft.gif" width="48" height="26" border="0"></td>
-                <td align="center"> 
-                  <div class="header1">kmMail - <? echo ($folder ? $folder : "Inbox"); ?> 
-                    (<? echo $count; ?> messages)</div>
-                </td>
-                <td align="right"><img src="images/titleright.gif" width="48" height="26" border="0"></td>
+<body class="normal">
+<table border="0" cellpadding="1" cellspacing="0" width="600" class="backblack">
+  <tr>
+    <td>
+      <table border="0" cellpadding="5" cellspacing="0" width="598" class="main">
+        <tr>
+          <td class="titleheader">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
+              <tr>
+                <td align="left"><img src="images/titleleft.gif" width="48" height="26" alt="*" class="normal" /></td>
+                <td class="titleheader"><? echo $config[title]; ?> - Messages</td>
+                <td align="right"><img src="images/titleright.gif" width="48" height="26" alt="*" class="normal" /></td>
               </tr>
             </table>
           </td>
         </tr>
-        <tr> 
-          <td> 
-            <table width="100%" border=0 cellpadding=1 cellspacing=1 bgcolor="#000000">
+        <tr>
+          <td class="normal">
+            <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center"> 
-                <td bgcolor="#C0C0C0">&nbsp;Mailbox&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;Reply&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;Forward&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;Reply&nbsp;</td>
+                <td class="toolbar">&nbsp;Forward&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
               </tr>
             </table>
-            <p> 
-            <table width="100%" border=0 cellpadding=2 cellspacing=1 bgcolor="#000000">
-              <form>
-                <tr align="center" bgcolor="#C0C0C0"> 
+            <p /> 
+              <form method="post" action="<? echo $PHP_SELF; ?>">
+            <table width="100%" border="0" cellpadding="2" cellspacing="1" class="backblack">
+                <tr align="center" class="messagelist-top"> 
                   <td><b>&nbsp;</b></td>
                   <td><b>From</b></td>
                   <td><b>Subject</b></td>
@@ -73,18 +71,18 @@ $count = count($msgs);
                 <?
 for($i = 0; $i < $count; $i++) {
   if($msgs[$i][deleted]) {
-    $bgcolor = "#808080";
+    $bgclass = "messagelist-deleted";
   } elseif($msgs[$i][unread]) {
-    $bgcolor = "#F0F0FF";
+    $bgclass = "messagelist-unread";
   } else {
-    $bgcolor = "#FFFFFF";
+    $bgclass = "messagelist-read";
   }
   ?> 
-                <tr bgcolor="<? echo $bgcolor; ?>"> 
+                <tr class="<? echo $bgclass; ?>"> 
                   <td> 
-                    <input type="checkbox" name="<? echo ($msgs[$i][deleted] ? 'un' : ''); ?>delete_msg[<? echo $msgs[$i][msgno]; ?>]">
+                    <input type="checkbox" name="<? echo ($msgs[$i][deleted] ? 'un' : ''); ?>delete_msg[<? echo $msgs[$i][msgno]; ?>]" />
                   </td>
-                  <td><a href="message.php?folder=<? echo urlencode($folder); ?>&msgno=<? echo $msgs[$i][msgno]; ?>"><? echo $msgs[$i][from]; ?></a></td>
+                  <td><a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgs[$i][msgno]; ?>"><? echo $msgs[$i][from]; ?></a></td>
                   <td><? echo $msgs[$i][subject]; ?></td>
                   <td><? echo $msgs[$i][size]; ?></td>
                   <td><? echo date("m/d/Y", $msgs[$i][udate]); ?></td>
@@ -93,20 +91,20 @@ for($i = 0; $i < $count; $i++) {
 }
 if($count == 0) {
   ?> 
-                <tr bgcolor="#FFFFFF"> 
-                  <td colspan=5 align="center"><b>This folder is empty.</b></td>
+                <tr class="messagelist-read"> 
+                  <td colspan="5" align="center"><b>This folder is empty.</b></td>
                 </tr>
                 <?
 }
 ?> 
-                <tr bgcolor="#FFFFFF"> 
-                  <td colspan=5> 
-                    <input type="submit" name="action_delete" value="Delete">
-                    <input type="submit" name="action_expunge" value="Remove Delete Messages">
+                <tr class="messagelist-read"> 
+                  <td colspan="5"> 
+                    <input type="submit" name="action_delete" value="Delete" />
+                    <input type="submit" name="action_expunge" value="Remove Delete Messages" />
                   </td>
                 </tr>
-              </form>
             </table>
+              </form>
           </td>
         </tr>
       </table>
@@ -115,3 +113,4 @@ if($count == 0) {
 </table>
 </body>
 </html>
+

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.3 2001/03/05 15:17:32 ryan Exp $
+// @(#) $Id: message.php,v 1.4 2001/03/20 22:20:08 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -13,60 +13,59 @@ $msginfo = $imap->retrieve_message_info($msgno);
 
 
 ?>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>kmMail - Read Message</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" href="css/style.css" type="text/css">
+<title><? echo $config[title]; ?> - Read Message</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
 </head>
-<body bgcolor="#FFFFFF" text="#000000" background="images/bg.gif">
-<table border=0 cellpadding=1 cellspacing=0 bgcolor="#000000" width=600 align="center">
-  <tr> 
-    <td> 
-      <table border=0 cellpadding=5 cellspacing=0 bgcolor="#DEDFD6" width=598>
-        <tr> 
-          <td align="center"> 
-            <table border=0 cellpadding=0 cellspacing=0 width="100%" background="images/titlebg.gif">
-              <tr> 
-                <td align="left"><img src="images/titleleft.gif" width="48" height="26" border="0"></td>
-                <td align="center"> 
-                  <div class="header1">kmMail - Read Message</div>
-                </td>
-                <td align="right"><img src="images/titleright.gif" width="48" height="26" border="0"></td>
+<body class="normal">
+<table border="0" cellpadding="1" cellspacing="0" width="600" class="backblack">
+  <tr>
+    <td>
+      <table border="0" cellpadding="5" cellspacing="0" width="598" class="main">
+        <tr>
+          <td class="titleheader">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
+              <tr>
+                <td align="left"><img src="images/titleleft.gif" width="48" height="26" alt="*" class="normal" /></td>
+                <td class="titleheader"><? echo $config[title]; ?> - Read Message</td>
+                <td align="right"><img src="images/titleright.gif" width="48" height="26" alt="*" class="normal" /></td>
               </tr>
             </table>
           </td>
         </tr>
-        <tr> 
-          <td> 
-            <table width="100%" border=0 cellpadding=1 cellspacing=1 bgcolor="#000000">
-              <tr align="center"> 
-                <td bgcolor="#C0C0C0">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php?action=reply&folder=<? echo urlencode($folder); ?>&msgno=<? echo $msgno; ?>">Reply</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php?action=forward&folder=<? echo urlencode($folder); ?>&msgno=<? echo $msgno; ?>">Forward</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
+        <tr>
+          <td class="normal">
+            <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
+              <tr align="center">
+                <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="compose.php?action=reply&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Reply</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="compose.php?action=forward&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Forward</a>&nbsp;</td>
+                <td class="toolbar">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
               </tr>
             </table>
-            <p> 
-            <table width="100%" border=0 cellpadding=3 cellspacing=1 bgcolor="#000000">
+            <p /> 
+            <table width="100%" border="0" cellpadding="3" cellspacing="1" class="backblack">
               <tr> 
-                <td bgcolor="#F0F0F0"> 
-                  <table border=0 cellpadding=0 cellspacing=0>
-                    <tr> 
+                <td class="light"> 
+                  <table border="0" cellpadding="0" cellspacing="0">
+                    <tr class="normal"> 
                       <td><b>From: </b></td>
                       <td><a href="compose.php?to=<? echo $msginfo[from_address]; ?>"><? echo $msginfo[from_name]; ?></a></td>
                     </tr>
                     <?
 if(count($msginfo[to_array]) > 0) {
   ?> 
-                    <tr> 
+                    <tr class="normal"> 
                       <td><b>To: </b></td>
                       <td> <?
   for($i = 0; $i < count($msginfo[to_array]); $i++) {
-    ?> <a href="compose.php?to=<? echo $msginfo[to_array][$i][address]; ?>"><? echo $msginfo[to_array][$i][name]; ?></a><br>
+    ?> <a href="compose.php?to=<? echo $msginfo[to_array][$i][address]; ?>"><? echo $msginfo[to_array][$i][name]; ?></a><br />
                         <?
   }
   ?> </td>
@@ -76,11 +75,11 @@ if(count($msginfo[to_array]) > 0) {
 
 if(count($msginfo[cc_array]) > 0) {
   ?> 
-                    <tr> 
+                    <tr class="normal"> 
                       <td><b>Cc: </b></td>
                       <td> <?
   for($i = 0; $i < count($msginfo[cc_array]); $i++) {
-    ?> <a href="compose.php?to=<? echo $msginfo[cc_array][$i][address]; ?>"><? echo $msginfo[cc_array][$i][name]; ?></a><br>
+    ?> <a href="compose.php?to=<? echo $msginfo[cc_array][$i][address]; ?>"><? echo $msginfo[cc_array][$i][name]; ?></a><br />
                         <?
   }
   ?> </td>
@@ -88,19 +87,19 @@ if(count($msginfo[cc_array]) > 0) {
                     <?
 }
 ?> 
-                    <tr> 
+                    <tr class="normal"> 
                       <td><b>Subject: </b></td>
                       <td><? echo $msginfo[subject]; ?></td>
                     </tr>
-                    <tr> 
+                    <tr class="normal"> 
                       <td><b>Date: </b></td>
                       <td><? echo $msginfo[date]; ?></td>
                     </tr>
                   </table>
                 </td>
               </tr>
-              <tr> 
-                <td bgcolor="#FFFFFF"><?
+              <tr class="white"> 
+                <td><?
 $struct = imap_fetchstructure($imap->mbox, $msgno, FT_UID);
 $message_show = new km_message_show();
 $message_show->display_message($imap->mbox, $folder, $msgno, $struct);

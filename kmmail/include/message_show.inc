@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.1 2001/03/03 07:38:41 ryan Exp $
+// @(#) $Id: message_show.inc,v 1.2 2001/03/05 15:17:41 ryan Exp $
 
 class km_message_show {
   var $cid_list;
@@ -117,13 +117,13 @@ class km_message_show {
     $size = $struct->bytes;
     $folder = $this->folder;
     $msgnum = $this->msgnum;
-    $download = "get_attach.php?folder=$folder&msgnum=$msgnum&part_no=$imap_part&type=$type&subtype=$subtype&name=$filename&encoding=$encoding";
-    print "<br><table width=\"100%\" border=0 cellpadding=3 cellspacing=1 bgcolor=\"#000000\"><tr><td bgcolor=\"#C0C0C0\"><img src=\"images/img_file.gif\" width=11 height=15 border=0> <strong>Attachment (<a href=\"$download\">Download</a>)</strong></td></tr><tr><td bgcolor=\"#F0F0F0\">";
-    print "<strong>Filename:</strong> $filename<br>\n";
-    print "<strong>Type:</strong> $mime_type<br>\n";
-    print "<strong>Size:</strong> $size bytes<br>\n";
+    $download = "get_attach.php?folder=$folder&amp;msgnum=$msgnum&amp;part_no=$imap_part&amp;type=$type&amp;subtype=$subtype&amp;name=$filename&amp;encoding=$encoding";
+    print "<br /><table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" class=\"backblack\"><tr><td class=\"toolbar\"><img src=\"images/img_file.gif\" width=\"11\" height=\"15\" alt=\"*\" class=\"normal\"/> <b>Attachment (<a href=\"$download\">Download</a>)</b></td></tr><tr><td class=\"light\">";
+    print "<strong>Filename:</strong> $filename<br />\n";
+    print "<strong>Type:</strong> $mime_type<br />\n";
+    print "<strong>Size:</strong> $size bytes<br />\n";
     if($struct->description) {
-      print "<strong>Description:</strong> " . $struct->description . "<br>\n";
+      print "<strong>Description:</strong> " . $struct->description . "<br />\n";
     }
     print "</td></tr></table>\n";
   }
@@ -147,16 +147,16 @@ class km_message_show {
         $cid = $this->cid_list[$i]["cid"];
         $type = strtolower($this->cid_list[$i]["struct"]->subtype);
         $imap_part = $this->cid_list[$i]["imap_part"];
-        $cid_imgsrc = "get_attach.php?folder=$folder&msgnum=$msgnum&part_no=$imap_part&type=image&subtype=$type&action=inline";
+        $cid_imgsrc = "get_attach.php?folder=$folder&amp;msgnum=$msgnum&amp;part_no=$imap_part&amp;type=image&amp;subtype=$type&amp;action=inline";
         $text = ereg_replace("cid:$cid", $cid_imgsrc, $text);
       }
     }
     if($this->messages_shown > 0) {
-      print "<hr size=1>";
+      print "<hr size=\"1\" />";
     }
 
 //    $text = preg_replace("'mailto:([\w|-|.]+)@([\w|-|.]+)'", "compose.php?to=\\1@\\2" , $text);
-    print "$text<br>\n";
+    print "$text<br />\n";
     $this->messages_shown++;
   }
 
@@ -176,15 +176,15 @@ class km_message_show {
     $text = $this->convert_encoding($struct, $text);
 
     $text = htmlentities($text);
-    $text = nl2br($text);
+    $text = preg_replace("/\n/", "<br />", $text);
     if($this->messages_shown > 0) {
-      print "<hr size=1>";
+      print "<hr />";
     }
 
     $text = preg_replace("'(\s+)http://(.*?)(\s+)'", "\\1<a href=\"http://\\2\" target=\"_blank\">http://\\2</a>\\3" , $text);
     $text = preg_replace("'(\s+)www.(.*?)(\s+)'", "\\1<a href=\"http://www.\\2\" target=\"_blank\">www.\\2</a>\\3" , $text);
     $text = preg_replace("'([\w|-|.]+)@([\w|-|.]+)'", "<a href=\"compose.php?to=\\0\">\\0</a>" , $text);
-    print "<tt>$text</tt><br>\n";
+    print "<tt>$text</tt><br />\n";
     $this->messages_shown++;
   }
 
@@ -305,28 +305,28 @@ class km_message_show {
       'to_array' => $to_array,
       'cc_array' => $cc_array
     );
-          print "<br>\n";
-          print "<table width=\"100%\" border=0 cellpadding=3 cellspacing=1 bgcolor=\"#000000\">\n";
-$download = "get_attach.php?folder=$this->folder&msgnum=$this->msgnum&part_no=&type=MESSAGE&subtype=RFC822&name=".urlencode(time().".txt")."&encoding=none";
+          print "<br />\n";
+          print "<table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" class=\"backblack\">\n";
+$download = "get_attach.php?folder=$this->folder&amp;msgnum=$this->msgnum&amp;part_no=&amp;type=MESSAGE&amp;subtype=RFC822&amp;name=".urlencode(time().".txt")."&amp;encoding=none";
 
-          print "<tr><td bgcolor=\"#C0C0C0\"><img src=\"images/img_envelope.gif\" width=15 height=11 border=0> <strong>Forwarded message (<a href=\"$download\">Download</a>)</strong></td></tr>\n";
-          print "<tr><td bgcolor=\"#F0F0F0\">\n";
+          print "<tr><td class=\"toolbar\"><img src=\"images/img_envelope.gif\" width=\"15\" height=\"11\" alt=\"*\" class=\"normal\"/> <b>Forwarded message (<a href=\"$download\">Download</a>)</b></td></tr>\n";
+          print "<tr><td class=\"light\">\n";
 ?>
-<table border=0 cellpadding=0 cellspacing=0>
-  <tr>   
+<table border="0" cellpadding="0" cellspacing="0">
+  <tr class="normal">   
     <td><b>From: </b></td>
     <td><a href="compose.php?to=<? echo $msginfo[from_address]; ?>"><? echo $msginfo[from_name]; ?></a></td>
   </tr>
 <?  
 if(count($msginfo[to_array]) > 0) {
   ?>
-  <tr>
+  <tr class="normal">
     <td><b>To: </b></td>
     <td>
   <?    
   for($z = 0; $z < count($msginfo[to_array]); $z++) {
     ?>
-      <a href="compose.php?to=<? echo $msginfo[to_array][$z][address]; ?>"><? echo $msginfo[to_array][$z][name]; ?></a><br>
+      <a href="compose.php?to=<? echo $msginfo[to_array][$z][address]; ?>"><? echo $msginfo[to_array][$z][name]; ?></a><br />
     <? 
   }
   ?>
@@ -337,13 +337,13 @@ if(count($msginfo[to_array]) > 0) {
 
 if(count($msginfo[cc_array]) > 0) {
   ?>   
-  <tr>  
+  <tr class="normal">  
     <td><b>Cc: </b></td>
     <td>
   <?
   for($z = 0; $z < count($msginfo[cc_array]); $z++) {
     ?>
-      <a href="compose.php?to=<? echo $msginfo[cc_array][$z][address]; ?>"><? echo $msginfo[cc_array][$z][name]; ?></a><br>
+      <a href="compose.php?to=<? echo $msginfo[cc_array][$z][address]; ?>"><? echo $msginfo[cc_array][$z][name]; ?></a><br />
     <?
   }
   ?>     
@@ -352,7 +352,7 @@ if(count($msginfo[cc_array]) > 0) {
   <?
 } 
 ?>
-  <tr>
+  <tr class="normal">
     <td><b>Subject: </b></td>
     <td><? echo $msginfo[subject]; ?></td>
   </tr> 
@@ -364,8 +364,8 @@ if(count($msginfo[cc_array]) > 0) {
 <?
 
           print "</td></tr>\n";
-          print "<tr><td bgcolor=\"#FFFFFF\">\n";
-          print "<p>\n";
+          print "<tr class=\"white\"><td>\n";
+          print "<p />\n";
           $message_show = new km_message_show();
           $message_show->display_message($this->mailbox, $this->folder, $this->msgnum, $struct, $imap_part);
           print "</td></tr>\n";
