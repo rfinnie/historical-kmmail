@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.7 2001/04/01 20:47:22 ryan Exp $
+// @(#) $Id: imap.inc,v 1.8 2001/04/02 06:06:51 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -75,8 +75,8 @@ class km_imap {
     sort($list);
     $out = array();
     for($i = 0; $i < count($list); $i++) {
-      $name = ereg_replace($imap_string, "", $list[$i]);
-      $name = ereg_replace($this->config[imap_mailpath], "", $name);
+      $name = str_replace($imap_string, "", $list[$i]);
+      $name = str_replace($this->config[imap_mailpath], "", $name);
       $out[] = $name;
     }
     return $out;
@@ -89,8 +89,8 @@ class km_imap {
     sort($list);
     $out = array();
     for($i = 0; $i < count($list); $i++) {
-      $name = ereg_replace($imap_string, "", $list[$i]);
-      $name = ereg_replace($this->config[imap_mailpath], "", $name);
+      $name = str_replace($imap_string, "", $list[$i]);
+      $name = str_replace($this->config[imap_mailpath], "", $name);
       imap_reopen($this->mbox, $list[$i]);
       $info=imap_mailboxmsginfo($this->mbox);
       $out[$i] = array(
