@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.1 2001/03/03 07:38:41 ryan Exp $
+// @(#) $Id: imap.inc,v 1.2 2001/03/05 15:17:41 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -49,6 +49,11 @@ class km_imap {
 
   function retrieve_num_messages() {
     return imap_num_msg($this->mbox);
+  }
+
+  function append_mailbox($text, $mailbox) {
+    $imap_string =  "{" . $this->host .":" . $this->port . "}" . $mailbox;
+    return imap_append($this->mbox, $imap_string, $text);
   }
 
   function retrieve_mailboxes() {

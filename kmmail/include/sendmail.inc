@@ -1,5 +1,5 @@
 <?php
-// @(#) $Id: ktapi_sendmail.inc,v 2.4 2001/02/27 02:26:13 jpm Exp $
+// @(#) $Id: sendmail.inc,v 1.1 2001/03/05 15:17:41 ryan Exp $
 
 class km_sendmail {
 
@@ -178,15 +178,15 @@ global $username, $password;
 
     $this->check_mime();
 
-    $this->send();
+    return $this->send();
 
-    return "";
+//    return "";
   }
 
   function send() {
     $extra = "From: ".$this->sender."\n";
     if($this->cc) {
-      $extra .= "Cc: ".$this->cc."\n";
+      $extra .= "Cc: ".stripslashes($this->cc)."\n";
     }
     $extra .= "Sender: ".$this->sender."\n";
     $this->email_headers = $extra . $this->email_headers;
@@ -194,7 +194,7 @@ global $username, $password;
 // //print "<pre>u ".$this->subject." u" . $this->email_headers . " yyy " . $this->message . "</pre>";
     mail(stripslashes($this->recipient), stripslashes($this->subject), $this->message, $this->email_headers);
 
-    return "";
+    return "To: ".stripslashes($this->recipient)."\nSubject: ".stripslashes($this->subject)."\nDate: ".gmdate("D, j M Y h:i:s -0000")."\n" . $this->email_headers . "\n" . $this->message;
   }
 
 }

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.2 2001/03/03 08:36:56 ryan Exp $
+// @(#) $Id: compose.php,v 1.1 2001/03/05 15:17:32 ryan Exp $
 include_once('include/settings.inc');
 
 session_start();
@@ -13,6 +13,12 @@ if(!$username) {
   exit;
 }
 
+include_once('include/imap.inc');
+$imap = new km_imap($username, $password);
+
+$folder = ($folder ? $folder : $config[imap_mainbox]);
+$imap->connect($folder);
+
 if($submit) {
   include_once('include/sendmail.inc');
   if($send_rfc822 != '') {
@@ -25,16 +31,12 @@ if($submit) {
     $attach_array = array($HTTP_POST_FILES['attach']);
   }
   $mail = new km_sendmail();
-  $mail->build_message($body, $to, $cc, $attach_array, $username.'@'.$config[host], $subject, ($send_html ? 'html' : 'plain'), $rfc822);
+  $sent = $mail->build_message($body, $to, $cc, $attach_array, $username.'@'.$config[host], $subject, ($send_html ? 'html' : 'plain'), $rfc822);
+  $imap->append_mailbox($sent, $config[imap_sentbox]);
   header("Location: mailbox.php");
   exit;
 }
 
-include_once('include/imap.inc');
-$imap = new km_imap($username, $password);
-
-$folder = ($folder ? $folder : $config[imap_mainbox]);
-$imap->connect($folder);
 
 
   if($action != "") {

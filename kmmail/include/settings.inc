@@ -6,6 +6,7 @@ $config = array(
   'imap_host' => 'localhost',
   'imap_port' => 143,
   'imap_mailpath' => 'mail/',
-  'imap_mainbox' => 'INBOX'
+  'imap_mainbox' => 'INBOX',
+  'imap_sentbox' => 'mail/sent-mail'
 );
 ?>
