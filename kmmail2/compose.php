@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.2.8.1 2002/11/25 07:49:17 ryanf Exp $
+// @(#) $Id: compose.php,v 1.2.8.2 2002/11/25 17:10:45 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
@@ -43,6 +43,7 @@ if($submit) {
   $mail->imap = $imap;
   $mail->recipient = $to;
   $mail->sender = $from;
+  $mail->senderaddr = $fromaddr;
   $mail->cc = $cc;
   $mail->subject = $subject;
   $mail->texts = $texts_array;

@@ -1,5 +1,5 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.12 2001/09/23 09:35:15 ryanf Exp $
+// @(#) $Id: sendmail.inc.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
 
 class km_sendmail {
 
@@ -9,6 +9,8 @@ class km_sendmail {
   var $cc;
   // From value
   var $sender;
+  // From value, email address only
+  var $senderaddr;
   // To value
   var $recipient;
   // Subject value
@@ -168,7 +170,11 @@ class km_sendmail {
   }
 
   function send() {
-    mail($this->recipient, $this->subject, $this->msgbody, $this->msgheaders);
+    if(ini_get('safe_mode')) {
+      mail($this->recipient, $this->subject, $this->msgbody, $this->msgheaders);
+    } else {
+      mail($this->recipient, $this->subject, $this->msgbody, $this->msgheaders, '-f' . $this->senderaddr);
+    }
   }
 
   function add_sent_mail() {
