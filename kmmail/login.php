@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: login.php,v 1.4 2001/03/21 00:48:37 ryan Exp $
+// @(#) $Id: login.php,v 1.5 2001/03/21 02:36:49 ryan Exp $
 include_once('include/misc.inc');
 
 if($username) {
@@ -71,13 +71,19 @@ if($username) {
             </div>
               </form>
             <p />
-            <div class="kmblurb">kmMail version <? echo $config[version]; ?>, build <? echo $config[build]; ?><br />
-            <a href="http://validator.w3.org/check/referer"><img src="images/valid-xhtml10.gif" alt="Valid XHTML 1.0!" height="31" width="88" class="normal"/></a> <a href="http://jigsaw.w3.org/css-validator/check/referer"><img src="images/vcss.gif" alt="Valid CSS!" height="31" width="88" class="normal"/></a></div>
           </td>
         </tr>
       </table>
     </td>
   </tr>
 </table>
+      <table border="0" cellpadding="5" cellspacing="0" width="300">
+        <tr>
+          <td>
+            <div class="kmblurb"><a class="kmblurb" href="http://www.kmmail.org/">kmMail</a> version <? echo $config[version]; ?>, build <? echo $config[build]; ?><br />
+            <a href="http://validator.w3.org/check/referer"><img src="images/valid-xhtml10.gif" alt="Valid XHTML 1.0!" height="31" width="88" class="normal"/></a> <a href="http://jigsaw.w3.org/css-validator/check/referer"><img src="images/vcss.gif" alt="Valid CSS!" height="31" width="88" class="normal"/></a></div>
+          </td>
+        </tr>
+      </table>
 </body>
 </html>
