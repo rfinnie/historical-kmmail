@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.5 2001/03/21 00:48:37 ryan Exp $
+// @(#) $Id: compose.php,v 1.6 2001/04/01 05:40:52 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -29,6 +29,12 @@ if($submit) {
   }
   $mail = new km_sendmail();
   $mail->imap = $imap;
+  if($msgno) {
+    $mail->reply_referrer = array(
+      'folder' => $folder,
+      'msgnum' => $msgno
+    );
+  }
   $mail->build_message($body, $to, $cc, $attach_array, $from, $subject, ($send_html ? 'html' : 'plain'), $rfc822);
   $mail->add_sent_mail();
   header("Location: mailbox.php");

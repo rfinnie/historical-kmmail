@@ -1,5 +1,5 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.6 2001/04/01 05:58:41 ryan Exp $
+// @(#) $Id: sendmail.inc,v 1.7 2001/04/01 06:02:07 ryan Exp $
 
 class km_sendmail {
 
@@ -27,6 +27,8 @@ class km_sendmail {
   var $rfc822_messages;
   // imap.inc class object
   var $imap;
+  // Associative array of folder and uid that this message referrences
+  var $reply_referrer;
 
   function get_unique_separator() {
     return "--=_" . md5(microtime());
@@ -188,11 +190,14 @@ class km_sendmail {
       $extra .= "Cc: ".stripslashes($this->cc)."\n";
     }
     $extra .= "Sender: ".$this->sender."\n";
+    if($this->reply_referrer['msgnum']) {
+      $headers = $this->imap->retrieve_all_headers_array($this->reply_referrer['folder'], $this->reply_referrer['msgnum']);
+      $extra .= "In-Reply-To: ".$headers['message-id']."\n";
+    }
     $extra .= "X-Sender: ".$config['title']." via kMmail version ".$config['version'].", build ".$config['build']."\n";
     $extra .= "X-Originating-IP: ".$REMOTE_ADDR."\n";
     $this->email_headers = $extra . $this->email_headers;
 
-// //print "<pre>u ".$this->subject." u" . $this->email_headers . " yyy " . $this->message . "</pre>";
     mail(stripslashes($this->recipient), stripslashes($this->subject), $this->message, $this->email_headers);
 
   }

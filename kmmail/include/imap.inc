@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.3 2001/03/06 03:03:14 ryan Exp $
+// @(#) $Id: imap.inc,v 1.4 2001/04/01 05:40:56 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -94,8 +94,8 @@ class km_imap {
     return $out;
   }
 
-  function retrieve_message_info($msgno) {
-    $msg = imap_header($this->mbox, imap_msgno($this->mbox, $msgno));
+  function retrieve_message_info($msgnum) {
+    $msg = imap_header($this->mbox, imap_msgno($this->mbox, $msgnum));
     $to_array = array();
     for($i = 0; $i < count($msg->to); $i++) {
       $to_array[$i][name] = ($msg->to[$i]->personal ? $msg->to[$i]->personal : $msg->to[$i]->mailbox . '@' . $msg->to[$i]->host);
@@ -171,6 +171,26 @@ class km_imap {
     imap_createmailbox($this->mbox, $this->create_imap_string($folder));
   }
 
+ function retrieve_all_headers_array($folder, $msgnum) {
+    $this->select_folder($folder);
+    $headers_text = imap_fetchheader($this->mbox, $msgnum, FT_UID);
+    $headers_text = preg_replace("/\r/", "\n", $headers_text);
+    $headers_text = preg_replace("/\n+/", "\n", $headers_text);
+    $headers_array = preg_split("/\n/", $headers_text);
+    $headers = array();
+    for($i = 0; $i < count($headers_array); $i++) {
+      if($headers_array[$i]) {
+        if(preg_match("/^\s+/", $headers_array[$i])) {
+          $headers[strtolower($lastname)] .= " " . preg_replace("/^\s+/", "", $headers_array[$i]);
+        } else {
+          list($name, $value) = preg_split("/:\s+/", $headers_array[$i], 2);
+          $headers[strtolower($name)] = $value;
+          $lastname = $name;
+        }
+      }
+    }
+    return $headers;
+  }
 }
 
 function pre_print_r($array) {
