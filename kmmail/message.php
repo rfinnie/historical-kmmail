@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.12 2001/09/06 23:12:04 ryanf Exp $
+// @(#) $Id: message.php,v 1.13 2001/09/07 05:54:36 ryanf Exp $
 include_once('include/message_show.inc');
 include_once('include/misc.inc');
 include_once('include/auth.inc');
@@ -7,6 +7,17 @@ include_once('include/imap.inc');
 
 $folder = ($folder ? $folder : $config[imap_mainbox]);
 list($imap, $username) = check_imap_auth($folder);
+
+list($next, $prev) = $imap->find_next_prev_uid($msgno);
+
+if($action == 'delete') {
+  $imap->delete_messages(array($msgno));
+  if($next > -1) {
+    header("Location: message.php?folder=$folder&msgno=$next");
+  } else {
+    header("Location: mailbox.php?folder=$folder");
+  }
+}
 
 $msginfo = $imap->retrieve_message_info($msgno);
 
@@ -51,6 +62,9 @@ function dlSentry() {
             <table width = "100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center"> 
                 <td class="toolbar"> |
+                  <? if($prev > -1) { ?>
+                  <a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $prev; ?>">&lt;&lt;</a> |
+                  <? } ?>
                   <a href="mailbox.php?folder=<? echo urlencode($folder); ?>">Mailbox</a> |
                   <? if(!$config['is_pop3']) { ?>
                   <a href="folders.php?folder=<? echo urlencode($folder); ?>">Folders</a> |
@@ -58,6 +72,10 @@ function dlSentry() {
                   <a href="compose.php?folder=<? echo urlencode($folder); ?>">Compose</a> |
                   <a href="compose.php?action=reply&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Reply</a> |
                   <a href="compose.php?action=forward&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Forward</a> |
+                  <a href="message.php?action=delete&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Delete</a> |
+                  <? if($next > -1) { ?>
+                  <a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $next; ?>">&gt;&gt;</a> |
+                  <? } ?>
                 </td>
               </tr>
             </table>
