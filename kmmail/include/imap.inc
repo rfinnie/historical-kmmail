@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.17 2001/05/09 00:03:27 ryan Exp $
+// @(#) $Id: imap.inc,v 1.18 2001/08/24 04:30:59 ryanf Exp $
 
 include_once('include/settings.inc');
 
@@ -45,6 +45,10 @@ class km_imap {
       }
     }
     return $array;
+  }
+
+  function last_error() {
+    return imap_last_error();
   }
 
   function check_login(&$error) {

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: login_error.php,v 1.1 2001/09/06 23:12:04 ryanf Exp $
+// @(#) $Id: login_error.php,v 1.2 2001/09/06 23:26:21 ryanf Exp $
 include_once('include/settings.inc');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -28,8 +28,15 @@ include_once('include/settings.inc');
         </tr>
         <tr> 
           <td class="normal">
-            <p>Either you have hit the "Cancel" button, or your username or password is incorrect.  Please reload to try again.</p>
-            <p>If you are absolutely sure that your username and password is correct, the mail server may be down.  Please contact your system administrator if that is the case.</p>
+            <p>Sorry, but an attempt to login has failed.  Either you have hit the "Cancel" button, or your username or password is incorrect.  Please reload to try again.</p>
+<?
+if($last_error) {
+  ?>
+            <p>The error received from the mail server was: <i><? echo $last_error; ?></i></p>
+  <?
+}
+?>
+            <p>If you are absolutely sure the login information you specified is correct, the mail server may be down.  Please contact your system administrator if that is the case.</p>
           </td>
         </tr>
       </table>

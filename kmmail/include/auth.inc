@@ -21,6 +21,7 @@ function check_imap_auth($folder) {
     if($imap->connect($folder)) {
       return array($imap, $PHP_AUTH_USER);
     } else {
+      $last_error = $imap->last_error();
       $title = $config['title'];
       header("WWW-Authenticate: Basic realm=\"$title\"");
       header("HTTP/1.0 401 Unauthorized");
