@@ -1,12 +1,31 @@
 <?
-// @(#) $Id: folders.php,v 1.4 2001/03/20 22:20:08 ryan Exp $
+// @(#) $Id: folders.php,v 1.5 2001/03/21 00:48:37 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
 include_once('include/imap.inc');
 $imap = new km_imap($username, $password);
 $imap->connect($config[imap_mainbox]);
+if($action == "delete") {
+  if($folder != "INBOX") {
+    $imap->delete_mailbox($folder);
+  }
+  header("Location: $PHP_SELF");
+} elseif($action == "create") {
+  if($folder != "INBOX") {
+    $imap->create_mailbox($folder);
+  }
+  header("Location: $PHP_SELF");
+} elseif($action == "rename") {
+  if($oldfolder != "INBOX") {
+    if($newfolder != "INBOX") {
+      $imap->rename_mailbox($oldfolder, $newfolder);
+    }
+  }
+  header("Location: $PHP_SELF");
+}
 $boxes = $imap->retrieve_mailboxes();
+
 $imap->disconnect();
 
 
@@ -54,6 +73,7 @@ $imap->disconnect();
                 <td><b>Messages</b></td>
                 <td><b>New</b></td>
                 <td><b>Size</b></td>
+                <td>&nbsp;</td>
               </tr>
               <?
 for($i = 0; $i < count($boxes); $i++) {
@@ -63,11 +83,44 @@ for($i = 0; $i < count($boxes); $i++) {
                 <td><? echo $boxes[$i][msgs]; ?></td>
                 <td><? echo $boxes[$i][unread]; ?></td>
                 <td><? echo $boxes[$i][size]; ?></td>
+                <td><? if(!(($boxes[$i]['name'] == 'INBOX') || ($boxes[$i]['msgs'] > 0))) { ?><a href="<? echo $PHP_SELF; ?>?action=delete&amp;folder=<? echo urlencode($boxes[$i][name]); ?>">Delete</a><? } else { ?>&nbsp;<? } ?></td>
               </tr>
               <?
 }
 ?> 
             </table>
+            <form method="post" action="<? echo $PHP_SELF; ?>">
+              <input type="hidden" name="action" value="create" />
+              <b>Create New Folder</b><br>
+              <input name="folder" size="20" /> <input type="submit" value="Create" />
+            </form>
+<?
+$noninbox = 0;
+for($i = 0; $i < count($boxes); $i++) {
+  if($boxes[$i]['name'] != "INBOX") {
+    $noninbox++;
+  }
+}
+if($noninbox > 0) {
+  ?>
+            <form method="post" action="<? echo $PHP_SELF; ?>">
+              <input type="hidden" name="action" value="rename" />
+              <b>Rename Folder</b><br>
+              From <select name="oldfolder">
+  <?
+  for($i = 0; $i < count($boxes); $i++) {
+    if($boxes[$i]['name'] != "INBOX") {
+      ?>
+                <option value="<? echo $boxes[$i]['name']; ?>"><? echo $boxes[$i]['name']; ?></option>
+      <?
+    }
+  }
+  ?>
+              </select> to <input name="newfolder" size="20" /> <input type="submit" value="Create" />
+            </form>
+  <?
+}
+?>
           </td>
         </tr>
       </table>

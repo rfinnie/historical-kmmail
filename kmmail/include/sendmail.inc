@@ -1,5 +1,5 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.7 2001/04/01 06:02:07 ryan Exp $
+// @(#) $Id: sendmail.inc,v 1.8 2001/04/01 06:16:36 ryan Exp $
 
 class km_sendmail {
 
@@ -117,7 +117,7 @@ class km_sendmail {
 //    $this->message .= "Content-Transfer-Encoding: base64\n";
     $this->message .= "\n";
 //    $this->message .= $this->encode($this->body . "\n");
-    $this->message .= stripslashes($this->body) . "\n";
+    $this->message .= $this->body . "\n";
     $this->message .= "\n\n";
     for ($i = 0; $i < count($this->attachments); $i++)
       $this->add_attachment($unique_separator, $i);
@@ -187,7 +187,7 @@ class km_sendmail {
     global $config, $REMOTE_ADDR;
     $extra = "From: ".$this->sender."\n";
     if($this->cc) {
-      $extra .= "Cc: ".stripslashes($this->cc)."\n";
+      $extra .= "Cc: ".$this->cc."\n";
     }
     $extra .= "Sender: ".$this->sender."\n";
     if($this->reply_referrer['msgnum']) {
@@ -198,13 +198,13 @@ class km_sendmail {
     $extra .= "X-Originating-IP: ".$REMOTE_ADDR."\n";
     $this->email_headers = $extra . $this->email_headers;
 
-    mail(stripslashes($this->recipient), stripslashes($this->subject), $this->message, $this->email_headers);
+    mail($this->recipient, $this->subject, $this->message, $this->email_headers);
 
   }
 
   function add_sent_mail() {
     global $config;
-    $sent = "To: ".stripslashes($this->recipient)."\nSubject: ".stripslashes($this->subject)."\nDate: ".gmdate("D, j M Y h:i:s -0000")."\n" . $this->email_headers . "\n" . $this->message;
+    $sent = "To: ".$this->recipient."\nSubject: ".$this->subject."\nDate: ".gmdate("D, j M Y h:i:s -0000")."\n" . $this->email_headers . "\n" . $this->message;
     
     if(!in_array($config[imap_sentbox], $this->imap->retrieve_mailboxes_short())) {
       $this->imap->create_mailbox($config[imap_sentbox]);

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc,v 1.3 2001/03/21 01:24:20 ryan Exp $
+// @(#) $Id: misc.inc,v 1.4 2001/03/22 07:36:38 ryan Exp $
 
 include_once('include/settings.inc');
 include_once('include/imap.inc');
@@ -71,4 +71,36 @@ function km_send_udp_stat_packet() {
   @fputs($fp, '');
   @fclose($fp);
 }
+
+function stripslashes_array(&$the_array_element, $the_array_element_key, $data) { 
+  $the_array_element = stripslashes($the_array_element); 
+} 
+
+if(get_magic_quotes_gpc() == 1) { 
+  switch($REQUEST_METHOD) { 
+    case "POST": 
+      while (list ($key, $val) = each ($HTTP_POST_VARS)) { 
+        if( is_array($val) ) { 
+          array_walk(&$val, 'stripslashes_array', ''); 
+          $$key = $val; 
+        } else { 
+          $$key = stripslashes($val); // double $$ so the variable gets changed globally 
+        } 
+      } 
+      break; 
+    case "GET": 
+      while (list ($key, $val) = each ($HTTP_GET_VARS)) { 
+        if( is_array($val) ) { 
+          array_walk(&$val, 'stripslashes_array', ''); 
+          $$key = $val; 
+        } else { 
+          $$key = stripslashes($val); // double $$ so the variable gets changed globally 
+        } 
+      } 
+      break; 
+  } 
+}
+
+
+
 ?>
