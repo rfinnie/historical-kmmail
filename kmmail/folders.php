@@ -1,7 +1,7 @@
 <?
-// @(#) $Id: folders.php,v 1.7 2001/04/01 07:43:34 ryan Exp $
+// @(#) $Id: folders.php,v 1.8 2001/04/19 06:11:25 ryan Exp $
 include_once('include/misc.inc');
-check_cookie(&$username, &$password);
+check_cookie($username, $password);
 
 include_once('include/imap.inc');
 $imap = new km_imap($username, $password);

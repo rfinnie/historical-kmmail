@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc,v 1.6 2001/04/02 06:06:51 ryan Exp $
+// @(#) $Id: misc.inc,v 1.7 2001/04/03 07:25:01 ryan Exp $
 
 include_once('include/settings.inc');
 include_once('include/imap.inc');
@@ -107,7 +107,7 @@ if(get_magic_quotes_gpc() == 1) {
     case "POST": 
       while (list ($key, $val) = each ($HTTP_POST_VARS)) { 
         if( is_array($val) ) { 
-          array_walk(&$val, 'stripslashes_array', ''); 
+          array_walk($val, 'stripslashes_array', ''); 
           $$key = $val; 
         } else { 
           $$key = stripslashes($val); // double $$ so the variable gets changed globally 
@@ -117,7 +117,7 @@ if(get_magic_quotes_gpc() == 1) {
     case "GET": 
       while (list ($key, $val) = each ($HTTP_GET_VARS)) { 
         if( is_array($val) ) { 
-          array_walk(&$val, 'stripslashes_array', ''); 
+          array_walk($val, 'stripslashes_array', ''); 
           $$key = $val; 
         } else { 
           $$key = stripslashes($val); // double $$ so the variable gets changed globally 

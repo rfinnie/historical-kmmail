@@ -1,7 +1,7 @@
 <?
-// @(#) $Id: message.php,v 1.6 2001/04/01 05:26:58 ryan Exp $
+// @(#) $Id: message.php,v 1.7 2001/04/01 21:19:55 ryan Exp $
 include_once('include/misc.inc');
-check_cookie(&$username, &$password);
+check_cookie($username, $password);
 
 include_once('include/imap.inc');
 include_once('include/message_show.inc');

@@ -1,7 +1,7 @@
 <?
-// @(#) $Id: mailbox.php,v 1.9 2001/04/01 20:47:19 ryan Exp $
+// @(#) $Id: mailbox.php,v 1.10 2001/04/13 06:10:10 ryan Exp $
 include_once('include/misc.inc');
-check_cookie(&$username, &$password);
+check_cookie($username, $password);
 
 include_once('include/imap.inc');
 $imap = new km_imap($username, $password);

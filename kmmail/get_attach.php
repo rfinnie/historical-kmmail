@@ -1,7 +1,7 @@
 <?
-// @(#) $Id: get_attach.php,v 1.2 2001/03/05 15:17:32 ryan Exp $
+// @(#) $Id: get_attach.php,v 1.3 2001/03/20 22:20:08 ryan Exp $
 include_once('include/misc.inc');
-check_cookie(&$username, &$password);
+check_cookie($username, $password);
 
 include_once('include/imap.inc');
 $imap = new km_imap($username, $password);

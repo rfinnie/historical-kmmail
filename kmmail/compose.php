@@ -1,7 +1,7 @@
 <?
-// @(#) $Id: compose.php,v 1.8 2001/04/02 06:06:48 ryan Exp $
+// @(#) $Id: compose.php,v 1.9 2001/04/03 06:43:23 ryan Exp $
 include_once('include/misc.inc');
-check_cookie(&$username, &$password);
+check_cookie($username, $password);
 
 $rn = passwd_real_name($username);
 
@@ -65,7 +65,7 @@ if($submit) {
     include_once('include/message_show.inc');
     $struct = imap_fetchstructure($imap->mbox, $msgno, FT_UID);
     $message = new km_message_show();
-    $message->get_message_forward($imap->mbox,$action,$folder,$msgno,&$to,&$subject,&$body);
+    $message->get_message_forward($imap->mbox,$action,$folder,$msgno,$to,$subject,$body);
   }
 $imap->disconnect();
   ?>
