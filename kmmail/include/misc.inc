@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc,v 1.12 2001/09/23 09:35:15 ryanf Exp $
+// @(#) $Id: misc.inc,v 1.13 2001/09/23 21:18:44 ryanf Exp $
 
 include_once('include/settings.inc');
 include_once('include/imap.inc');
@@ -115,7 +115,7 @@ if($config['is_pop3'] && ($config['display_folders'])) {
   $config['display_folders'] = 0;
 }
 
-if($config['imap_timezone_offset'] == 'real_timezone_offset') {
+if(strval($config['imap_timezone_offset']) == 'real_timezone_offset') {
   $config['imap_timezone_offset'] = get_offset_minutes();
 }
 ?>
