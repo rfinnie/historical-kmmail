@@ -42,9 +42,10 @@
                     </tr>
                     <tr> 
                       <td class="light"> 
-                        <? include('http://sourceforge.net/export/projhtml.php?group_id=32721&mode=full&no_table=1'); ?>
+                        <? include('http://sourceforge.net/export/projhtml.php?group_id=32721&mode=full&no_table=1'); ?><p>
+                        <a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=32721" width="88" height="31" border="0" alt="SourceForge Logo"></a>
                       </td>
-                    </tr>
+                    </tr> 
                   </table>
                 </td>
                 <td> 
