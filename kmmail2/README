@@ -125,7 +125,7 @@ of the developers, some of whom have been in the PHP community for years.
 thousands of subscribers actively using it.  Click-thru and action rates
 were some of the highest in the industry, showing that referral marketing
 does work.  Nonetheless, Kefta went on to other things, mainly
-private-label ASP-style projects.  Keftamail was starting to loose the
+private-label ASP-style projects.  Keftamail was starting to lose the
 spotlight.
   In the spring of 2001, I (Ryan Finnie) asked the CTO about spinning off
 the core mail functionality of Keftamail into its own open-source project.  
@@ -137,4 +137,4 @@ was released.
 However, kmMail contributions have come from developers both in and out of
 Kefta.
 
-@(#) $Id: README,v 1.4 2001/10/02 22:45:49 ryanf Exp $
+@(#) $Id: README,v 1.1.1.1.4.1 2002/11/25 05:16:50 ryanf Exp $
