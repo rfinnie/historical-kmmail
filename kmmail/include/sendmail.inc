@@ -1,5 +1,5 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.9 2001/04/01 07:36:00 ryan Exp $
+// @(#) $Id: sendmail.inc,v 1.10 2001/04/03 06:43:26 ryan Exp $
 
 class km_sendmail {
 
@@ -83,9 +83,9 @@ class km_sendmail {
     $headers = $this->imap->retrieve_message_headers_text($folder, $msgnum);
 
     $headers = preg_replace("/\r/", "", $headers);
-    $headers = preg_replace("/^From /", "X-Original: ", $headers);
-    $headers = preg_replace("/\n([ |\t]+)/", " ", $headers);
-    $headers = preg_replace("/^Received: (.*?)$/m", "", $headers);
+    $headers = preg_replace("/^From /", "X-Original-From: ", $headers);
+    $headers = preg_replace("/^Received: /m", "X-Original-Received: ", $headers);
+    $headers = preg_replace("/^\n+/", "", $headers);
     while(preg_match("/\n\n/", $headers)) {
       $headers = preg_replace("/\n\n/", "\n", $headers);
     }

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.16 2001/04/27 20:32:43 ryan Exp $
+// @(#) $Id: imap.inc,v 1.17 2001/05/09 00:03:27 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -180,9 +180,10 @@ class km_imap {
     imap_expunge($this->mbox);
   }
 
-  function retrieve_message_list() {
+  function retrieve_message_list($offset = 1, $return = 5) {
     $out = array();
     $msg_array = imap_sort($this->mbox, "SORTARRIVAL", 1, SE_UID);
+    $msg_array = array_slice($msg_array, $offset - 1, $return);
     for($i=0; $i < count($msg_array); $i++) {
       $msg = imap_header($this->mbox, imap_msgno($this->mbox, $msg_array[$i]));
       $out[$i] = array(
@@ -193,7 +194,8 @@ class km_imap {
         'size' => $msg->Size,
         'udate' => $msg->udate,
         'unread' => ($msg->Unseen == 'U' || $msg->Recent == 'N'),
-        'deleted' => ($msg->Deleted == 'D')
+        'deleted' => ($msg->Deleted == 'D'),
+        'replied' => ($msg->Answered == 'A')
       );
       if(!$this->config['is_pop3']) {
         $partcount = $this->parts_count($msg_array[$i]);
