@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.7 2001/04/21 21:07:59 ryan Exp $
+// @(#) $Id: message_show.inc,v 1.8 2001/08/24 22:15:44 ryanf Exp $
 
 class km_message_show {
   var $cid_list;
@@ -117,7 +117,7 @@ class km_message_show {
     $folder = $this->folder;
     $msgnum = $this->msgnum;
     $download = "get_attach.php?folder=$folder&amp;msgnum=$msgnum&amp;part_no=$imap_part&amp;type=$type&amp;subtype=$subtype&amp;name=$filename&amp;encoding=$encoding";
-    print "<br /><table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" class=\"backblack\"><tr><td class=\"toolbar\"><img src=\"images/img_file.gif\" width=\"11\" height=\"15\" alt=\"*\" class=\"normal\"/> <b>Attachment (<a href=\"$download\"" . ($this->config['use_download_disclaimer'] ? ' onclick="return dlSentry();"' : '') . ">Download</a>)</b></td></tr><tr><td class=\"light\">";
+    print "<br /><table align=\"center\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" class=\"backblack\"><tr><td class=\"toolbar\"><img src=\"images/img_file.gif\" width=\"11\" height=\"15\" alt=\"*\" class=\"normal\"/> <b>Attachment (<a href=\"$download\"" . ($this->config['use_download_disclaimer'] ? ' onclick="return dlSentry();"' : '') . ">Download</a>)</b></td></tr><tr><td class=\"light\">";
     print "<strong>Filename:</strong> $filename<br />\n";
     print "<strong>Type:</strong> $mime_type<br />\n";
     print "<strong>Size:</strong> $size bytes<br />\n";
