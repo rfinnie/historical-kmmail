@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.10 2001/04/19 06:07:20 ryan Exp $
+// @(#) $Id: imap.inc,v 1.11 2001/04/21 19:32:33 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -17,6 +17,34 @@ class km_imap {
     $username = get_real_username($username);
     $this->username = $username;
     $this->password = $password;
+  }
+
+  function parts_count($msgno) {
+    $struct = imap_fetchstructure($this->mbox, $msgno, FT_UID);
+    return $this->parts_count_recursive(array($struct), array());
+  }
+  function parts_count_recursive($struct, $array) {
+    $types = array(
+      0 => "TEXT",
+      1 => "MULTIPART",
+      2 => "MESSAGE",
+      3 => "APPLICATION",
+      4 => "AUDIO",
+      5 => "IMAGE",
+      6 => "VIDEO",
+      7 => "OTHER"
+    );
+    for($i = 0; $i < count($struct); $i++) {
+      $mime = strtolower($types[($struct[$i]->type ? $struct[$i]->type : 7)] . '/' . $struct[$i]->subtype);
+      $array['mime'][$mime]++;
+      if($struct[$i]->disposition) {
+        $array['disposition'][strtolower($struct[$i]->disposition)]++;
+      }
+      if($struct[$i]->parts) {
+        $array = $this->parts_count_recursive($struct[$i]->parts, $array);
+      }
+    }
+    return $array;
   }
 
   function check_login() {
@@ -156,7 +184,7 @@ class km_imap {
     $msg_array = imap_sort($this->mbox, "SORTARRIVAL", 1, SE_UID);
     for($i=0; $i < count($msg_array); $i++) {
       $msg = imap_header($this->mbox, imap_msgno($this->mbox, $msg_array[$i]));
-      $out[] = array(
+      $out[$i] = array(
         'msgno' => $msg_array[$i],
         'date' => $msg->date,
         'subject' => ($msg->subject ? $msg->subject : '[No Subject]'),
@@ -166,6 +194,9 @@ class km_imap {
         'unread' => ($msg->Unseen == 'U' || $msg->Recent == 'N'),
         'deleted' => ($msg->Deleted == 'D')
       );
+      $partcount = $this->parts_count($msg_array[$i]);
+      $out[$i]['count_mime'] = $partcount['mime'];
+      $out[$i]['count_disposition'] = $partcount['disposition'];
     }
     return $out;
   }
@@ -221,6 +252,6 @@ class km_imap {
 function pre_print_r($array) {
   print "<pre>";
   print_r($array);
-  print "</pre>\n";
+  print "</pre><hr>\n";
 }
 ?>
