@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.18 2001/09/08 04:10:40 ryanf Exp $
+// @(#) $Id: settings.inc,v 1.19 2001/09/08 20:43:04 ryanf Exp $
 $config = array(
 
   // Version number.
@@ -85,7 +85,11 @@ $config = array(
   // Text to use for disclaimer.
   'expunge_disclaimer_text' => 'Warning! Are you sure you want to remove all deleted messages in all mailboxes?  There is no way to undo this action.',
 
-  // The number of minutes your timezone is offset, west of GMT is negative.
+  // Some IMAP servers (maybe all, maybe just my own copy of UWash) return
+  // the received epoch time of the message as offset by your current
+  // timezone.  For me, imapd is telling me that messages arrived 480 minutes
+  // after they really arrived.  You can use timezone_offset to adjust the
+  // received time of the messages.  
   // For example:
   //   New York:    -300 (GMT-5:00)
   //   Los Angeles: -480 (GMT-8:00)
