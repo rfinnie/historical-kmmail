@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.18 2001/09/08 03:22:19 ryanf Exp $
+// @(#) $Id: message.php,v 1.19 2001/09/08 03:33:01 ryanf Exp $
 include_once('include/message_show.inc');
 include_once('include/misc.inc');
 include_once('include/auth.inc');
@@ -148,7 +148,7 @@ if(count($msginfo[cc_array]) > 0) {
                       <td><nobr>Folder: <? echo $folder; ?></nobr></td>
                     </tr>
                     <tr class="normal" align="right"> 
-                      <td><nobr><a href="#" onClick="return pwin('popup.php?action=show_headers&folder=<? echo urlencode($folder); ?>&msgno=<? echo $msgno; ?>');">Show Headers</a></nobr></td>
+                      <td><nobr><a href="popup.php?action=show_headers&folder=<? echo urlencode($folder); ?>&msgno=<? echo $msgno; ?>" onClick="return pwin('popup.php?action=show_headers&folder=<? echo urlencode($folder); ?>&msgno=<? echo $msgno; ?>');">Show Headers</a></nobr></td>
                     </tr>
                     <tr class="normal" align="right"> 
                       <td><nobr><a href="get_attach.php?folder=<? echo $folder; ?>&amp;type=MESSAGE&amp;subtype=RFC822&amp;msgnum=<? echo $msgno; ?>&amp;name=<? echo date('Ymd-His', strtotime($msginfo[date])) . '.eml'; ?>">Download Message</a></nobr></td>
