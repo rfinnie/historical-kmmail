@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.14 2001/04/23 02:54:44 ryan Exp $
+// @(#) $Id: imap.inc,v 1.15 2001/04/26 19:34:41 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -132,19 +132,19 @@ class km_imap {
     $msg = imap_header($this->mbox, imap_msgno($this->mbox, $msgnum));
     $to_array = array();
     for($i = 0; $i < count($msg->to); $i++) {
-      $to_array[$i][name] = ($msg->to[$i]->personal ? $msg->to[$i]->personal : $msg->to[$i]->mailbox . '@' . $msg->to[$i]->host);
+      $to_array[$i][name] = ($msg->to[$i]->personal ? $this->decode_header_string($msg->to[$i]->personal) : $msg->to[$i]->mailbox . '@' . $msg->to[$i]->host);
       $to_array[$i][address] = $msg->to[$i]->mailbox . '@' . $msg->to[$i]->host;
     }
     $cc_array = array();
     for($i = 0; $i < count($msg->cc); $i++) {
-      $cc_array[$i][name] = ($msg->cc[$i]->personal ? $msg->cc[$i]->personal : $msg->cc[$i]->mailbox . '@' . $msg->cc[$i]->host);
+      $cc_array[$i][name] = ($msg->cc[$i]->personal ? $this->decode_header_string($msg->cc[$i]->personal) : $msg->cc[$i]->mailbox . '@' . $msg->cc[$i]->host);
       $cc_array[$i][address] = $msg->cc[$i]->mailbox . '@' . $msg->cc[$i]->host;
     }
     $out = array(
       'date' => $msg->date,
       'udate' => $msg->udate,
-      'subject' => ($msg->subject ? $msg->subject : '[No Subject]'),
-      'from_name' => ($msg->from[0]->personal ? $msg->from[0]->personal : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
+      'subject' => ($msg->subject ? $this->decode_header_string($msg->subject) : '[No Subject]'),
+      'from_name' => ($msg->from[0]->personal ? $this->decode_header_string($msg->from[0]->personal) : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
       'from_address' => ($msg->reply_to[0]->mailbox ? $msg->reply_to[0]->mailbox . '@' . $msg->reply_to[0]->host : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
       'to_array' => $to_array,
       'cc_array' => $cc_array
@@ -187,8 +187,8 @@ class km_imap {
       $out[$i] = array(
         'msgno' => $msg_array[$i],
         'date' => $msg->date,
-        'subject' => ($msg->subject ? $msg->subject : '[No Subject]'),
-        'from' => ($msg->from[0]->personal ? $msg->from[0]->personal : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
+        'subject' => ($msg->subject ? $this->decode_header_string($msg->subject) : '[No Subject]'),
+        'from' => ($msg->from[0]->personal ? $this->decode_header_string($msg->from[0]->personal) : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
         'size' => $msg->Size,
         'udate' => $msg->udate,
         'unread' => ($msg->Unseen == 'U' || $msg->Recent == 'N'),
@@ -242,12 +242,32 @@ class km_imap {
           $headers[strtolower($lastname)] .= " " . preg_replace("/^\s+/", "", $headers_array[$i]);
         } else {
           list($name, $value) = preg_split("/:\s+/", $headers_array[$i], 2);
-          $headers[strtolower($name)] = $value;
+          $headers[strtolower($name)] = $this->decode_header_string($value);
           $lastname = $name;
         }
       }
     }
     return $headers;
+  }
+
+  function decode_header_string($hed_str) {
+    if($hed_str) {      
+      if(substr($hed_str, 0, 2) == "=?") {
+        $start_pos = strpos($hed_str, "?", 2);
+        $type = substr($hed_str, $start_pos + 1, 1);
+        $newstr = substr($hed_str, $start_pos + 3, strlen($hed_str) - ($start_pos + 5));
+        if (strtoupper($type) == "Q") {
+          $output = str_replace("_", " " , imap_qprint($newstr));
+        } elseif (strtoupper($type) == "B") {
+          $output = base64_decode($newstr);
+        } else {
+          $output = $newstr;
+        }
+      } else {
+        $output = $hed_str;
+      }
+    } 
+    return $output;
   }
 }
 
