@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.27 2001/09/08 04:10:40 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.28 2001/09/08 20:43:04 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -146,10 +146,13 @@ if($count == 0) {
                   <td colspan="5" align="center"><b>This folder is empty.</b></td>
                 </tr>
                 <?
-} else {
+}
   ?> 
                 <tr class="messagelist-read">
                   <td colspan="5" align="center">
+<?
+if($count > 0) {
+?>
 Messages <? echo $offset; ?>-<? echo (($offset + $return) > $count ? $count : ($offset + $return - 1)); ?> of <? echo $count; ?> in <? echo $folder; ?>
                     <br />
                     <input type="submit" name="action_delete" value="Delete" /> checked messages
@@ -169,6 +172,10 @@ Messages <? echo $offset; ?>-<? echo (($offset + $return) > $count ? $count : ($
     ?> 
                     </select>
                     <input type="submit" name="action_move" value="Move" /><br>
+<?
+  }
+}
+?>
                     Jump directly to
                     <select name="jump_folder">
                       <?
@@ -182,15 +189,8 @@ Messages <? echo $offset; ?>-<? echo (($offset + $return) > $count ? $count : ($
     ?> 
                     </select>
                     <input type="submit" name="action_jump" value="Jump" /><br>
-                    <?
-
-  }
-  ?>
  </td>
                 </tr>
-                <?
-}
-?> 
               </table>
             </form>
             <p /> 
