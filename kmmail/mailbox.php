@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.4 2001/03/20 22:20:08 ryan Exp $
+// @(#) $Id: mailbox.php,v 1.5 2001/03/21 00:48:37 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -84,7 +84,7 @@ for($i = 0; $i < $count; $i++) {
                   </td>
                   <td><a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgs[$i][msgno]; ?>"><? echo $msgs[$i][from]; ?></a></td>
                   <td><? echo $msgs[$i][subject]; ?></td>
-                  <td><? echo $msgs[$i][size]; ?></td>
+                  <td><? echo km_human_readable_size($msgs[$i][size], 1); ?></td>
                   <td><? echo date("m/d/Y", $msgs[$i][udate]); ?></td>
                 </tr>
                 <?

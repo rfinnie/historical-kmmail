@@ -1,17 +1,15 @@
 <?
-// @(#) $Id: login.php,v 1.5 2001/03/21 02:36:49 ryan Exp $
+// @(#) $Id: login.php,v 1.6 2001/03/21 05:00:20 ryan Exp $
 include_once('include/misc.inc');
 
 if($username) {
-  include_once('include/imap.inc');
   $imap = new km_imap($username, $password, $config[imap_mainbox]);
   if($imap->check_login()) {
-    session_start();
-    $kmauth = array(
-      "username" => $username,
-      "password" => $password
-    );
-    session_register("kmauth");
+    km_session_start($username, $password);
+
+    if($config[send_udp_stat_packet]) {
+      km_send_udp_stat_packet();
+    }
     header("Location: mailbox.php");
     exit;
   } else {

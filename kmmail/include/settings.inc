@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.6 2001/03/20 22:20:21 ryan Exp $
+// @(#) $Id: settings.inc,v 1.7 2001/03/21 00:48:44 ryan Exp $
 $config = array(
   'version' => '1.0pre1',
   'build' => 'BUILDTAG',
@@ -16,6 +16,7 @@ $config = array(
   'default_login' => 0,
   'default_login_username' => 'username',
   'default_login_password' => 'password',
-  'title' => 'kmMail'
+  'title' => 'kmMail',
+  'send_udp_stat_packet' => 1
 );
 ?>
