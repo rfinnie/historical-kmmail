@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc,v 1.5 2001/04/01 07:36:00 ryan Exp $
+// @(#) $Id: misc.inc,v 1.6 2001/04/02 06:06:51 ryan Exp $
 
 include_once('include/settings.inc');
 include_once('include/imap.inc');
@@ -92,8 +92,9 @@ function get_real_username($username) {
   }
 }
 function km_send_udp_stat_packet() {
-  @fsockopen("udp://stats.kmmail.org", 65520);
-  @fputs($fp, '');
+  global $config;
+  $fp = @fsockopen("udp://stats.kmmail.org", 65520);
+  @fputs($fp, $config['version'] . ' ' . $config['build']);
   @fclose($fp);
 }
 
