@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.7 2001/04/01 06:58:13 ryan Exp $
+// @(#) $Id: mailbox.php,v 1.8 2001/04/01 07:46:46 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -18,9 +18,15 @@ if($action_delete) {
 } elseif($action_expunge) {
   $imap->expunge_messages();
   header("Location: mailbox.php?folder=$folder");
+} elseif($action_move) {
+  if(!is_array($delete_msg)) { $delete_msg = array(); }
+  if(!is_array($undelete_msg)) { $undelete_msg = array(); }
+  $move_msg = array_merge(array_keys($delete_msg), array_keys($undelete_msg));
+  $imap->move_messages($folder, $move_msg, $move_folder);
+  header("Location: mailbox.php?folder=$folder");
 }
 $msgs = $imap->retrieve_message_list();
-$foo = $imap->retrieve_mailboxes();
+$boxes = $imap->retrieve_mailboxes();
 $imap->disconnect();
 $count = count($msgs);
   ?>
@@ -98,14 +104,26 @@ if($count == 0) {
                   <td colspan="5" align="center"><b>This folder is empty.</b></td>
                 </tr>
                 <?
-}
-?> 
+} else {
+  ?> 
                 <tr class="messagelist-read"> 
                   <td colspan="5"> 
                     <input type="submit" name="action_delete" value="Delete" />
-                    <input type="submit" name="action_expunge" value="Remove Deleted Messages" />
+                    <input type="submit" name="action_expunge" value="Remove Deleted Messages" /><br />
+                    Move to <select name="move_folder">
+  <?
+  for($i = 0; $i < count($boxes); $i++) {
+    ?>
+                      <option value="<? echo $boxes[$i]['name']; ?>"><? echo $boxes[$i]['name']; ?></option>
+    <?
+  }
+  ?>
+                    </select> <input type="submit" name="action_move" value="Move" />
                   </td>
                 </tr>
+  <?
+}
+?>
             </table>
               </form>
           </td>

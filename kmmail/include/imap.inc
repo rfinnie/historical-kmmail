@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.5 2001/04/01 06:16:36 ryan Exp $
+// @(#) $Id: imap.inc,v 1.6 2001/04/01 07:41:19 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -34,6 +34,14 @@ class km_imap {
       return "{" . $this->config['imap_host'] .":" . $this->config['imap_port'] . "}" . $folder;
     } else {
       return "{" . $this->config['imap_host'] .":" . $this->config['imap_port'] . "}" . $this->config[imap_mailpath] . $folder;
+    }
+  }
+
+  function create_imap_string_short($folder) {
+    if($folder == $this->config[imap_mainbox]) {
+      return $folder;
+    } else {
+      return $this->config[imap_mailpath] . $folder;
     }
   }
 
@@ -121,6 +129,14 @@ class km_imap {
   function delete_messages($msgs) {
     for($i = 0; $i < count($msgs); $i++) {
       imap_delete($this->mbox, $msgs[$i], FT_UID);
+    }
+  }
+
+  function move_messages($old_folder, $msgs, $new_folder) {
+    if($old_folder != $new_folder) {
+      $this->select_folder($old_folder);
+      $msgss = implode(',', $msgs);
+      imap_mail_move($this->mbox, $msgss, $this->create_imap_string_short($new_folder), CP_UID);
     }
   }
 
