@@ -196,6 +196,10 @@ if($msgno) {
                 </tr>
               </table>
             </form>
+            <div align="right">
+              kmMail version <? echo $config['version']; ?>
+              <img src="images/img_envelope.gif" width="15" height="11" border="0" />
+            </div>
           </td>
         </tr>
       </table>

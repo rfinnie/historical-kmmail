@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: login.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
+// @(#) $Id: login.php,v 1.1.1.1.8.1 2002/11/25 07:49:17 ryanf Exp $
 
 // WARNING: This file is included from within a function in auth.inc.php
 // and therefor does not have global status.
@@ -79,6 +79,10 @@
                 </tr>
               </table>
             </form>
+            <div align="right">
+              kmMail version <? echo $config['version']; ?>
+              <img src="images/img_envelope.gif" width="15" height="11" border="0" />
+            </div>
           </td>
         </tr>
       </table>

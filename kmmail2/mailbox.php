@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.2 2002/11/25 04:41:36 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.2.8.1 2002/11/25 07:49:17 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
@@ -104,11 +104,25 @@ function expSentry() {
               </tr>
             </table>
             <p />
-            <form method="post" action="<? echo $_SERVER['PHP_SELF']; ?>">
+            <form name="mailboxform" method="post" action="<? echo $_SERVER['PHP_SELF']; ?>">
+              <script language="JavaScript">
+              <!--
+              function checkAll() {
+                for(i = 0; i < document.mailboxform.length; i++) {
+                  if(document.mailboxform.elements[i].type == 'checkbox') {
+                    if((document.mailboxform.elements[i].name.substring(0, 10) == 'delete_msg') ||
+                      (document.mailboxform.elements[i].name.substring(0, 12) == 'undelete_msg')) {
+                      document.mailboxform.elements[i].checked = document.mailboxform.checkall.checked;
+                    }
+                  }
+                }
+              }
+              //-->
+              </script>
               <input type="hidden" name="folder" value="<? echo $folder; ?>" />
               <table width="100%" border="0" cellpadding="2" cellspacing="1" class="backblack">
                 <tr align="center" class="messagelist-top"> 
-                  <td><b>&nbsp;</b></td>
+                  <td><b><input type="checkbox" name="checkall" onClick="checkAll();"></b></td>
                   <td><b><? echo (stristr($folder, $config['imap_sentbox']) ? 'To' : 'From'); ?></b></td>
                   <td><b>Subject</b></td>
                   <td><b>Size</b></td>
@@ -201,10 +215,10 @@ Messages <? echo $offset; ?>-<? echo (($offset + $return) > $count ? $count : ($
 ?> 
               </table>
             </form>
-            <p /> 
-            <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
-            </table>
-
+            <div align="right">
+              kmMail version <? echo $config['version']; ?>
+              <img src="images/img_envelope.gif" width="15" height="11" border="0" />
+            </div>
           </td>
         </tr>
       </table>
@@ -213,5 +227,3 @@ Messages <? echo $offset; ?>-<? echo (($offset + $return) > $count ? $count : ($
 </table>
 </body>
 </html>
-
-

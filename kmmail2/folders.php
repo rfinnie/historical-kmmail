@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: folders.php,v 1.2 2002/11/25 04:41:36 ryanf Exp $
+// @(#) $Id: folders.php,v 1.2.8.1 2002/11/25 07:49:17 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
@@ -142,7 +142,12 @@ if($noninbox > 0) {
             </form>
             <?
 }
-?> </td>
+?>
+            <div align="right">
+              kmMail version <? echo $config['version']; ?>
+              <img src="images/img_envelope.gif" width="15" height="11" border="0" />
+            </div>
+          </td>
         </tr>
       </table>
     </td>
