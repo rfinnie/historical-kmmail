@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.20 2001/09/10 17:48:56 ryanf Exp $
+// @(#) $Id: settings.inc,v 1.21 2001/09/23 09:35:15 ryanf Exp $
 $config = array(
 
   // Version number.
@@ -101,7 +101,8 @@ $config = array(
   // above.
   // In short, first try 'real_timezone_offset', then 0, then just try
   // playing with numbers until the received time looks correct.
-  'imap_timezone_offset' => 'real_timezone_offset',
+  // UPDATE: It seems to be just my imapd, so I'm setting the default to 0.
+  'imap_timezone_offset' => 0,
 
   // That's it!
   'the' => 'end'
