@@ -1,13 +1,13 @@
 <?
-// @(#) $Id: message.php,v 1.10 2001/04/23 02:02:24 ryan Exp $
-include_once('include/misc.inc');
-check_cookie($username, $password);
-
-include_once('include/imap.inc');
+// @(#) $Id: message.php,v 1.11 2001/08/24 22:15:44 ryanf Exp $
 include_once('include/message_show.inc');
-$imap = new km_imap($username, $password);
+include_once('include/misc.inc');
+include_once('include/auth.inc');
+include_once('include/imap.inc');
+
 $folder = ($folder ? $folder : $config[imap_mainbox]);
-$imap->connect($folder);
+list($imap, $username) = check_imap_auth($folder);
+
 $msginfo = $imap->retrieve_message_info($msgno);
 
 
@@ -31,10 +31,10 @@ function dlSentry() {
 <? } ?>
 </head>
 <body class="normal">
-<table border="0" cellpadding="1" cellspacing="0" width="600" class="backblack">
+<table border="0" cellpadding="1" cellspacing="0" width="100%" class="backblack">
   <tr> 
     <td> 
-      <table border="0" cellpadding="5" cellspacing="0" width="598" class="main">
+      <table border="0" cellpadding="5" cellspacing="0" width="100%" class="main">
         <tr> 
           <td class="titleheader"> 
             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
@@ -48,16 +48,17 @@ function dlSentry() {
         </tr>
         <tr> 
           <td class="normal"> 
-            <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
+            <table width = "100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center"> 
-                <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <? if(!$config['is_pop3']) { ?>
-                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
-                <? } ?> 
-                <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
-                <td class="toolbar">&nbsp;<a href="compose.php?action=reply&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Reply</a>&nbsp;</td>
-                <td class="toolbar">&nbsp;<a href="compose.php?action=forward&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Forward</a>&nbsp;</td>
-                <td class="toolbar">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
+                <td class="toolbar"> |
+                  <a href="mailbox.php">Mailbox</a> |
+                  <? if(!$config['is_pop3']) { ?>
+                  <a href="folders.php">Folders</a> |
+                  <? } ?> 
+                  <a href="compose.php">Compose</a> |
+                  <a href="compose.php?action=reply&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Reply</a> |
+                  <a href="compose.php?action=forward&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Forward</a> |
+                </td>
               </tr>
             </table>
             <p /> 

@@ -1,15 +1,14 @@
 <?
-// @(#) $Id: compose.php,v 1.12 2001/04/23 02:02:24 ryan Exp $
+// @(#) $Id: compose.php,v 1.13 2001/05/08 23:58:41 ryan Exp $
 include_once('include/misc.inc');
-check_cookie($username, $password);
-
-$rn = passwd_real_name($username);
-
+include_once('include/auth.inc');
 include_once('include/imap.inc');
-$imap = new km_imap($username, $password);
 
 $folder = ($folder ? $folder : $config[imap_mainbox]);
-$imap->connect($folder);
+list($imap, $username) = check_imap_auth($folder);
+$fromaddr = $username.'@'.$config['host'];
+
+$rn = passwd_real_name($username);
 
 if($submit) {
   include_once('include/sendmail.inc');
@@ -80,10 +79,10 @@ $imap->disconnect();
 <link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
 </head>
 <body class="normal">
-<table border="0" cellpadding="1" cellspacing="0" width="600" class="backblack">
+<table border="0" cellpadding="1" cellspacing="0" width="100%" class="backblack">
   <tr> 
     <td> 
-      <table border="0" cellpadding="5" cellspacing="0" width="598" class="main">
+      <table border="0" cellpadding="5" cellspacing="0" width="100%" class="main">
         <tr> 
           <td class="titleheader"> 
             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
@@ -98,15 +97,14 @@ $imap->disconnect();
         <tr> 
           <td class="normal"> 
             <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
-              <tr align="center"> 
-                <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <? if(!$config['is_pop3']) { ?>
-                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
-                <? } ?> 
-                <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
-                <td class="toolbar">&nbsp;Reply&nbsp;</td>
-                <td class="toolbar">&nbsp;Forward&nbsp;</td>
-                <td class="toolbar">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
+              <tr align="center">
+                <td class="toolbar"> |
+                  <a href="mailbox.php">Mailbox</a> | 
+                  <? if(!$config['is_pop3']) { ?>
+                  <a href="folders.php">Folders</a> |
+                  <? } ?> 
+                  <a href="compose.php">Compose</a> |
+                </td>
               </tr>
             </table>
             <p /> 
@@ -122,7 +120,7 @@ if($msgno) {
 ?> 
                 <tr> 
                   <td class="light"> 
-                    <table border="0" cellspacing="0" cellpadding="1">
+                    <table border="0" cellspacing="0" cellpadding="1" align="center">
                       <tr class="normal"> 
                         <td><b>From:</b></td>
                         <td> <?
@@ -181,9 +179,9 @@ if($msgno) {
                     </table>
                   </td>
                 </tr>
-                <tr class="compose"> 
+                <tr class="compose" align="center"> 
                   <td> 
-                    <textarea name="body" cols="69" rows="15"><? echo $body; ?></textarea>
+                    <textarea name="body" cols="78" rows="15"><? echo $body; ?></textarea>
                   </td>
                 </tr>
               </table>

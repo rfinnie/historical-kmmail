@@ -1,11 +1,11 @@
 <?
-// @(#) $Id: folders.php,v 1.10 2001/04/23 02:02:24 ryan Exp $
+// @(#) $Id: folders.php,v 1.11 2001/04/26 19:26:17 ryan Exp $
 include_once('include/misc.inc');
-check_cookie($username, $password);
-
+include_once('include/auth.inc');
 include_once('include/imap.inc');
-$imap = new km_imap($username, $password);
-$imap->connect($config[imap_mainbox]);
+
+list($imap, $username) = check_imap_auth($config[imap_mainbox]);
+
 if($action == "delete") {
   if($folder != "INBOX") {
     $imap->delete_mailbox($folder);
@@ -39,10 +39,10 @@ $imap->disconnect();
 <link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
 </head>
 <body class="normal">
-<table border="0" cellpadding="1" cellspacing="0" width="600" class="backblack">
+<table border="0" cellpadding="1" cellspacing="0" width="100%" class="backblack">
   <tr> 
     <td> 
-      <table border="0" cellpadding="5" cellspacing="0" width="598" class="main">
+      <table border="0" cellpadding="5" cellspacing="0" width="100%" class="main">
         <tr> 
           <td class="titleheader"> 
             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
@@ -58,12 +58,11 @@ $imap->disconnect();
           <td class="normal"> 
             <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center"> 
-                <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
-                <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
-                <td class="toolbar">&nbsp;Reply&nbsp;</td>
-                <td class="toolbar">&nbsp;Forward&nbsp;</td>
-                <td class="toolbar">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
+                <td class="toolbar"> |
+                  <a href="mailbox.php">Mailbox</a> |
+                  <a href="folders.php">Folders</a> |
+                  <a href="compose.php">Compose</a> |
+                </td>
               </tr>
             </table>
             <p /> 
