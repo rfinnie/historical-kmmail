@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.23 2001/09/07 22:28:34 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.24 2001/09/07 22:29:37 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -21,6 +21,8 @@ if($action_delete) {
 } elseif($action_expunge) {
   $imap->expunge_messages();
   header("Location: mailbox.php?folder=$folder");
+} elseif($action_jump) {
+  header("Location: mailbox.php?folder=$jump_folder");
 } elseif($action_move) {
   if(!is_array($delete_msg)) { $delete_msg = array(); }
   if(!is_array($undelete_msg)) { $undelete_msg = array(); }
@@ -148,10 +150,25 @@ Messages <? echo $offset; ?>-<? echo (($offset + $return) > $count ? $count : ($
     }
     ?> 
                     </select>
-                    <input type="submit" name="action_move" value="Move" />
+                    <input type="submit" name="action_move" value="Move" /><br>
+                    Jump directly to
+                    <select name="jump_folder">
+                      <?
+    for($i = 0; $i < count($boxes); $i++) {
+      if($boxes[$i] != $folder) {
+        ?> 
+                      <option value="<? echo $boxes[$i]; ?>"><? echo $boxes[$i]; ?></option>
+                      <?
+      }
+    }
+    ?> 
+                    </select>
+                    <input type="submit" name="action_jump" value="Jump" /><br>
                     <?
+
   }
-  ?> </td>
+  ?>
+ </td>
                 </tr>
                 <?
 }
