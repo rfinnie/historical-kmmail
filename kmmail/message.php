@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.17 2001/09/08 01:06:28 ryanf Exp $
+// @(#) $Id: message.php,v 1.18 2001/09/08 03:22:19 ryanf Exp $
 include_once('include/message_show.inc');
 include_once('include/misc.inc');
 include_once('include/auth.inc');
@@ -20,7 +20,6 @@ if($action == 'delete') {
 }
 
 $msginfo = $imap->retrieve_message_info($msgno);
-
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -152,7 +151,7 @@ if(count($msginfo[cc_array]) > 0) {
                       <td><nobr><a href="#" onClick="return pwin('popup.php?action=show_headers&folder=<? echo urlencode($folder); ?>&msgno=<? echo $msgno; ?>');">Show Headers</a></nobr></td>
                     </tr>
                     <tr class="normal" align="right"> 
-                      <td><nobr><a href="get_attach.php?folder=<? echo $folder; ?>&amp;type=MESSAGE&amp;subtype=RFC822&amp;msgnum=<? echo $msgno; ?>&amp;name=foo.txt">Download Message</a></nobr></td>
+                      <td><nobr><a href="get_attach.php?folder=<? echo $folder; ?>&amp;type=MESSAGE&amp;subtype=RFC822&amp;msgnum=<? echo $msgno; ?>&amp;name=<? echo date('Ymd-His', strtotime($msginfo[date])) . '.eml'; ?>">Download Message</a></nobr></td>
                     </tr>
                   </table>
 
