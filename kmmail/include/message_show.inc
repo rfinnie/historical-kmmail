@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.10 2001/09/08 01:02:22 ryanf Exp $
+// @(#) $Id: message_show.inc,v 1.11 2001/09/08 03:22:19 ryanf Exp $
 
 class km_message_show {
   var $cid_list;
@@ -90,12 +90,12 @@ class km_message_show {
     if($struct->type) {
       $type = $types[$struct->type];
     } else {
-      $type = "UNKNOWN";
+      $type = "TEXT";
     }
     if($struct->subtype) {
       $subtype = $struct->subtype;
     } else {
-      $subtype = "UNKNOWN";
+      $subtype = "TEXT";
     }
     $mime_type = strtolower($type . "/" . $subtype);
     if($struct->ifdparameters == 1) {
