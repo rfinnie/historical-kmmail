@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.5 2001/03/21 00:48:37 ryan Exp $
+// @(#) $Id: mailbox.php,v 1.6 2001/03/22 07:36:35 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -14,8 +14,10 @@ if($action_delete) {
   if(count($undelete_msg) > 0) {
     $imap->undelete_messages(array_keys($undelete_msg));
   }
+  header("Location: mailbox.php?folder=$folder");
 } elseif($action_expunge) {
   $imap->expunge_messages();
+  header("Location: mailbox.php?folder=$folder");
 }
 $msgs = $imap->retrieve_message_list();
 $foo = $imap->retrieve_mailboxes();
@@ -60,6 +62,7 @@ $count = count($msgs);
             </table>
             <p /> 
               <form method="post" action="<? echo $PHP_SELF; ?>">
+              <input type="hidden" name="folder" value="<? echo $folder; ?>" />
             <table width="100%" border="0" cellpadding="2" cellspacing="1" class="backblack">
                 <tr align="center" class="messagelist-top"> 
                   <td><b>&nbsp;</b></td>
