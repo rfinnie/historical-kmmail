@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.11 2001/04/21 19:24:17 ryan Exp $
+// @(#) $Id: compose.php,v 1.12 2001/04/23 02:02:24 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 
@@ -26,7 +26,7 @@ if($submit) {
       'msgnum' => $msgno
     );
   }
-  if($HTTP_POST_FILES['attach']['name'] == "") {
+  if(($HTTP_POST_FILES['attach']['name'] == "") || (strtolower($HTTP_POST_FILES['attach']['name']) == "none")) {
     $attach_array = array();
   } else {
     $attach_array = array($HTTP_POST_FILES['attach']);
