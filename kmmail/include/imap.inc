@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.11 2001/04/21 19:32:33 ryan Exp $
+// @(#) $Id: imap.inc,v 1.12 2001/04/21 21:20:06 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -194,9 +194,11 @@ class km_imap {
         'unread' => ($msg->Unseen == 'U' || $msg->Recent == 'N'),
         'deleted' => ($msg->Deleted == 'D')
       );
-      $partcount = $this->parts_count($msg_array[$i]);
-      $out[$i]['count_mime'] = $partcount['mime'];
-      $out[$i]['count_disposition'] = $partcount['disposition'];
+      if(!$this->config['is_pop3']) {
+        $partcount = $this->parts_count($msg_array[$i]);
+        $out[$i]['count_mime'] = $partcount['mime'];
+        $out[$i]['count_disposition'] = $partcount['disposition'];
+      }
     }
     return $out;
   }
