@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.4 2001/04/01 05:40:56 ryan Exp $
+// @(#) $Id: imap.inc,v 1.5 2001/04/01 06:16:36 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -169,6 +169,14 @@ class km_imap {
 
   function create_mailbox($folder) {
     imap_createmailbox($this->mbox, $this->create_imap_string($folder));
+  }
+
+  function delete_mailbox($folder) {
+    imap_deletemailbox($this->mbox, $this->create_imap_string($folder));
+  }
+
+  function rename_mailbox($oldfolder, $newfolder) {
+    imap_renamemailbox($this->mbox, $this->create_imap_string($oldfolder), $this->create_imap_string($newfolder));
   }
 
  function retrieve_all_headers_array($folder, $msgnum) {
