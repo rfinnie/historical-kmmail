@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.22 2001/09/07 22:18:55 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.23 2001/09/07 22:28:34 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -72,12 +72,12 @@ $imap->disconnect();
                   <a href="folders.php?folder=<? echo urlencode($folder); ?>">Folders</a> |
                   <? } ?> 
                   <a href="compose.php?folder=<? echo urlencode($folder); ?>">Compose</a> |
-                  <? if(($offset + $return) <= $count) { $newoffset = $offset + $return; ?>
-                  <a href="mailbox.php?folder=<? echo $folder; ?>&amp;offset=<? echo $newoffset; ?>">&gt;&gt;</a> |
-                  <? } ?> 
                   <? if(!$config['is_pop3']) { ?>
                   <a href="mailbox.php?action_expunge=1">Expunge</a> |
                   <? } ?>
+                  <? if(($offset + $return) <= $count) { $newoffset = $offset + $return; ?>
+                  <a href="mailbox.php?folder=<? echo $folder; ?>&amp;offset=<? echo $newoffset; ?>">&gt;&gt;</a> |
+                  <? } ?> 
                 </td>
               </tr>
             </table>
