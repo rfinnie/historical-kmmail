@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.2 2001/03/05 15:17:41 ryan Exp $
+// @(#) $Id: imap.inc,v 1.3 2001/03/06 03:03:14 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -9,11 +9,11 @@ class km_imap {
   var $username;
   var $password;
   var $mbox;
+  var $config;
 
   function km_imap($username, $password) {
     global $config;
-    $this->host = $config[imap_host];
-    $this->port = $config[imap_port];
+    $this->config = $config;
     $this->username = $username;
     $this->password = $password;
   }
@@ -27,14 +27,18 @@ class km_imap {
     }
   }
 
-  function connect($folder) {
-    global $config;
-    if($folder == $config[imap_mainbox]) {
-      $imap_string =  "{" . $this->host .":" . $this->port . "}" . $folder;
+  function create_imap_string($folder = '') {
+    if($folder == '') {
+      return "{" . $this->config['imap_host'] .":" . $this->config['imap_port'] . "}";
+    } elseif($folder == $this->config[imap_mainbox]) {
+      return "{" . $this->config['imap_host'] .":" . $this->config['imap_port'] . "}" . $folder;
     } else {
-      $imap_string =  "{" . $this->host .":" . $this->port . "}" . $config[imap_mailpath] . $folder;
+      return "{" . $this->config['imap_host'] .":" . $this->config['imap_port'] . "}" . $this->config[imap_mailpath] . $folder;
     }
-    $this->mbox = imap_open($imap_string, $this->username, $this->password);
+  }
+
+  function connect($folder) {
+    $this->mbox = imap_open($this->create_imap_string($folder), $this->username, $this->password);
     if($this->mbox) {
       return true;
     } else {
@@ -51,21 +55,33 @@ class km_imap {
     return imap_num_msg($this->mbox);
   }
 
-  function append_mailbox($text, $mailbox) {
-    $imap_string =  "{" . $this->host .":" . $this->port . "}" . $mailbox;
-    return imap_append($this->mbox, $imap_string, $text);
+  function append_mailbox($folder, $text) {
+    return imap_append($this->mbox, $this->create_imap_string($folder), $text);
   }
 
-  function retrieve_mailboxes() {
-    global $config;
-    $imap_string =  "{" . $this->host .":" . $this->port . "}";
-    $list = imap_listmailbox($this->mbox, $imap_string . $config[imap_mailpath], '*');
+  function retrieve_mailboxes_short() {
+    $imap_string = $this->create_imap_string();
+    $list = imap_listmailbox($this->mbox, $imap_string . $this->config[imap_mailpath], '*');
     $list[] = $imap_string . "INBOX";
     sort($list);
     $out = array();
     for($i = 0; $i < count($list); $i++) {
       $name = ereg_replace($imap_string, "", $list[$i]);
-      $name = ereg_replace($config[imap_mailpath], "", $name);
+      $name = ereg_replace($this->config[imap_mailpath], "", $name);
+      $out[] = $name;
+    }
+    return $out;
+  }
+
+  function retrieve_mailboxes() {
+    $imap_string = $this->create_imap_string();
+    $list = imap_listmailbox($this->mbox, $imap_string . $this->config[imap_mailpath], '*');
+    $list[] = $imap_string . "INBOX";
+    sort($list);
+    $out = array();
+    for($i = 0; $i < count($list); $i++) {
+      $name = ereg_replace($imap_string, "", $list[$i]);
+      $name = ereg_replace($this->config[imap_mailpath], "", $name);
       imap_reopen($this->mbox, $list[$i]);
       $info=imap_mailboxmsginfo($this->mbox);
       $out[$i] = array(
@@ -100,11 +116,6 @@ class km_imap {
       'cc_array' => $cc_array
     );
     return $out;
-  }
-
-  function retrieve_message_body($msgno) {
-    $body = imap_body($this->mbox, $msgno, FT_UID + FT_PEEK);
-    return $body;
   }
 
   function delete_messages($msgs) {
@@ -142,6 +153,24 @@ class km_imap {
     return $out;
   }
   
+  function select_folder($folder) {
+    imap_reopen($this->mbox, $this->create_imap_string($folder));
+  }
+
+  function retrieve_message_headers_text($folder, $msgnum) {
+    $this->select_folder($folder);
+    return imap_fetchheader($this->mbox, $msgnum, FT_UID);
+  }
+
+  function retrieve_message_body($folder, $msgnum) {
+    $this->select_folder($folder);
+    return imap_body($this->mbox, $msgnum, FT_UID);
+  }
+
+  function create_mailbox($folder) {
+    imap_createmailbox($this->mbox, $this->create_imap_string($folder));
+  }
+
 }
 
 function pre_print_r($array) {

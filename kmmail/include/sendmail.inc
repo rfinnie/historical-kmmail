@@ -1,5 +1,5 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.2 2001/03/06 03:03:14 ryan Exp $
+// @(#) $Id: sendmail.inc,v 1.3 2001/03/06 05:49:28 ryan Exp $
 
 class km_sendmail {
 
@@ -76,12 +76,8 @@ class km_sendmail {
 // //print "<pre>";
 // //print_r($this->rfc822_messages);
 // //print "</pre>";
-    include_once('include/imap.inc');
-global $username, $password;
-    $imap = new km_imap($username, $password);
-    $imap->connect($folder);
-    $headers = imap_fetchheader($imap->mbox, $msgnum, FT_UID);
-    $body = imap_body($imap->mbox, $msgnum, FT_UID);
+    $body = $this->imap->retrieve_message_body($folder, $msgnum);
+    $headers = $this->imap->retrieve_message_headers_text($folder, $msgnum);
 
     $headers = preg_replace("/\r/", "", $headers);
     $headers = preg_replace("/^From /", "X-Original: ", $headers);
@@ -194,8 +190,16 @@ global $username, $password;
 // //print "<pre>u ".$this->subject." u" . $this->email_headers . " yyy " . $this->message . "</pre>";
     mail(stripslashes($this->recipient), stripslashes($this->subject), $this->message, $this->email_headers);
 
-    return "To: ".stripslashes($this->recipient)."\nSubject: ".stripslashes($this->subject)."\nDate: ".gmdate("D, j M Y h:i:s -0000")."\n" . $this->email_headers . "\n" . $this->message;
   }
 
+  function add_sent_mail() {
+    global $config;
+    $sent = "To: ".stripslashes($this->recipient)."\nSubject: ".stripslashes($this->subject)."\nDate: ".gmdate("D, j M Y h:i:s -0000")."\n" . $this->email_headers . "\n" . $this->message;
+    
+    if(!in_array($config[imap_sentbox], $this->imap->retrieve_mailboxes_short())) {
+      $this->imap->create_mailbox($config[imap_sentbox]);
+    }
+    $this->imap->append_mailbox($config[imap_sentbox], $sent);
+  }
 }
 ?>

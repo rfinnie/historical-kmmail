@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.4 2001/03/20 22:20:08 ryan Exp $
+// @(#) $Id: compose.php,v 1.5 2001/03/21 00:48:37 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -28,8 +28,9 @@ if($submit) {
     $from = $username.'@'.$config[host];
   }
   $mail = new km_sendmail();
-  $sent = $mail->build_message($body, $to, $cc, $attach_array, $from, $subject, ($send_html ? 'html' : 'plain'), $rfc822);
-  $imap->append_mailbox($sent, $config[imap_sentbox]);
+  $mail->imap = $imap;
+  $mail->build_message($body, $to, $cc, $attach_array, $from, $subject, ($send_html ? 'html' : 'plain'), $rfc822);
+  $mail->add_sent_mail();
   header("Location: mailbox.php");
   exit;
 }

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.7 2001/03/21 00:48:44 ryan Exp $
+// @(#) $Id: settings.inc,v 1.8 2001/03/22 07:36:38 ryan Exp $
 $config = array(
   'version' => '1.0pre1',
   'build' => 'BUILDTAG',
@@ -8,7 +8,7 @@ $config = array(
   'imap_port' => 143,
   'imap_mailpath' => 'mail/',
   'imap_mainbox' => 'INBOX',
-  'imap_sentbox' => 'mail/sent-mail',
+  'imap_sentbox' => 'sent-mail',
   'use_passwd' => 1,
   'passwd_map' => array(
     'juser' => 'Joe User'
