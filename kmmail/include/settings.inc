@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.13 2001/04/05 21:47:07 ryan Exp $
+// @(#) $Id: settings.inc,v 1.14 2001/08/24 22:15:44 ryanf Exp $
 $config = array(
 
   // Version number.
@@ -34,17 +34,6 @@ $config = array(
   'passwd_map' => array(
     'juser' => 'Joe User'
   ),
-
-  // Set to 1 and specify username and password if you want a default
-  // username and password to be used if the session cookie cannot be found.
-  // This should only be used in a testing environment.
-  'default_login' => 0,
-
-  // Default username to use if default_login is 1.
-  'default_login_username' => 'username',
-
-  // Default password to use if default_login is 1.
-  'default_login_password' => 'password',
 
   // Title of the program as seen by the end users.  This is for display
   // purposes only; you may use whatever you want here.
