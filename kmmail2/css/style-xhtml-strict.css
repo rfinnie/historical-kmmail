@@ -1,0 +1,155 @@
+a:link {
+  color : #000080;
+}
+a:visited {
+  color : #000080;
+}
+a:hover {
+  color : #0000ff;
+}
+
+body.normal {
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+  color : #000000;
+  background-color : #86a6c9;
+  background-image : url(../images/bg.gif);
+  text-align : center;
+}
+
+
+div.center {
+  text-align : center;
+}
+div.left {
+  text-align : left;
+}
+div.right {
+  text-align : right;
+}
+div.kmblurb {
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+  color : #ffffff;
+  text-align : right;
+}
+a.kmblurb:link {
+  color : #ffffff;
+}
+a.kmblurb:visited {
+  color : #ffffff;
+}
+
+table.titlebar {
+  background-image : url("../images/titlebg.gif");
+}
+
+
+table.backblack {
+  background-color : #000000;
+  color : #ffffff;
+}
+
+
+table.main {
+  background-color : #dedfd6;
+  color : #000000;
+}
+
+
+table {
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+  text-align : left;
+}
+
+td.normal {
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+}
+
+
+td.light {
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+  background-color : #f0f0f0;
+  color : #000000;
+}
+
+tr.compose {
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+  background-color : #ffffff;
+  color : #000000;
+}
+
+tr.white {
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+  background-color : #ffffff;
+  color : #000000;
+}
+
+tr.normal {
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+}
+
+
+td.toolbar {
+  background-color : #c0c0c0;
+  color : #000000;
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+}
+
+
+tr.messagelist-top {
+  
+  background-color : #c0c0c0;
+  color : #000000;
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 12pt;
+  font-weight : bold;
+}
+
+
+tr.messagelist-read {
+  background-color : #ffffff;
+  color : #000000;
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+}
+
+
+tr.messagelist-unread {
+  background-color : #f0f0ff;
+  color : #000000;
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+}
+
+
+tr.messagelist-deleted {
+  background-color : #808080;
+  color : #000000;
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 10pt;
+}
+
+
+td.titleheader {
+  font-family : Arial, Helvetica, sans-serif;
+  font-size : 12pt;
+  font-weight : bold;
+  text-align : center;
+}
+
+
+img.normal {
+  border-top-width : 0;
+  border-right-width : 0;
+  border-bottom-width : 0;
+  border-left-width : 0;
+}
+
