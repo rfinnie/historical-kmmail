@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.6 2001/04/01 05:40:52 ryan Exp $
+// @(#) $Id: compose.php,v 1.7 2001/04/01 06:16:42 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -23,9 +23,9 @@ if($submit) {
     $attach_array = array($HTTP_POST_FILES['attach']);
   }
   if($rn) {
-    $from = "\"$rn\" <".$username.'@'.$config[host].">";
+    $from = "\"$rn\" <$fromaddr>";
   } else {
-    $from = $username.'@'.$config[host];
+    $from = $fromaddr;
   }
   $mail = new km_sendmail();
   $mail->imap = $imap;
@@ -107,11 +107,11 @@ if($msgno) {
 <?
 if($rn) {
   ?>
-                          "<? echo $rn; ?>" &lt;<? echo $username; ?>@<? echo $config[host]; ?>&gt;
+                          "<? echo $rn; ?>" &lt;<? echo $fromaddr; ?>&gt;
   <?
 } else {
   ?>
-                          &lt;<? echo $config[host]; ?>&gt;
+                          &lt;<? echo $fromaddr; ?>&gt;
   <?
 }
 ?>

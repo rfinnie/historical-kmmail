@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.6 2001/04/01 07:41:19 ryan Exp $
+// @(#) $Id: imap.inc,v 1.7 2001/04/01 20:47:22 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -14,6 +14,7 @@ class km_imap {
   function km_imap($username, $password) {
     global $config;
     $this->config = $config;
+    $username = get_real_username($username);
     $this->username = $username;
     $this->password = $password;
   }

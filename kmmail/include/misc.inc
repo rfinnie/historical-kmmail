@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc,v 1.4 2001/03/22 07:36:38 ryan Exp $
+// @(#) $Id: misc.inc,v 1.5 2001/04/01 07:36:00 ryan Exp $
 
 include_once('include/settings.inc');
 include_once('include/imap.inc');
@@ -34,12 +34,14 @@ function passwd_real_name($username) {
 function check_cookie(&$username, &$password) {
   global $config;
   global $kmauth;
+  global $fromaddr;
   session_start();
   session_register("kmauth");
   if(!$kmauth || !$kmauth[username]) {
     if($config[default_login]) {
       $username = $config[default_login_username];
       $password = $config[default_login_password];
+      $fromaddr = $username.'@'.$config['host'];
     } else {
       header("Location: login.php");
       exit;
@@ -47,6 +49,7 @@ function check_cookie(&$username, &$password) {
   } else {
     $username = $kmauth[username];
     $password = $kmauth[password];
+    $fromaddr = $kmauth['fromaddr'];
   }
 
 }
@@ -56,16 +59,38 @@ function clear_cookie() {
 }
 
 function km_session_start($username, $password) {
-  global $HTTP_SESSION_VARS;
+  global $HTTP_SESSION_VARS, $config;
   session_start();
   global $kmauth;
+
+  $fromuser = $username;
+  $fromaddr = $fromuser.'@'.$config['host'];
+  $username = get_real_username($username);
+
   $kmauth = array(
     "username" => $username,
-    "password" => $password
+    "password" => $password,
+    "fromaddr" => $fromaddr
   );
   session_register("kmauth");
 }
 
+function get_real_username($username) {
+  global $config;
+  $email = $username.'@'.$config['host'];
+  if($config['use_virtusertable'] == 1) {
+    dbmopen($config['virtusertable_file'], 'r');
+    $realunix = dbmfetch($config['virtusertable_file'], $email);
+    dbmclose($fn);
+    if($realunix && preg_match("/^[a-z0-9]+$/", $realunix)) {
+      return $realunix;
+    } else {
+      return $username;
+    }
+  } else {
+    return $username;
+  }
+}
 function km_send_udp_stat_packet() {
   @fsockopen("udp://stats.kmmail.org", 65520);
   @fputs($fp, '');
