@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.14 2001/09/07 17:11:04 ryanf Exp $
+// @(#) $Id: popup.php,v 1.1 2001/09/07 21:22:20 ryanf Exp $
 include_once('include/message_show.inc');
 include_once('include/misc.inc');
 include_once('include/auth.inc');
@@ -21,9 +21,6 @@ $msginfo = $imap->retrieve_message_info($msgno);
 <link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
 </head>
 <body class="normal">
-<table border="0" cellpadding="0" cellspacing="0" width="100%" class="backblack">
-  <tr> 
-    <td> 
 <?
 if($action="show_headers") {
   ?>
@@ -38,9 +35,6 @@ if($action="show_headers") {
   <?
 }
 ?>
-    </td>
-  </tr>
-</table>
 </body>
 </html>
 <?
