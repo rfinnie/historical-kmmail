@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.26 2001/09/08 01:06:28 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.27 2001/09/08 04:10:40 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -45,6 +45,16 @@ $today = date("m/d/Y");
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
+<? if($config['use_expunge_disclaimer']) { ?>
+<script language="javascript">
+<!--
+function expSentry() {
+  var string = "<? echo $config['expunge_disclaimer_text']; ?>";
+  return confirm(string);
+}
+// -->
+</script>
+<? } ?>
 </head>
 <body class="normal">
 <table border="0" cellpadding="1" cellspacing="0" width="100%" class="backblack">
@@ -77,7 +87,7 @@ $today = date("m/d/Y");
                   <? } ?> 
                   <a href="compose.php?folder=<? echo urlencode($folder); ?>">Compose</a> |
                   <? if(!$config['is_pop3']) { ?>
-                  <a href="mailbox.php?action_expunge=1">Expunge</a> |
+                  <a href="mailbox.php?action_expunge=1"<? echo ($config['use_expunge_disclaimer'] ? ' onclick="return expSentry();"' : ''); ?>>Expunge</a> |
                   <? } ?>
                   <? if(($offset + $return) <= $count) { $newoffset = $offset + $return; ?>
                   <a href="mailbox.php?folder=<? echo $folder; ?>&amp;offset=<? echo $newoffset; ?>">&gt;&gt;</a> |

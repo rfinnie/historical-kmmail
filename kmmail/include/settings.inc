@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.17 2001/09/07 22:18:55 ryanf Exp $
+// @(#) $Id: settings.inc,v 1.18 2001/09/08 04:10:40 ryanf Exp $
 $config = array(
 
   // Version number.
@@ -78,6 +78,12 @@ $config = array(
 
   // Text to use for disclaimer.
   'download_disclaimer_text' => 'Warning! If you do not know who sent you this email, do not download the attached file. It could contain a computer virus that may compromise your system or contain questionable graphics.\n\nDo you wish to download this file?',
+
+  // This option allows you to specify a message before expunging.
+  'use_expunge_disclaimer' => 1,
+
+  // Text to use for disclaimer.
+  'expunge_disclaimer_text' => 'Warning! Are you sure you want to remove all deleted messages in all mailboxes?  There is no way to undo this action.',
 
   // The number of minutes your timezone is offset, west of GMT is negative.
   // For example:
