@@ -1,5 +1,5 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.3 2001/03/06 05:49:28 ryan Exp $
+// @(#) $Id: sendmail.inc,v 1.4 2001/04/01 05:40:56 ryan Exp $
 
 class km_sendmail {
 
@@ -180,11 +180,14 @@ class km_sendmail {
   }
 
   function send() {
+    global $config, $REMOTE_ADDR;
     $extra = "From: ".$this->sender."\n";
     if($this->cc) {
       $extra .= "Cc: ".stripslashes($this->cc)."\n";
     }
     $extra .= "Sender: ".$this->sender."\n";
+    $extra .= "X-Sender: ".$config['title']." via kMmail version ".$config['version'].", build ".$config['build']."\n";
+    $extra .= "X-Originating-IP: ".$REMOTE_ADDR."\n";
     $this->email_headers = $extra . $this->email_headers;
 
 // //print "<pre>u ".$this->subject." u" . $this->email_headers . " yyy " . $this->message . "</pre>";
