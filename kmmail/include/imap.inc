@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.12 2001/04/21 21:20:06 ryan Exp $
+// @(#) $Id: imap.inc,v 1.13 2001/04/23 02:53:31 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -35,7 +35,7 @@ class km_imap {
       7 => "OTHER"
     );
     for($i = 0; $i < count($struct); $i++) {
-      $mime = strtolower($types[($struct[$i]->type ? $struct[$i]->type : 7)] . '/' . $struct[$i]->subtype);
+      $mime = strtolower($types[($struct[$i]->type ? $struct[$i]->type : 0)] . '/' . $struct[$i]->subtype);
       $array['mime'][$mime]++;
       if($struct[$i]->disposition) {
         $array['disposition'][strtolower($struct[$i]->disposition)]++;
