@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.5 2001/04/05 22:49:17 ryan Exp $
+// @(#) $Id: message_show.inc,v 1.6 2001/04/18 05:29:09 ryan Exp $
 
 class km_message_show {
   var $cid_list;
@@ -17,6 +17,8 @@ class km_message_show {
     $this->cid_list = $this->make_cid_list($struct->parts, $imap_part_base);
     if($struct->type == 1) {
       if($struct->subtype == "MIXED") {
+        $this->process_multipart_mixed($struct->parts, $imap_part_base);
+      } elseif($struct->subtype == "REPORT") {
         $this->process_multipart_mixed($struct->parts, $imap_part_base);
       } elseif($struct->subtype == "RELATED") {
         $this->process_multipart_related($struct->parts, $imap_part_base);
@@ -264,7 +266,9 @@ class km_message_show {
           }
         }
       } elseif($struct->type == 2) {
-        if($struct->subtype == "RFC822") {
+        if($struct->subtype == "DELIVERY-STATUS") {
+          $this->process_text_plain($struct, $imap_part);
+        } elseif($struct->subtype == "RFC822") {
           $struct = $struct->parts[0];
           $msg = imap_rfc822_parse_headers(imap_fetchbody($this->mailbox, $this->msgnum, "$imap_part.0", FT_UID));
     $to_array = array();
