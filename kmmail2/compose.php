@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.2 2002/11/25 04:41:36 ryanf Exp $
+// @(#) $Id: compose.php,v 1.2.8.1 2002/11/25 07:49:17 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
@@ -10,8 +10,9 @@ if($folder) {
   $imap->select_folder($folder);
 }
 $fromaddr = $username.'@'.$config['host'];
+$realuser = get_real_username($username);
 
-$rn = passwd_real_name($username);
+$rn = passwd_real_name($realuser);
 
 if($submit) {
   include_once('include/sendmail.inc.php');
