@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.5 2001/03/21 00:48:37 ryan Exp $
+// @(#) $Id: message.php,v 1.6 2001/04/01 05:26:58 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -103,6 +103,26 @@ $struct = imap_fetchstructure($imap->mbox, $msgno, FT_UID);
 $message_show = new km_message_show();
 $message_show->display_message($imap->mbox, $folder, $msgno, $struct);
 ?></td>
+              </tr>
+              <tr class="white"> 
+                <td>
+                  <? if($show_headers != "on") { ?><a href="<? echo $PHP_SELF; ?>?folder=<? echo $folder; ?>&amp;msgno=<? echo $msgno; ?>&amp;show_headers=on">Show Headers</a><br /><? } ?>
+<?
+if($show_headers == "on") {
+  $link = "$PHP_SELF?folder=$folder&amp;msgno=$msgno&amp;show_headers=off";
+  ?>
+                  <table width="100%" border="0" cellpadding="3" cellspacing="1" class="backblack">
+                    <tr>
+                      <td class="toolbar"><b>Message Headers (<a href="<? echo $link; ?>">Hide</a>)</b></td>
+                    </tr>
+                    <tr>
+                      <td class="light"><tt><? echo nl2br(htmlentities($imap->retrieve_message_headers_text($folder, $msgno))); ?></tt></td>
+                    </tr>
+                  </table>
+  <?
+}
+?>
+                </td>
               </tr>
             </table>
           </td>
