@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: folders.php,v 1.5 2001/03/21 00:48:37 ryan Exp $
+// @(#) $Id: folders.php,v 1.6 2001/04/01 07:35:56 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -82,7 +82,7 @@ for($i = 0; $i < count($boxes); $i++) {
                 <td><a href="mailbox.php?folder=<? echo urlencode($boxes[$i][name]); ?>"><? echo $boxes[$i][name]; ?></a></td>
                 <td><? echo $boxes[$i][msgs]; ?></td>
                 <td><? echo $boxes[$i][unread]; ?></td>
-                <td><? echo $boxes[$i][size]; ?></td>
+                <td><? echo km_human_readable_size($boxes[$i][size], 1); ?></td>
                 <td><? if(!(($boxes[$i]['name'] == 'INBOX') || ($boxes[$i]['msgs'] > 0))) { ?><a href="<? echo $PHP_SELF; ?>?action=delete&amp;folder=<? echo urlencode($boxes[$i][name]); ?>">Delete</a><? } else { ?>&nbsp;<? } ?></td>
               </tr>
               <?
