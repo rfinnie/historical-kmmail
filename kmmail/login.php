@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: km_message_show.inc,v 2.2 2001/02/07 19:32:56 ryan Exp $
+// @(#) $Id: login.php,v 1.1 2001/03/03 07:38:28 ryan Exp $
 if($username) {
   include_once('include/imap.inc');
   $imap = new km_imap($username, $password, "INBOX");
@@ -29,7 +29,7 @@ if($username) {
             <table border=0 cellpadding=0 cellspacing=0 width="100%" background="images/titlebg.gif">
               <tr> 
                 <td align="left"><img src="images/titleleft.gif" width="48" height="26" border="0"></td>
-                <td align="center">
+                <td align="center"> 
                   <div class="header1">kmMail - Login</div>
                 </td>
                 <td align="right"><img src="images/titleright.gif" width="48" height="26" border="0"></td>
@@ -39,7 +39,7 @@ if($username) {
         </tr>
         <tr> 
           <td> 
-            <p>Welcome to kmMail!  Please enter your username and password to continue.</p>
+            <p>Welcome to kmMail! Please enter your username and password to continue.</p>
             <table border="0" align="center">
               <form method="post" action="<? echo $PHP_SELF; ?>">
                 <tr> 

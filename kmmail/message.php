@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: km_message_show.inc,v 2.2 2001/02/07 19:32:56 ryan Exp $
+// @(#) $Id: message.php,v 1.1 2001/03/03 07:38:28 ryan Exp $
 if(!$kmauth) {
   exit;
 }
@@ -36,7 +36,7 @@ $msginfo = $imap->retrieve_message_info($msgno);
             <table border=0 cellpadding=0 cellspacing=0 width="100%" background="images/titlebg.gif">
               <tr> 
                 <td align="left"><img src="images/titleleft.gif" width="48" height="26" border="0"></td>
-                <td align="center">
+                <td align="center"> 
                   <div class="header1">kmMail - Read Message</div>
                 </td>
                 <td align="right"><img src="images/titleright.gif" width="48" height="26" border="0"></td>
@@ -46,78 +46,72 @@ $msginfo = $imap->retrieve_message_info($msgno);
         </tr>
         <tr> 
           <td> 
-<table width="100%" border=0 cellpadding=1 cellspacing=1 bgcolor="#000000">
-<tr align="center">
-  <td bgcolor="#C0C0C0">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-  <td bgcolor="#C0C0C0">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
-  <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td> 
-  <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php?action=reply&msgno=<? echo $msgno; ?>">Reply</a>&nbsp;</td>
-  <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php?action=forward&msgno=<? echo $msgno; ?>">Forward</a>&nbsp;</td>
-  <td bgcolor="#C0C0C0">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
-</tr>  
-</table>
-<p>
-<table width="100%" border=0 cellpadding=3 cellspacing=1 bgcolor="#000000">
-  <tr>
-    <td bgcolor="#F0F0F0">
-<table border=0 cellpadding=0 cellspacing=0>
-  <tr>
-    <td><b>From: </b></td>
-    <td><a href="compose.php?to=<? echo $msginfo[from_address]; ?>"><? echo $msginfo[from_name]; ?></a></td>
-  </tr>
-<?
+            <table width="100%" border=0 cellpadding=1 cellspacing=1 bgcolor="#000000">
+              <tr align="center"> 
+                <td bgcolor="#C0C0C0">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php?action=reply&msgno=<? echo $msgno; ?>">Reply</a>&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php?action=forward&msgno=<? echo $msgno; ?>">Forward</a>&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
+              </tr>
+            </table>
+            <p> 
+            <table width="100%" border=0 cellpadding=3 cellspacing=1 bgcolor="#000000">
+              <tr> 
+                <td bgcolor="#F0F0F0"> 
+                  <table border=0 cellpadding=0 cellspacing=0>
+                    <tr> 
+                      <td><b>From: </b></td>
+                      <td><a href="compose.php?to=<? echo $msginfo[from_address]; ?>"><? echo $msginfo[from_name]; ?></a></td>
+                    </tr>
+                    <?
 if(count($msginfo[to_array]) > 0) {
-  ?>
-  <tr>
-    <td><b>To: </b></td>
-    <td>
-  <?
+  ?> 
+                    <tr> 
+                      <td><b>To: </b></td>
+                      <td> <?
   for($i = 0; $i < count($msginfo[to_array]); $i++) {
-    ?>
-      <a href="compose.php?to=<? echo $msginfo[to_array][$i][address]; ?>"><? echo $msginfo[to_array][$i][name]; ?></a><br>
-    <?
+    ?> <a href="compose.php?to=<? echo $msginfo[to_array][$i][address]; ?>"><? echo $msginfo[to_array][$i][name]; ?></a><br>
+                        <?
   }
-  ?>
-    </td>
-  </tr>
-<?
+  ?> </td>
+                    </tr>
+                    <?
 }
 
 if(count($msginfo[cc_array]) > 0) {
-  ?>
-  <tr>
-    <td><b>Cc: </b></td>
-    <td>
-  <?
+  ?> 
+                    <tr> 
+                      <td><b>Cc: </b></td>
+                      <td> <?
   for($i = 0; $i < count($msginfo[cc_array]); $i++) {
-    ?>
-      <a href="compose.php?to=<? echo $msginfo[cc_array][$i][address]; ?>"><? echo $msginfo[cc_array][$i][name]; ?></a><br>
-    <?
+    ?> <a href="compose.php?to=<? echo $msginfo[cc_array][$i][address]; ?>"><? echo $msginfo[cc_array][$i][name]; ?></a><br>
+                        <?
   }
-  ?>
-    </td>
-  </tr>
-  <?
+  ?> </td>
+                    </tr>
+                    <?
 }
-?>
-  <tr>
-    <td><b>Subject: </b></td>
-    <td><? echo $msginfo[subject]; ?></td>
-  </tr>
-  <tr>
-    <td><b>Date: </b></td>
-    <td><? echo $msginfo[date]; ?></td>
-  </tr>
-</table>
-    </td>
-  </tr>
-  <tr>
-    <td bgcolor="#FFFFFF"><?
+?> 
+                    <tr> 
+                      <td><b>Subject: </b></td>
+                      <td><? echo $msginfo[subject]; ?></td>
+                    </tr>
+                    <tr> 
+                      <td><b>Date: </b></td>
+                      <td><? echo $msginfo[date]; ?></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF"><?
 $struct = imap_fetchstructure($imap->mbox, $msgno, FT_UID);
 $message_show = new km_message_show($imap->mbox, ($folder ? $folder : 'INBOX'), $msgno, $struct);
 ?></td>
-  </tr>
-</table>
+              </tr>
+            </table>
           </td>
         </tr>
       </table>

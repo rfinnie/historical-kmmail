@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: km_message_show.inc,v 2.2 2001/02/07 19:32:56 ryan Exp $
+// @(#) $Id: folders.php,v 1.1 2001/03/03 07:38:28 ryan Exp $
 if(!$kmauth) {
   exit;
 }
@@ -35,7 +35,7 @@ $imap->disconnect();
             <table border=0 cellpadding=0 cellspacing=0 width="100%" background="images/titlebg.gif">
               <tr> 
                 <td align="left"><img src="images/titleleft.gif" width="48" height="26" border="0"></td>
-                <td align="center">
+                <td align="center"> 
                   <div class="header1">kmMail - Folders</div>
                 </td>
                 <td align="right"><img src="images/titleright.gif" width="48" height="26" border="0"></td>
@@ -45,37 +45,37 @@ $imap->disconnect();
         </tr>
         <tr> 
           <td> 
-<table width="100%" border=0 cellpadding=1 cellspacing=1 bgcolor="#000000">
-<tr align="center">
-  <td bgcolor="#C0C0C0">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-  <td bgcolor="#C0C0C0">&nbsp;Folders&nbsp;</td>
-  <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td> 
-  <td bgcolor="#C0C0C0">&nbsp;Reply&nbsp;</td>
-  <td bgcolor="#C0C0C0">&nbsp;Forward&nbsp;</td>
-  <td bgcolor="#C0C0C0">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
-</tr>  
-</table>
-<p>
-<table width="100%" border=0 cellpadding=2 cellspacing=1 bgcolor="#000000">
-  <tr align="center" bgcolor="#C0C0C0">
-    <td><b>Mailbox</b></td>
-    <td><b>Messages</b></td>
-    <td><b>New</b></td>
-    <td><b>Size</b></td>
-  </tr>
-<?
+            <table width="100%" border=0 cellpadding=1 cellspacing=1 bgcolor="#000000">
+              <tr align="center"> 
+                <td bgcolor="#C0C0C0">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;Folders&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;Reply&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;Forward&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
+              </tr>
+            </table>
+            <p> 
+            <table width="100%" border=0 cellpadding=2 cellspacing=1 bgcolor="#000000">
+              <tr align="center" bgcolor="#C0C0C0"> 
+                <td><b>Mailbox</b></td>
+                <td><b>Messages</b></td>
+                <td><b>New</b></td>
+                <td><b>Size</b></td>
+              </tr>
+              <?
 for($i = 0; $i < count($boxes); $i++) {
-  ?>
-  <tr bgcolor="#FFFFFF">
-    <td><a href="mailbox.php?folder=<? echo urlencode($boxes[$i][name]); ?>"><? echo $boxes[$i][name]; ?></a></td>
-    <td><? echo $boxes[$i][msgs]; ?></td>
-    <td><? echo $boxes[$i][unread]; ?></td>
-    <td><? echo $boxes[$i][size]; ?></td>
-  </tr>
-  <?
+  ?> 
+              <tr bgcolor="#FFFFFF"> 
+                <td><a href="mailbox.php?folder=<? echo urlencode($boxes[$i][name]); ?>"><? echo $boxes[$i][name]; ?></a></td>
+                <td><? echo $boxes[$i][msgs]; ?></td>
+                <td><? echo $boxes[$i][unread]; ?></td>
+                <td><? echo $boxes[$i][size]; ?></td>
+              </tr>
+              <?
 }
-?>
-</table>
+?> 
+            </table>
           </td>
         </tr>
       </table>
