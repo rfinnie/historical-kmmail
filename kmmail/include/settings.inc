@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.22 2001/09/23 20:51:15 ryanf Exp $
+// @(#) $Id: settings.inc,v 1.23 2001/09/24 23:12:40 ryanf Exp $
 $config = array(
 
   // Version number.
@@ -9,7 +9,7 @@ $config = array(
   'build' => 'BUILDTAG',
 
   // This is what will be placed after the username when sending email.
-  'host' => $HTTP_ENV_VARS['HOSTNAME'],
+  'host' => $HTTP_SERVER_VARS['HTTP_HOST'],
 
   // IMAP host to connect to.
   'imap_host' => 'localhost',
