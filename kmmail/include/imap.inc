@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.9 2001/04/10 22:29:26 ryan Exp $
+// @(#) $Id: imap.inc,v 1.10 2001/04/19 06:07:20 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -127,6 +127,9 @@ class km_imap {
   function delete_messages($msgs) {
     for($i = 0; $i < count($msgs); $i++) {
       imap_delete($this->mbox, $msgs[$i], FT_UID);
+    }
+    if($this->config['is_pop3']) {
+      $this->expunge_messages();
     }
   }
 
