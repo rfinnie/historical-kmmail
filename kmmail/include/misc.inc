@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc,v 1.1 2001/03/20 06:01:27 ryan Exp $
+// @(#) $Id: misc.inc,v 1.2 2001/03/20 22:20:21 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -39,5 +39,9 @@ function check_cookie(&$username, &$password) {
     $password = $kmauth[password];
   }
 
+}
+
+function clear_cookie() {
+  session_destroy();
 }
 ?>

@@ -1,7 +1,8 @@
 <?
-// @(#) $Id: logout.php,v 1.2 2001/03/03 08:36:56 ryan Exp $
+// @(#) $Id: logout.php,v 1.3 2001/03/21 00:48:37 ryan Exp $
 include_once('include/misc.inc');
-setcookie('kmauth');
+check_cookie(&$username, &$password);
+clear_cookie();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
