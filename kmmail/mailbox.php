@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.10 2001/04/13 06:10:10 ryan Exp $
+// @(#) $Id: mailbox.php,v 1.11 2001/04/19 06:20:33 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 
@@ -59,7 +59,7 @@ $count = count($msgs);
             <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center"> 
                 <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
+                <? if(!$config['is_pop3']) { ?><td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td><? } ?>
                 <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
                 <td class="toolbar">&nbsp;Reply&nbsp;</td>
                 <td class="toolbar">&nbsp;Forward&nbsp;</td>
@@ -81,6 +81,8 @@ $count = count($msgs);
 for($i = 0; $i < $count; $i++) {
   if($msgs[$i][deleted]) {
     $bgclass = "messagelist-deleted";
+  } elseif($config['is_pop3']) {
+    $bgclass = "messagelist-read";
   } elseif($msgs[$i][unread]) {
     $bgclass = "messagelist-unread";
   } else {
@@ -109,16 +111,22 @@ if($count == 0) {
                 <tr class="messagelist-read"> 
                   <td colspan="5"> 
                     <input type="submit" name="action_delete" value="Delete" />
+  <?
+  if(!$config['is_pop3']) {
+    ?>
                     <input type="submit" name="action_expunge" value="Remove Deleted Messages" /><br />
                     Move to <select name="move_folder">
-  <?
-  for($i = 0; $i < count($boxes); $i++) {
-    ?>
+    <?
+    for($i = 0; $i < count($boxes); $i++) {
+      ?>
                       <option value="<? echo $boxes[$i]; ?>"><? echo $boxes[$i]; ?></option>
+      <?
+    }
+    ?>
+                    </select> <input type="submit" name="action_move" value="Move" />
     <?
   }
   ?>
-                    </select> <input type="submit" name="action_move" value="Move" />
                   </td>
                 </tr>
   <?

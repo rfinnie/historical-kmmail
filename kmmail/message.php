@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.7 2001/04/01 21:19:55 ryan Exp $
+// @(#) $Id: message.php,v 1.8 2001/04/19 06:20:33 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 
@@ -41,7 +41,7 @@ $msginfo = $imap->retrieve_message_info($msgno);
             <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center">
                 <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
+                <? if(!$config['is_pop3']) { ?><td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td><? } ?>
                 <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
                 <td class="toolbar">&nbsp;<a href="compose.php?action=reply&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Reply</a>&nbsp;</td>
                 <td class="toolbar">&nbsp;<a href="compose.php?action=forward&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Forward</a>&nbsp;</td>

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.9 2001/04/03 06:43:23 ryan Exp $
+// @(#) $Id: compose.php,v 1.10 2001/04/19 06:20:33 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 
@@ -54,7 +54,9 @@ if($submit) {
   }
   $mail->build_message();
   $mail->send();
-  $mail->add_sent_mail();
+  if(!$config['is_pop3']) {
+    $mail->add_sent_mail();
+  }
   header("Location: mailbox.php");
   exit;
 }
@@ -98,7 +100,7 @@ $imap->disconnect();
             <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center">
                 <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
+                <? if(!$config['is_pop3']) { ?><td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td><? } ?>
                 <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
                 <td class="toolbar">&nbsp;Reply&nbsp;</td>
                 <td class="toolbar">&nbsp;Forward&nbsp;</td>
@@ -181,7 +183,7 @@ if($msgno) {
                 </tr>
                 <tr class="compose"> 
                   <td> 
-                    <textarea name="body" cols="80" rows="15"><? echo $body; ?></textarea>
+                    <textarea name="body" cols="69" rows="15"><? echo $body; ?></textarea>
                   </td>
                 </tr>
             </table>
