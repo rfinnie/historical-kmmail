@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.13 2001/04/21 21:20:03 ryan Exp $
+// @(#) $Id: mailbox.php,v 1.14 2001/04/23 02:02:24 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 
@@ -98,6 +98,7 @@ for($i = 0; $i < $count; $i++) {
                   <td><a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgs[$i][msgno]; ?>"><? echo $msgs[$i][from]; ?></a></td>
                   <td> <? echo ($msgs[$i]['count_mime']['message/rfc822'] ? '<img src="images/img_envelope.gif" width="15" height="11" alt="*" class="normal" />' : ''); ?> 
                     <? echo ($msgs[$i]['count_disposition']['attachment'] ? '<img src="images/img_file.gif" width="11" height="15" alt="*" class="normal" />' : ''); ?> 
+                    <? echo ($msgs[$i]['count_mime']['text/html'] ? '<img src="images/img_world.gif" width="13" height="13" alt="*" class="normal" />' : ''); ?> 
                     <? echo $msgs[$i][subject]; ?> </td>
                   <td><? echo km_human_readable_size($msgs[$i][size], 1); ?></td>
                   <td><? echo date("m/d/Y", $msgs[$i][udate]); ?></td>
