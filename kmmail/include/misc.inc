@@ -1,8 +1,20 @@
 <?
-// @(#) $Id: misc.inc,v 1.13 2001/09/23 21:18:44 ryanf Exp $
+// @(#) $Id: misc.inc,v 1.14 2001/09/24 23:12:17 ryanf Exp $
 
 include_once('include/settings.inc');
 include_once('include/imap.inc');
+
+function bc_array_search($needle, $haystack) {
+  if(in_array($needle, $haystack)) {
+    foreach($haystack as $key => $value) {
+      if($needle == $value) {
+        return $key;
+      }
+    }
+  } else {
+    return false;
+  }
+}
 
 function km_human_readable_size($number, $precision) {
   $tags = array('B', 'KB', 'MB', 'GB', 'TB');

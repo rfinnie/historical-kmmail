@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.24 2001/09/10 00:35:03 ryanf Exp $
+// @(#) $Id: imap.inc,v 1.25 2001/09/23 09:35:15 ryanf Exp $
 
 include_once('include/settings.inc');
 
@@ -195,7 +195,7 @@ class km_imap {
   function find_next_prev_uid($nowuid) {
     $msg_array = imap_sort($this->mbox, SORTARRIVAL, 1, SE_UID);
     $num_messages = count($msg_array);
-    $res = array_search($nowuid, $msg_array);
+    $res = bc_array_search($nowuid, $msg_array);
     if(($res == 0) && ($msg_array[$res] != $nowuid)) {
       return false;
     }
@@ -225,7 +225,9 @@ class km_imap {
         'date' => $msg->date,
         'subject' => ($msg->subject ? $this->decode_header_string($msg->subject) : '[No Subject]'),
         'from' => ($msg->from[0]->personal ? $this->decode_header_string($msg->from[0]->personal) : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
+        'fromaddress' => $msg->from[0]->mailbox . '@' . $msg->from[0]->host,
         'to' => ($msg->to[0]->personal ? $this->decode_header_string($msg->to[0]->personal) : $msg->to[0]->mailbox . '@' . $msg->to[0]->host),
+        'toaddress' => $msg->to[0]->mailbox . '@' . $msg->to[0]->host,
         'size' => $msg->Size,
         'udate' => $msg->udate + $config['imap_timezone_offset'] * 60,
         'unread' => ($msg->Unseen == 'U' || $msg->Recent == 'N'),
