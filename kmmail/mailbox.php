@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.6 2001/03/22 07:36:35 ryan Exp $
+// @(#) $Id: mailbox.php,v 1.7 2001/04/01 06:58:13 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -103,7 +103,7 @@ if($count == 0) {
                 <tr class="messagelist-read"> 
                   <td colspan="5"> 
                     <input type="submit" name="action_delete" value="Delete" />
-                    <input type="submit" name="action_expunge" value="Remove Delete Messages" />
+                    <input type="submit" name="action_expunge" value="Remove Deleted Messages" />
                   </td>
                 </tr>
             </table>
