@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.12 2001/04/04 06:40:30 ryan Exp $
+// @(#) $Id: settings.inc,v 1.13 2001/04/05 21:47:07 ryan Exp $
 $config = array(
 
   // Version number.
@@ -70,6 +70,15 @@ $config = array(
   // If use_virtusertable is enabled, this is the location of the
   // virtusertable db file.  In the example below, the path/filename is
   // really '/etc/mail/virtusertable.db'; PHP will add the extension.
-  'virtusertable_file' => '/etc/mail/virtusertable'
+  'virtusertable_file' => '/etc/mail/virtusertable',
+
+  // This option allows you to specify a download disclaimer for attachments.
+  'use_download_disclaimer' => 1,
+
+  // Text to use for disclaimer.
+  'download_disclaimer_text' => 'Warning! If you do not know who sent you this email, do not download the attached file. It could contain a computer virus that may compromise your system or contain questionable graphics.\n\nDo you wish to download this file?',
+
+  // That's it!
+  'the' => 'end'
 );
 ?>

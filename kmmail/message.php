@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.9 2001/04/21 19:24:17 ryan Exp $
+// @(#) $Id: message.php,v 1.10 2001/04/23 02:02:24 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 
@@ -19,6 +19,16 @@ $msginfo = $imap->retrieve_message_info($msgno);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
+<? if($config['use_download_disclaimer']) { ?>
+<script language="javascript">
+<!--
+function dlSentry() {
+  var string = "<? echo $config['download_disclaimer_text']; ?>";
+  return confirm(string);
+}
+// -->
+</script>
+<? } ?>
 </head>
 <body class="normal">
 <table border="0" cellpadding="1" cellspacing="0" width="600" class="backblack">

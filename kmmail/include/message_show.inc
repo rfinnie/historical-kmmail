@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.6 2001/04/18 05:29:09 ryan Exp $
+// @(#) $Id: message_show.inc,v 1.7 2001/04/21 21:07:59 ryan Exp $
 
 class km_message_show {
   var $cid_list;
@@ -7,8 +7,15 @@ class km_message_show {
   var $msgnum;
   var $mailbox;
   var $messages_shown = 0;
+  var $config;
+
+  function km_message_show() {
+    global $config;
+    $this->config = $config;
+  }
 
   function display_message($mailbox, $folder, $msgnum, $struct, $imap_part_base = "", $isrfc822 = "") {
+    // pre_print_r($struct);
     $this->mailbox = $mailbox;
     $this->folder = $folder;
     $this->msgnum = $msgnum;
@@ -110,7 +117,7 @@ class km_message_show {
     $folder = $this->folder;
     $msgnum = $this->msgnum;
     $download = "get_attach.php?folder=$folder&amp;msgnum=$msgnum&amp;part_no=$imap_part&amp;type=$type&amp;subtype=$subtype&amp;name=$filename&amp;encoding=$encoding";
-    print "<br /><table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" class=\"backblack\"><tr><td class=\"toolbar\"><img src=\"images/img_file.gif\" width=\"11\" height=\"15\" alt=\"*\" class=\"normal\"/> <b>Attachment (<a href=\"$download\">Download</a>)</b></td></tr><tr><td class=\"light\">";
+    print "<br /><table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" class=\"backblack\"><tr><td class=\"toolbar\"><img src=\"images/img_file.gif\" width=\"11\" height=\"15\" alt=\"*\" class=\"normal\"/> <b>Attachment (<a href=\"$download\"" . ($this->config['use_download_disclaimer'] ? ' onclick="return dlSentry();"' : '') . ">Download</a>)</b></td></tr><tr><td class=\"light\">";
     print "<strong>Filename:</strong> $filename<br />\n";
     print "<strong>Type:</strong> $mime_type<br />\n";
     print "<strong>Size:</strong> $size bytes<br />\n";
