@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc,v 1.11 2001/09/07 22:18:55 ryanf Exp $
+// @(#) $Id: misc.inc,v 1.12 2001/09/23 09:35:15 ryanf Exp $
 
 include_once('include/settings.inc');
 include_once('include/imap.inc');
@@ -31,55 +31,6 @@ function passwd_real_name($username) {
   }
 }
 
-function check_cookie(&$username, &$password) {
-  global $HTTP_SERVER_VARS;
-  global $config;
-  global $kmauth;
-  global $fromaddr;
-  session_start();
-  session_register("kmauth");
-  if(!$kmauth || !$kmauth[username]) {
-    if($config[default_login]) {
-      $username = $config[default_login_username];
-      $password = $config[default_login_password];
-      $fromaddr = $username.'@'.$config['host'];
-    } else {
-      header("Location: login.php");
-      exit;
-    }
-  } else {
-    $username = $kmauth[username];
-    $password = $kmauth[password];
-    $fromaddr = $kmauth['fromaddr'];
-  }
-  if($kmauth['keycheck'] != md5($HTTP_SERVER_VARS['HTTP_USER_AGENT'])) {
-    header("Location: login.php");
-    exit;
-  }
-
-}
-
-function clear_cookie() {
-  session_destroy();
-}
-
-function km_session_start($username, $password) {
-  global $HTTP_SESSION_VARS, $config, $HTTP_SERVER_VARS;
-  session_start();
-  global $kmauth;
-
-  $fromuser = $username;
-  $fromaddr = $fromuser.'@'.$config['host'];
-  $username = get_real_username($username);
-
-  $kmauth = array(
-    "username" => $username,
-    "password" => $password,
-    "fromaddr" => $fromaddr,
-    "keycheck" => md5($HTTP_SERVER_VARS['HTTP_USER_AGENT'])
-  );
-  session_register("kmauth");
-}
 
 function get_real_username($username) {
   global $config;
@@ -118,7 +69,7 @@ function get_offset() {
     $minus = "-";
     $os = 0 - $os;
   } else {
-    $minus = "";
+    $minus = "+";
   }
   $hours = intval($os / 60);
   $minutes = $os - ($hours * 60);
