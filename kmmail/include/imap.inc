@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.20 2001/09/07 17:11:04 ryanf Exp $
+// @(#) $Id: imap.inc,v 1.21 2001/09/07 21:22:21 ryanf Exp $
 
 include_once('include/settings.inc');
 
@@ -215,6 +215,7 @@ class km_imap {
         'date' => $msg->date,
         'subject' => ($msg->subject ? $this->decode_header_string($msg->subject) : '[No Subject]'),
         'from' => ($msg->from[0]->personal ? $this->decode_header_string($msg->from[0]->personal) : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
+        'to' => ($msg->to[0]->personal ? $this->decode_header_string($msg->to[0]->personal) : $msg->to[0]->mailbox . '@' . $msg->to[0]->host),
         'size' => $msg->Size,
         'udate' => $msg->udate,
         'unread' => ($msg->Unseen == 'U' || $msg->Recent == 'N'),

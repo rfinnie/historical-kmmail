@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.21 2001/09/07 22:05:29 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.22 2001/09/07 22:18:55 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -87,12 +87,13 @@ $imap->disconnect();
               <table width="100%" border="0" cellpadding="2" cellspacing="1" class="backblack">
                 <tr align="center" class="messagelist-top"> 
                   <td><b>&nbsp;</b></td>
-                  <td><b>From</b></td>
+                  <td><b><? echo (stristr($folder, $config['imap_sentbox']) ? 'To' : 'From'); ?></b></td>
                   <td><b>Subject</b></td>
                   <td><b>Size</b></td>
                   <td><b>Date</b></td>
                 </tr>
                 <?
+//pre_print_r($msgs);
 for($i = 0; $i < count($msgs); $i++) {
   if($msgs[$i][deleted]) {
     $bgclass = "messagelist-deleted";
@@ -108,7 +109,7 @@ for($i = 0; $i < count($msgs); $i++) {
                   <td> 
                     <input type="checkbox" name="<? echo ($msgs[$i][deleted] ? 'un' : ''); ?>delete_msg[<? echo $msgs[$i][msgno]; ?>]" />
                   </td>
-                  <td><a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgs[$i][msgno]; ?>"><? echo $msgs[$i][from]; ?></a></td>
+                  <td><a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgs[$i][msgno]; ?>"><? echo (stristr($folder, $config['imap_sentbox']) ? $msgs[$i][to] : $msgs[$i][from]); ?></a></td>
                   <td> <? echo ($msgs[$i]['count_mime']['message/rfc822'] ? '<img src="images/img_envelope.gif" width="15" height="11" alt="*" class="normal" />' : ''); ?> 
                     <? echo ($msgs[$i]['count_disposition']['attachment'] ? '<img src="images/img_file.gif" width="11" height="15" alt="*" class="normal" />' : ''); ?> 
                     <? echo ($msgs[$i]['count_mime']['text/html'] ? '<img src="images/img_world.gif" width="13" height="13" alt="*" class="normal" />' : ''); ?> 
