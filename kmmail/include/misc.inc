@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc,v 1.8 2001/04/19 06:20:40 ryan Exp $
+// @(#) $Id: misc.inc,v 1.9 2001/04/21 19:24:21 ryan Exp $
 
 include_once('include/settings.inc');
 include_once('include/imap.inc');
@@ -32,6 +32,7 @@ function passwd_real_name($username) {
 }
 
 function check_cookie(&$username, &$password) {
+  global $HTTP_SERVER_VARS;
   global $config;
   global $kmauth;
   global $fromaddr;
@@ -51,6 +52,10 @@ function check_cookie(&$username, &$password) {
     $password = $kmauth[password];
     $fromaddr = $kmauth['fromaddr'];
   }
+  if($kmauth['keycheck'] != md5($HTTP_SERVER_VARS['HTTP_USER_AGENT'])) {
+    header("Location: login.php");
+    exit;
+  }
 
 }
 
@@ -59,7 +64,7 @@ function clear_cookie() {
 }
 
 function km_session_start($username, $password) {
-  global $HTTP_SESSION_VARS, $config;
+  global $HTTP_SESSION_VARS, $config, $HTTP_SERVER_VARS;
   session_start();
   global $kmauth;
 
@@ -70,7 +75,8 @@ function km_session_start($username, $password) {
   $kmauth = array(
     "username" => $username,
     "password" => $password,
-    "fromaddr" => $fromaddr
+    "fromaddr" => $fromaddr,
+    "keycheck" => md5($HTTP_SERVER_VARS['HTTP_USER_AGENT'])
   );
   session_register("kmauth");
 }
