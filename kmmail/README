@@ -22,7 +22,10 @@ get you up and running in minutes.
   4. That's it!  You should now be able to go to where you placed the
 files and log in.  If you are unable to log in, check include/settings.inc
 again (most importantly 'imap_host' and 'imap_port').
-
+  5. Please go to http://kmmail.sourceforge.net/ and fill out the survey.  
+You cannot imagine how helpful your comments are.  Also, please be sure to 
+mention your orginazation's name and URL so you may be listed in the 
+kmMail users section.
 
 KMMAIL AND POP3
 
@@ -94,4 +97,4 @@ was released.
 However, kmMail contributions have come from developers both in and out of
 Kefta.
 
-@(#) $Id$
+@(#) $Id: README,v 1.1 2001/09/07 06:57:53 ryanf Exp $
