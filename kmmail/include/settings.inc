@@ -1,8 +1,8 @@
 <?
 $config = array(
-  'version' => '1.0dev',
-  'build' => 'dev',
-  'host' => 'root.64megs.com',
+  'version' => '1.0pre1',
+  'build' => 'BUILDTAG',
+  'host' => 'host.domain.dom',
   'imap_host' => 'localhost',
   'imap_port' => 143,
   'imap_mailpath' => 'mail/',
