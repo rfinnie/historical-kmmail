@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.11 2001/09/08 03:22:19 ryanf Exp $
+// @(#) $Id: message_show.inc,v 1.12 2001/09/20 23:48:05 ryanf Exp $
 
 class km_message_show {
   var $cid_list;
@@ -22,21 +22,7 @@ class km_message_show {
     $this->isrfc822 = $isrfc822;
 
     $this->cid_list = $this->make_cid_list($struct->parts, $imap_part_base);
-    if($struct->type == 1) {
-      if($struct->subtype == "MIXED") {
-        $this->process_multipart_mixed($struct->parts, $imap_part_base);
-      } elseif($struct->subtype == "REPORT") {
-        $this->process_multipart_mixed($struct->parts, $imap_part_base);
-      } elseif($struct->subtype == "PARALLEL") {
-        $this->process_multipart_mixed($struct->parts, $imap_part_base);
-      } elseif($struct->subtype == "RELATED") {
-        $this->process_multipart_related($struct->parts, $imap_part_base);
-      } elseif($struct->subtype == "ALTERNATIVE") {
-        $this->process_multipart_alternative($struct->parts, $imap_part_base);
-      }
-    } else {
-      $this->process_multipart_mixed(array($struct), $imap_part_base);
-    }
+    $this->process_multipart_mixed(array($struct), $imap_part_base, 1);
   }
 
   function make_cid_list($struct_parts, $imap_part_base) {
@@ -174,6 +160,7 @@ class km_message_show {
     }
 
     $text = preg_replace("'(\s+)http://(.*?)(\s+)'", "\\1<a href=\"http://\\2\" target=\"_blank\">http://\\2</a>\\3" , $text);
+    $text = preg_replace("'(\s+)https://(.*?)(\s+)'", "\\1<a href=\"https://\\2\" target=\"_blank\">https://\\2</a>\\3" , $text);
     $text = preg_replace("'(\s+)www.(.*?)(\s+)'", "\\1<a href=\"http://www.\\2\" target=\"_blank\">www.\\2</a>\\3" , $text);
     $text = preg_replace("'([\w|-|.]+)@([\w|-|.]+)'", "<a href=\"compose.php?to=\\0\">\\0</a>" , $text);
     print "<tt>$text</tt><br />\n";
@@ -247,7 +234,7 @@ class km_message_show {
     }
   }
 
-  function process_multipart_mixed($struct_parts, $imap_part_base) {
+  function process_multipart_mixed($struct_parts, $imap_part_base, $isbase=0) {
     for($i = 0; $i < count($struct_parts); $i++) {
       if($imap_part_base == "") {
         $imap_part = ($i + 1);
@@ -257,9 +244,12 @@ class km_message_show {
       $struct = $struct_parts[$i];
 
       if($struct->type == 1) {
+        $imap_part = ($isbase ? $imap_part_base : $imap_part);
         if($struct->subtype == "MIXED") {
           $this->process_multipart_mixed($struct->parts, $imap_part);
         } elseif($struct->subtype == "PARALLEL") {
+          $this->process_multipart_mixed($struct->parts, $imap_part);
+        } elseif($struct->subtype == "APPLEDOUBLE") {
           $this->process_multipart_mixed($struct->parts, $imap_part);
         } elseif($struct->subtype == "RELATED") {
           $this->process_multipart_related($struct->parts, $imap_part);
