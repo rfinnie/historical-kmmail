@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.28 2001/09/08 20:43:04 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
@@ -94,6 +94,7 @@ function expSentry() {
                   <a href="folders.php">Folders</a> |
                   <? } ?> 
                   <a href="compose.php">Compose</a> |
+                  <a href="addressbook.php">Address Book</a> |
                   <? if(!$config['is_pop3']) { ?>
                   <a href="mailbox.php?action_expunge=1"<? echo ($config['use_expunge_disclaimer'] ? ' onclick="return expSentry();"' : ''); ?>>Expunge</a> |
                   <? } ?>

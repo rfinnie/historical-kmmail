@@ -1,10 +1,11 @@
 <?
-// @(#) $Id: mailbox.php,v 1.28 2001/09/08 20:43:04 ryanf Exp $
+// @(#) $Id: addressbook.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
   
-list($imap, $username) = check_imap_auth($config['imap_mainbox']);
+list($imap, $username) = check_imap_auth();
+
 if(!in_array($config['addressbook_folder'], $imap->retrieve_mailboxes_short())) {
   $imap->create_mailbox($config['addressbook_folder']);
   $fromaddr = $username.'@'.$config['host'];
@@ -12,11 +13,9 @@ if(!in_array($config['addressbook_folder'], $imap->retrieve_mailboxes_short())) 
     'name' => 'Sample kmMail User',
     'email' => 'sample@kmmail.org',
     'org' => 'kmMail',
-    'notes' => 'This is a sample Addressbook entry.'
+    'notes' => 'This is a sample address book entry.'
   );
-  $welcome = "From: $fromaddr\r\nTo: $fromaddr\r\nSubject: kmMail Addressbook Entry\r\n\r\n" . serialize($welcomea);
-  //$welcome = "X-Name: kmMail User\r\nX-Email: addressbook@kmmail.org\r\nX-Organization: kmMail\r\nX-Comment: This is an automatically-generated entry.\r\n";
-  //$welcome = "To: \"kmMail User\" <addressbook@kmmail.org>\r\nSubject: kmMail\r\n\r\nThis is an automatically-generated entry.\r\n";
+  $welcome = "From: $fromaddr\r\nTo: $fromaddr\r\nSubject: kmMail address book Entry\r\n\r\n" . serialize($welcomea);
   $imap->append_mailbox($config['addressbook_folder'], $welcome);
 }
 $imap->select_folder($config['addressbook_folder']);
@@ -37,12 +36,8 @@ if($action == 'delete') {
   header("Location: addressbook.php");
   exit();
 }
-$offset = ($offset ? $offset : 1);
-$return = $config['mailbox_page_size'];
 $count = $imap->retrieve_num_messages();
-$msgs = $imap->retrieve_message_list($offset, $return);
-$boxes = $imap->retrieve_mailboxes_short();
-$today = date("m/d/Y");
+$msgs = $imap->retrieve_message_list(1, 10000);
   ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -51,16 +46,6 @@ $today = date("m/d/Y");
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
-<? if($config['use_expunge_disclaimer']) { ?>
-<script language="javascript">
-<!--
-function expSentry() {
-  var string = "<? echo $config['expunge_disclaimer_text']; ?>";
-  return confirm(string);
-}
-// -->
-</script>
-<? } ?>
 </head>
 <body class="normal">
 <table border="0" cellpadding="1" cellspacing="0" width="100%" class="backblack">
@@ -72,7 +57,7 @@ function expSentry() {
             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
               <tr> 
                 <td align="left"><img src="images/titleleft.gif" width="48" height="26" alt="*" class="normal" /></td>
-                <td class="titleheader"><? echo $config[title]; ?> - Messages</td>
+                <td class="titleheader"><? echo $config[title]; ?> - Address Book</td>
                 <td align="right"><img src="images/titleright.gif" width="48" height="26" alt="*" class="normal" /></td>
               </tr>
             </table>
@@ -88,9 +73,8 @@ function expSentry() {
                   <a href="folders.php">Folders</a> |
                   <? } ?> 
                   <a href="compose.php">Compose</a> |
-                  <? if(!$config['is_pop3']) { ?>
-                  <a href="addressbook.php?action_expunge=1"<? echo ($config['use_expunge_disclaimer'] ? ' onclick="return expSentry();"' : ''); ?>>Expunge</a> |
-                  <? } ?>
+                  <a href="addressbook.php">Address Book</a> |
+                  <a href="mailbox.php?mainlogout=true">Logout</a> |
                 </td>
               </tr>
             </table>
@@ -141,10 +125,6 @@ if($count == 0) {
 ?>
               </table>
             </form>
-            <p /> 
-            <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
-            </table>
-
           </td>
         </tr>
       </table>

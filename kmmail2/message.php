@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.20 2001/09/08 20:48:06 ryanf Exp $
+// @(#) $Id: message.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
 include_once('include/message_show.inc.php');
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
@@ -84,6 +84,7 @@ function dlSentry() {
                   <a href="compose.php?action=reply&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Reply</a> |
                   <a href="compose.php?action=forward&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Forward</a> |
                   <a href="message.php?action=delete&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Delete</a> |
+                  <a href="addressbook.php">Address Book</a> |
                   <a href="mailbox.php?mainlogout=true">Logout</a> |
                   <? if($next > -1) { ?>
                   <a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $next; ?>">&gt;&gt;</a> |
