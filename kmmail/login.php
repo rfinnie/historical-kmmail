@@ -1,10 +1,17 @@
 <?
-// @(#) $Id: login.php,v 1.1 2001/03/03 07:38:28 ryan Exp $
+// @(#) $Id: login.php,v 1.2 2001/03/03 08:36:56 ryan Exp $
+include_once('include/settings.inc');
+
 if($username) {
   include_once('include/imap.inc');
-  $imap = new km_imap($username, $password, "INBOX");
+  $imap = new km_imap($username, $password, $config[imap_mainbox]);
   if($imap->check_login()) {
-    setcookie("kmauth", bin2hex($username) . ":" . bin2hex($password));
+    session_start();
+    $kmauth = array(
+      "username" => $username,
+      "password" => $password
+    );
+    session_register("kmauth");
     header("Location: mailbox.php");
     exit;
   } else {
@@ -62,6 +69,8 @@ if($username) {
                 </tr>
               </form>
             </table>
+            <p>
+            <div align="right"><font size="1">kmMail version <? echo $config[version]; ?>, build <? echo $config[build]; ?></font></div>
           </td>
         </tr>
       </table>

@@ -1,25 +1,19 @@
 <?
-// @(#) $Id: km_message_show.inc,v 2.2 2001/02/07 19:32:56 ryan Exp $
+// @(#) $Id: message_show.inc,v 1.1 2001/03/03 07:38:41 ryan Exp $
 
 class km_message_show {
-  var $cid_list = "";
-  var $folder = "";
-  var $msgnum = "";
-  var $mailbox = "";
-
+  var $cid_list;
+  var $folder;
+  var $msgnum;
+  var $mailbox;
   var $messages_shown = 0;
 
-  function km_message_show($mailbox, $folder, $msgnum, $struct, $imap_part_base = "") {
+  function display_message($mailbox, $folder, $msgnum, $struct, $imap_part_base = "", $isrfc822 = "") {
     $this->mailbox = $mailbox;
     $this->folder = $folder;
     $this->msgnum = $msgnum;
+    $this->isrfc822 = $isrfc822;
 
-//    print "<pre>";
-//    print_r($struct);
-//    print "</pre>";
-
-//$download = "get_attach.php?folder=$this->folder&msgnum=$this->msgnum&part_no=&type=MESSAGE&subtype=RFC822&name=".urlencode(time().".txt")."&encoding=none";
-//print "<a href=\"$download\">Download</a><p>\n";
     $this->cid_list = $this->make_cid_list($struct->parts, $imap_part_base);
     if($struct->type == 1) {
       if($struct->subtype == "MIXED") {
@@ -30,13 +24,16 @@ class km_message_show {
         $this->process_multipart_alternative($struct->parts, $imap_part_base);
       }
     } else {
+      $this->process_multipart_mixed(array($struct), $imap_part_base);
+/*
       if($struct->subtype == "HTML") {
         $this->process_text_html($struct, $imap_part_base);
       } elseif($struct->subtype == "PLAIN") {
-        $this->process_text_plain($struct, $imap_part);
+        $this->process_text_plain($struct, $imap_part_base);
       } else {
-        $this->process_attachment($struct, $imap_part);
+        $this->process_attachment($struct, $imap_part_base);
       }
+*/
     }
   }
 
@@ -169,7 +166,11 @@ class km_message_show {
     if($imap_part == "") {
       $text = imap_body($mailbox, $msgnum, FT_UID);
     } else {
-      $text = imap_fetchbody($mailbox, $msgnum, $imap_part, FT_UID);
+//      if($struct->type) {
+        $text = imap_fetchbody($mailbox, $msgnum, $imap_part, FT_UID);
+//      } else {
+//        $text = imap_fetchbody($mailbox, $msgnum, "$imap_part.1", FT_UID);
+//      }
     }
 
     $text = $this->convert_encoding($struct, $text);
@@ -365,7 +366,8 @@ if(count($msginfo[cc_array]) > 0) {
           print "</td></tr>\n";
           print "<tr><td bgcolor=\"#FFFFFF\">\n";
           print "<p>\n";
-          $message_show = new km_message_show($this->mailbox, $this->folder, $this->msgnum, $struct, $imap_part);
+          $message_show = new km_message_show();
+          $message_show->display_message($this->mailbox, $this->folder, $this->msgnum, $struct, $imap_part);
           print "</td></tr>\n";
           print "</table>\n";
         }
@@ -377,10 +379,80 @@ if(count($msginfo[cc_array]) > 0) {
 
 
 
+
+  function find_first_text($mailbox, $msgnum, $struct, $imap_part_base = "") {
+    $text = $this->find_first_text_recursive($mailbox, $msgnum, $struct->parts, $imap_part_base);
+    if($text) {
+      return $text;
+    } else {
+      if($struct->subtype == "PLAIN") {
+        $text = imap_body($mailbox, $msgnum, FT_UID);
+        if($struct->encoding == 3) {
+          $text = base64_decode($text);
+        } elseif($struct->encoding == 4) {
+          $text = preg_replace("/=(\r*)\n/", "", $text);
+          $text = quoted_printable_decode($text);
+        }
+        return $text;
+      }
+    }
+  }
+      
+  function find_first_text_recursive($mailbox, $msgnum, $struct_parts, $imap_part_base = "") {
+    for($i = 0; $i < count($struct_parts); $i++) {
+      if($imap_part_base == "") {
+        $imap_part = ($i + 1);
+      } else {
+        $imap_part = $imap_part_base . "." . ($i + 1);
+      }
+      $struct = $struct_parts[$i];
+      if($struct->type == 1) {
+        $found_text = $this->find_first_text_recursive($mailbox, $msgnum, $struct->parts, $imap_part);
+        if($found_text) {
+          return $found_text;
+        }
+      } else {
+        if($struct->subtype == "PLAIN") {
+          $text = imap_fetchbody($mailbox, $msgnum, $imap_part, FT_UID);
+          if($struct->encoding == 3) {
+            $text = base64_decode($text);
+          } elseif($struct->encoding == 4) {
+            $text = preg_replace("/=(\r*)\n/", "", $text);
+            $text = quoted_printable_decode($text);  
+          }
+          return $text;
+        } 
+      }
+    }
+  }
+
+
+  function get_message_forward($mailbox,$action,$folder,$msgnum,&$to,&$subject,&$body) {
+        $msg = imap_header($mailbox,imap_msgno($mailbox, $msgnum));
+        $subject = !$msg->Subject ? "[No Subject]" : $msg->Subject;
+        if($action == "reply") {
+          if(!preg_match("/^re:/i", $subject)) {
+            $subject = "Re: $subject";
+          }
+        } else {
+          if(!preg_match("/\(fwd\)$/i", $subject)) {
+            $subject = "$subject (fwd)";
+          }
+        }
+  
+        $from = $msg->from[0];
+        $to = $action == "reply" ? "$from->mailbox@$from->host" : "";
+    
+        $struct = imap_fetchstructure($mailbox,$msgnum, FT_UID);
+        $body = $this->find_first_text($mailbox, $msgnum, $struct, "");
+        if($body != "") {
+          $body = preg_replace("/^/m", ">", $body);
+          $fromaddress = ($from->personal ? $from->personal : "$from->mailbox@$from->host");
+          $body = "\n\n\nOn $msg->date, $fromaddress said:\n" . $body;
+        }
+  }
+
 }
-
-
-
 
 
 

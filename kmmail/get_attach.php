@@ -1,15 +1,16 @@
 <?
-// @(#) $Id: km_message_show.inc,v 2.2 2001/02/07 19:32:56 ryan Exp $
+// @(#) $Id: get_attach.php,v 1.1 2001/03/03 07:38:28 ryan Exp $
+session_start();
+session_register("kmauth");
 if(!$kmauth) {
   exit;
 }
-
-$kmauth_array = explode(':', $kmauth);
-$username = pack("H" . strlen($kmauth_array[0]), $kmauth_array[0]);
-$password = pack("H" . strlen($kmauth_array[1]), $kmauth_array[1]);
+$username = $kmauth[username];
+$password = $kmauth[password];
 if(!$username) {
   exit;
 }
+
 include_once('include/imap.inc');
 $imap = new km_imap($username, $password);
 $imap->connect($folder);

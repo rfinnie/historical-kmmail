@@ -1,18 +1,21 @@
 <?
-// @(#) $Id: folders.php,v 1.1 2001/03/03 07:38:28 ryan Exp $
+// @(#) $Id: folders.php,v 1.2 2001/03/03 08:36:56 ryan Exp $
+include_once('include/settings.inc');
+
+session_start();
+session_register("kmauth");
 if(!$kmauth) {
   exit;
 }
-
-$kmauth_array = explode(':', $kmauth);
-$username = pack("H" . strlen($kmauth_array[0]), $kmauth_array[0]);
-$password = pack("H" . strlen($kmauth_array[1]), $kmauth_array[1]);
+$username = $kmauth[username];
+$password = $kmauth[password];
 if(!$username) {
   exit;
 }
+
 include_once('include/imap.inc');
 $imap = new km_imap($username, $password);
-$imap->connect('INBOX');
+$imap->connect($config[imap_mainbox]);
 $boxes = $imap->retrieve_mailboxes();
 $imap->disconnect();
 

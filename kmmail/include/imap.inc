@@ -1,14 +1,19 @@
 <?
-// @(#) $Id: km_message_show.inc,v 2.2 2001/02/07 19:32:56 ryan Exp $
+// @(#) $Id: imap.inc,v 1.1 2001/03/03 07:38:41 ryan Exp $
+
+include_once('include/settings.inc');
 
 class km_imap {
-  var $host = 'localhost';
-  var $port = 143;
-  var $username = '';
-  var $password = '';
-  var $mbox = '';
+  var $host;
+  var $port;
+  var $username;
+  var $password;
+  var $mbox;
 
   function km_imap($username, $password) {
+    global $config;
+    $this->host = $config[imap_host];
+    $this->port = $config[imap_port];
     $this->username = $username;
     $this->password = $password;
   }
@@ -23,7 +28,12 @@ class km_imap {
   }
 
   function connect($folder) {
-    $imap_string =  "{" . $this->host .":" . $this->port . "}" . $folder;
+    global $config;
+    if($folder == $config[imap_mainbox]) {
+      $imap_string =  "{" . $this->host .":" . $this->port . "}" . $folder;
+    } else {
+      $imap_string =  "{" . $this->host .":" . $this->port . "}" . $config[imap_mailpath] . $folder;
+    }
     $this->mbox = imap_open($imap_string, $this->username, $this->password);
     if($this->mbox) {
       return true;
@@ -42,13 +52,15 @@ class km_imap {
   }
 
   function retrieve_mailboxes() {
+    global $config;
     $imap_string =  "{" . $this->host .":" . $this->port . "}";
-    $list = imap_listmailbox($this->mbox, $imap_string . "mail", '*');
+    $list = imap_listmailbox($this->mbox, $imap_string . $config[imap_mailpath], '*');
     $list[] = $imap_string . "INBOX";
     sort($list);
     $out = array();
     for($i = 0; $i < count($list); $i++) {
-      $name = ereg_replace("{.*}", "", $list[$i]);
+      $name = ereg_replace($imap_string, "", $list[$i]);
+      $name = ereg_replace($config[imap_mailpath], "", $name);
       imap_reopen($this->mbox, $list[$i]);
       $info=imap_mailboxmsginfo($this->mbox);
       $out[$i] = array(

@@ -1,19 +1,23 @@
 <?
-// @(#) $Id: message.php,v 1.1 2001/03/03 07:38:28 ryan Exp $
+// @(#) $Id: message.php,v 1.2 2001/03/03 08:36:56 ryan Exp $
+include_once('include/settings.inc');
+
+session_start();
+session_register("kmauth");
 if(!$kmauth) {
   exit;
 }
-
-$kmauth_array = explode(':', $kmauth);
-$username = pack("H" . strlen($kmauth_array[0]), $kmauth_array[0]);
-$password = pack("H" . strlen($kmauth_array[1]), $kmauth_array[1]);
+$username = $kmauth[username];
+$password = $kmauth[password];
 if(!$username) {
   exit;
 }
+
 include_once('include/imap.inc');
 include_once('include/message_show.inc');
 $imap = new km_imap($username, $password);
-$imap->connect($folder ? $folder : 'INBOX');
+$folder = ($folder ? $folder : $config[imap_mainbox]);
+$imap->connect($folder);
 $msginfo = $imap->retrieve_message_info($msgno);
 #$msgbody = $imap->retrieve_message_body($msgno);
 
@@ -51,8 +55,8 @@ $msginfo = $imap->retrieve_message_info($msgno);
                 <td bgcolor="#C0C0C0">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
                 <td bgcolor="#C0C0C0">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
                 <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php?action=reply&msgno=<? echo $msgno; ?>">Reply</a>&nbsp;</td>
-                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php?action=forward&msgno=<? echo $msgno; ?>">Forward</a>&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php?action=reply&folder=<? echo urlencode($folder); ?>&msgno=<? echo $msgno; ?>">Reply</a>&nbsp;</td>
+                <td bgcolor="#C0C0C0">&nbsp;<a href="compose.php?action=forward&folder=<? echo urlencode($folder); ?>&msgno=<? echo $msgno; ?>">Forward</a>&nbsp;</td>
                 <td bgcolor="#C0C0C0">&nbsp;<a href="logout.php">Logout</a>&nbsp;</td>
               </tr>
             </table>
@@ -108,7 +112,8 @@ if(count($msginfo[cc_array]) > 0) {
               <tr> 
                 <td bgcolor="#FFFFFF"><?
 $struct = imap_fetchstructure($imap->mbox, $msgno, FT_UID);
-$message_show = new km_message_show($imap->mbox, ($folder ? $folder : 'INBOX'), $msgno, $struct);
+$message_show = new km_message_show();
+$message_show->display_message($imap->mbox, $folder, $msgno, $struct);
 ?></td>
               </tr>
             </table>
