@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.20 2001/09/07 21:22:20 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.21 2001/09/07 22:05:29 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -68,7 +68,7 @@ $imap->disconnect();
                   <a href="mailbox.php?folder=<? echo $folder; ?>&amp;offset=<? echo $newoffset; ?>">&lt;&lt;</a> |
                   <? } ?>
                   <a href="mailbox.php?folder=<? echo urlencode($folder); ?>">Mailbox</a> |
-                  <? if(!$config['is_pop3']) { ?>
+                  <? if($config['display_folders']) { ?>
                   <a href="folders.php?folder=<? echo urlencode($folder); ?>">Folders</a> |
                   <? } ?> 
                   <a href="compose.php?folder=<? echo urlencode($folder); ?>">Compose</a> |
@@ -133,7 +133,7 @@ Messages <? echo $offset; ?>-<? echo (($offset + $return) > $count ? $count : ($
                     <br />
                     <input type="submit" name="action_delete" value="Delete" /> checked messages
                     <?
-  if(!$config['is_pop3'] && (count($boxes) > 1)) {
+  if($config['display_folders'] && (count($boxes) > 1)) {
     ?> 
                     or move to 
                     <select name="move_folder">

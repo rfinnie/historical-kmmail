@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc,v 1.9 2001/04/21 19:24:21 ryan Exp $
+// @(#) $Id: misc.inc,v 1.10 2001/04/23 01:54:23 ryan Exp $
 
 include_once('include/settings.inc');
 include_once('include/imap.inc');
@@ -134,4 +134,7 @@ if(get_magic_quotes_gpc() == 1) {
 }
 
 $config['is_pop3'] = (preg_match("/\/pop3$/", $config['imap_host']) ? 1 : 0);
+if($config['is_pop3'] && ($config['display_folders'])) {
+  $config['display_folders'] = 0;
+}
 ?>

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.14 2001/09/07 17:11:04 ryanf Exp $
+// @(#) $Id: message.php,v 1.15 2001/09/07 21:22:20 ryanf Exp $
 include_once('include/message_show.inc');
 include_once('include/misc.inc');
 include_once('include/auth.inc');
@@ -75,7 +75,7 @@ function dlSentry() {
                   <a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $prev; ?>">&lt;&lt;</a> |
                   <? } ?>
                   <a href="mailbox.php?folder=<? echo urlencode($folder); ?>">Mailbox</a> |
-                  <? if(!$config['is_pop3']) { ?>
+                  <? if($config['display_folders']) { ?>
                   <a href="folders.php?folder=<? echo urlencode($folder); ?>">Folders</a> |
                   <? } ?> 
                   <a href="compose.php?folder=<? echo urlencode($folder); ?>">Compose</a> |

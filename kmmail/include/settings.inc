@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.15 2001/09/06 23:30:48 ryanf Exp $
+// @(#) $Id: settings.inc,v 1.16 2001/09/07 07:15:40 ryanf Exp $
 $config = array(
 
   // Version number.
@@ -22,6 +22,15 @@ $config = array(
 
   // Main IMAP folder.
   'imap_mainbox' => 'INBOX',
+
+  // This option controls whether folders should be displayed.
+  // If this is a POP3 connection, 0 is assumed.
+  'display_folders' => 1,
+
+  // This options controls whether copies of sent messages should be
+  // deposited in 'imap_sentbox' (see below).
+  // If 'display_folders' is 0, 0 is assumed here as well.
+  'use_sentbox' => 1,
 
   // Path relative to 'imap_mailpath' where copies of sent mail go.
   'imap_sentbox' => 'sent-mail',
