@@ -1,9 +1,9 @@
 <?
-// @(#) $Id: settings.inc,v 1.10 2001/04/02 06:06:51 ryan Exp $
+// @(#) $Id: settings.inc,v 1.11 2001/04/03 23:47:08 ryan Exp $
 $config = array(
 
   // Version number.
-  'version' => '1.0pre2',
+  'version' => '1.0pre3',
 
   // Build date/time.
   'build' => 'BUILDTAG',
