@@ -1,12 +1,14 @@
 <?
-// @(#) $Id: compose.php,v 1.18 2001/09/10 00:35:03 ryanf Exp $
+// @(#) $Id: compose.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
 
 //$folder = ($folder ? $folder : $config[imap_mainbox]);
 list($imap, $username) = check_imap_auth();
-$imap->select_folder($folder);
+if($folder) {
+  $imap->select_folder($folder);
+}
 $fromaddr = $username.'@'.$config['host'];
 
 $rn = passwd_real_name($username);
@@ -108,6 +110,7 @@ $imap->disconnect();
                   <a href="folders.php">Folders</a> |
                   <? } ?> 
                   <a href="compose.php">Compose</a> |
+                  <a href="addressbook.php">Address Book</a> |
                   <a href="mailbox.php?mainlogout=true">Logout</a> |
                 </td>
               </tr>

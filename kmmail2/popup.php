@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: popup.php,v 1.2 2001/09/07 22:07:26 ryanf Exp $
+// @(#) $Id: popup.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
 include_once('include/message_show.inc.php');
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
@@ -7,6 +7,8 @@ include_once('include/imap.inc.php');
 
 //$folder = ($folder ? $folder : $config[imap_mainbox]);
 list($imap, $username) = check_imap_auth();
+$imap->select_folder($folder);
+
 
 $msginfo = $imap->retrieve_message_info($msgno);
 
