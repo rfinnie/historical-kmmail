@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.25 2001/09/07 22:34:03 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.26 2001/09/08 01:06:28 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -36,6 +36,7 @@ $count = $imap->retrieve_num_messages();
 $msgs = $imap->retrieve_message_list($offset, $return);
 $boxes = $imap->retrieve_mailboxes_short();
 $imap->disconnect();
+$today = date("m/d/Y");
   ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -119,7 +120,13 @@ for($i = 0; $i < count($msgs); $i++) {
                     <? echo ($msgs[$i]['replied'] ? '<img src="images/img_replied.gif" width="7" height="10" alt="*" class="normal" />' : ''); ?> 
                     <? echo $msgs[$i][subject]; ?> </td>
                   <td><? echo km_human_readable_size($msgs[$i][size], 1); ?></td>
-                  <td><? echo date("m/d/Y", $msgs[$i][udate]); ?></td>
+                  <?
+                    $msg_date = date("m/d/Y", $msgs[$i]['udate']);
+                    if ($msg_date == $today) {
+                      $msg_date = date("g:ia", $msgs[$i]['udate']);
+                    }
+                  ?>
+                  <td><nobr><? echo $msg_date; ?></nobr></td>
                 </tr>
                 <?
 }

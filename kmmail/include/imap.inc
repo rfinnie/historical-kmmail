@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.21 2001/09/07 21:22:21 ryanf Exp $
+// @(#) $Id: imap.inc,v 1.22 2001/09/07 22:28:35 ryanf Exp $
 
 include_once('include/settings.inc');
 
@@ -134,6 +134,8 @@ class km_imap {
   }
 
   function retrieve_message_info($msgnum) {
+    global $config;
+
     $msg = imap_header($this->mbox, imap_msgno($this->mbox, $msgnum));
     $to_array = array();
     for($i = 0; $i < count($msg->to); $i++) {
@@ -147,7 +149,7 @@ class km_imap {
     }
     $out = array(
       'date' => $msg->date,
-      'udate' => $msg->udate,
+      'udate' => $msg->udate + $config['timezone_offset'] * 60,
       'subject' => ($msg->subject ? $this->decode_header_string($msg->subject) : '[No Subject]'),
       'from_name' => ($msg->from[0]->personal ? $this->decode_header_string($msg->from[0]->personal) : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
       'from_address' => ($msg->reply_to[0]->mailbox ? $msg->reply_to[0]->mailbox . '@' . $msg->reply_to[0]->host : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
@@ -205,6 +207,8 @@ class km_imap {
   }
 
   function retrieve_message_list($offset = 1, $return = 5) {
+    global $config;
+
     $out = array();
     $msg_array = imap_sort($this->mbox, SORTARRIVAL, 1, SE_UID);
     $msg_array = array_slice($msg_array, $offset - 1, $return);
@@ -217,7 +221,7 @@ class km_imap {
         'from' => ($msg->from[0]->personal ? $this->decode_header_string($msg->from[0]->personal) : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
         'to' => ($msg->to[0]->personal ? $this->decode_header_string($msg->to[0]->personal) : $msg->to[0]->mailbox . '@' . $msg->to[0]->host),
         'size' => $msg->Size,
-        'udate' => $msg->udate,
+        'udate' => $msg->udate + $config['timezone_offset'] * 60,
         'unread' => ($msg->Unseen == 'U' || $msg->Recent == 'N'),
         'deleted' => ($msg->Deleted == 'D'),
         'replied' => ($msg->Answered == 'A')

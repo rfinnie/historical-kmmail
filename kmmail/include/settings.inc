@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.16 2001/09/07 07:15:40 ryanf Exp $
+// @(#) $Id: settings.inc,v 1.17 2001/09/07 22:18:55 ryanf Exp $
 $config = array(
 
   // Version number.
@@ -78,6 +78,14 @@ $config = array(
 
   // Text to use for disclaimer.
   'download_disclaimer_text' => 'Warning! If you do not know who sent you this email, do not download the attached file. It could contain a computer virus that may compromise your system or contain questionable graphics.\n\nDo you wish to download this file?',
+
+  // The number of minutes your timezone is offset, west of GMT is negative.
+  // For example:
+  //   New York:    -300 (GMT-5:00)
+  //   Los Angeles: -480 (GMT-8:00)
+  //   London:         0 (GMT)
+  //   Sydney:       600 (GMT+10:00)
+  'timezone_offset' => -480,
 
   // That's it!
   'the' => 'end'
