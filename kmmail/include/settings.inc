@@ -7,6 +7,10 @@ $config = array(
   'imap_port' => 143,
   'imap_mailpath' => 'mail/',
   'imap_mainbox' => 'INBOX',
-  'imap_sentbox' => 'mail/sent-mail'
+  'imap_sentbox' => 'mail/sent-mail',
+  'use_passwd' => 1,
+  'passwd_map' => array(
+    'juser' => 'Joe User'
+  )
 );
 ?>

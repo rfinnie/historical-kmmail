@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.1 2001/03/05 15:17:32 ryan Exp $
+// @(#) $Id: compose.php,v 1.2 2001/03/06 03:03:11 ryan Exp $
 include_once('include/settings.inc');
 
 session_start();
@@ -12,6 +12,9 @@ $password = $kmauth[password];
 if(!$username) {
   exit;
 }
+
+include_once('include/misc.inc');
+$rn = passwd_real_name($username);
 
 include_once('include/imap.inc');
 $imap = new km_imap($username, $password);
@@ -30,8 +33,13 @@ if($submit) {
   } else {
     $attach_array = array($HTTP_POST_FILES['attach']);
   }
+  if($rn) {
+    $from = "\"$rn\" <".$username.'@'.$config[host].">";
+  } else {
+    $from = $username.'@'.$config[host];
+  }
   $mail = new km_sendmail();
-  $sent = $mail->build_message($body, $to, $cc, $attach_array, $username.'@'.$config[host], $subject, ($send_html ? 'html' : 'plain'), $rfc822);
+  $sent = $mail->build_message($body, $to, $cc, $attach_array, $from, $subject, ($send_html ? 'html' : 'plain'), $rfc822);
   $imap->append_mailbox($sent, $config[imap_sentbox]);
   header("Location: mailbox.php");
   exit;
@@ -102,7 +110,17 @@ if($msgno) {
                       <tr> 
                         <td><b>From:</b></td>
                         <td>
-                          <? echo $username; ?>@<? echo $config[host]; ?>
+<?
+if($rn) {
+  ?>
+                          "<? echo $rn; ?>" &lt;<? echo $username; ?>@<? echo $config[host]; ?>&gt;
+  <?
+} else {
+  ?>
+                          &lt;<? echo $config[host]; ?>&gt;
+  <?
+}
+?>
                         </td>
                         <td rowspan=4 align="center" valign="middle" width="100%"> 
                           <input type="submit" name="submit" value="Send">
