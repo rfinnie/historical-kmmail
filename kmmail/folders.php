@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: folders.php,v 1.9 2001/04/19 06:20:33 ryan Exp $
+// @(#) $Id: folders.php,v 1.10 2001/04/23 02:02:24 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 
@@ -76,8 +76,14 @@ $imap->disconnect();
                 <td>&nbsp;</td>
               </tr>
               <?
+$total_msgs = 0;
+$total_unread = 0;
+$total_size = 0;
 for($i = 0; $i < count($boxes); $i++) {
-  ?> 
+  $total_msgs += $boxes[$i][msgs];
+  $total_unread += $boxes[$i][unread];
+  $total_size += $boxes[$i][size];
+  ?>
               <tr class="messagelist-read"> 
                 <td><a href="mailbox.php?folder=<? echo urlencode($boxes[$i][name]); ?>"><? echo $boxes[$i][name]; ?></a></td>
                 <td><? echo $boxes[$i][msgs]; ?></td>
@@ -88,6 +94,13 @@ for($i = 0; $i < count($boxes); $i++) {
               <?
 }
 ?> 
+              <tr class="messagelist-read"> 
+                <td><b>Total</b></td>
+                <td><? echo $total_msgs; ?></td>
+                <td><? echo $total_unread; ?></td>
+                <td><? echo km_human_readable_size($total_size, 1); ?></td>
+                <td>&nbsp;</td>
+              </tr>
             </table>
             <form method="post" action="<? echo $PHP_SELF; ?>">
               <input type="hidden" name="action" value="create" />
