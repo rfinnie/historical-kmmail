@@ -150,7 +150,10 @@
                     <tr> 
                       <td class="light"> I am still working on gathering a kmMail 
                         users list. If you use kmMail on your site and would like 
-                        to be listed here, please email ryan (at) kmmail.org.</td>
+                        to be listed here, please follow <a href="http://sourceforge.net/survey/survey.php?group_id=32721&survey_id=12198">this 
+                        link</a> to a survey for kmMail installers. There is a 
+                        text field to leave your site name and address. I also 
+                        encourage you to sign up for the newsletter above.</td>
                     </tr>
                   </table>
                 </td>
