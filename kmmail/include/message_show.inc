@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.9 2001/09/07 23:06:50 ryanf Exp $
+// @(#) $Id: message_show.inc,v 1.10 2001/09/08 01:02:22 ryanf Exp $
 
 class km_message_show {
   var $cid_list;
@@ -26,6 +26,8 @@ class km_message_show {
       if($struct->subtype == "MIXED") {
         $this->process_multipart_mixed($struct->parts, $imap_part_base);
       } elseif($struct->subtype == "REPORT") {
+        $this->process_multipart_mixed($struct->parts, $imap_part_base);
+      } elseif($struct->subtype == "PARALLEL") {
         $this->process_multipart_mixed($struct->parts, $imap_part_base);
       } elseif($struct->subtype == "RELATED") {
         $this->process_multipart_related($struct->parts, $imap_part_base);
@@ -255,7 +257,11 @@ class km_message_show {
       $struct = $struct_parts[$i];
 
       if($struct->type == 1) {
-        if($struct->subtype == "RELATED") {
+        if($struct->subtype == "MIXED") {
+          $this->process_multipart_mixed($struct->parts, $imap_part);
+        } elseif($struct->subtype == "PARALLEL") {
+          $this->process_multipart_mixed($struct->parts, $imap_part);
+        } elseif($struct->subtype == "RELATED") {
           $this->process_multipart_related($struct->parts, $imap_part);
         } elseif($struct->subtype == "ALTERNATIVE") {
           $this->process_multipart_alternative($struct->parts, $imap_part);
