@@ -1,12 +1,10 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.8 2001/04/01 06:16:36 ryan Exp $
+// @(#) $Id: sendmail.inc,v 1.9 2001/04/01 07:36:00 ryan Exp $
 
 class km_sendmail {
 
   // The messae the user sees if his client cannot support multipart/mixed
   var $non_mime = "  This message is in MIME format.  The first part should be readable text,\n  while the remaining parts are likely unreadable without MIME-aware tools.";
-  // MIME type of body -- text/html or text/plain
-  var $email_type = "text/html";
   // Cc value
   var $cc;
   // From value
@@ -15,26 +13,33 @@ class km_sendmail {
   var $recipient;
   // Subject value
   var $subject;
-  // Finished message to eventually go to sendmail
-  var $message;
-  // Finished headers to eventually go to sendmail
-  var $email_headers;
-  // User's body
-  var $body;
+  // Array of text from user
+  var $texts;
   // Array of attachments 
   var $attachments;
   // Array of folders and uids to be included at message/rfc822 attachments
   var $rfc822_messages;
   // imap.inc class object
   var $imap;
+  // Config array
+  var $config;
   // Associative array of folder and uid that this message referrences
   var $reply_referrer;
+  // Final headers
+  var $msgheaders;
+  // Final body
+  var $msgbody;
+
+  function km_sendmail() {
+    global $config;
+    $this->config = $config;
+  }
 
   function get_unique_separator() {
     return "--=_" . md5(microtime());
   }
 
-  function encode($data) {
+  function encode_base64($data) {
     return chunk_split(base64_encode($data));
   }
 
@@ -49,9 +54,8 @@ class km_sendmail {
     return $contents;
   }
 
-  function add_attachment($separator, $num) {
-    // Get the attachment info from the property
-    // $this->attachments[0]["data"] -> changed to "tmp_name"
+  function add_attachment($num) {
+    // $this->attachments[0]["tmp_name"]
     // $this->attachments[0]["name"]
     // $this->attachments[0]["type"]
     // $this->attachments[0]["size"]
@@ -59,27 +63,22 @@ class km_sendmail {
     $attach_name = $this->attachments[$num]["name"];
     $attach_type = $this->attachments[$num]["type"];
     $binary_data = $this->get_object_data($uploaded_file);
-    $this->message .= "--$separator\n";
-    if(strtolower($attach_type) != "message/rfc822") {
-      $this->message .= "Content-Type: $attach_type; NAME=\"$attach_name\"\n";
-      $this->message .= "Content-Transfer-Encoding: BASE64\n";
-      $this->message .= "Content-Disposition: attachment; filename=\"$attach_name\"\n\n";
-      $this->message .= $this->encode($binary_data);
-    } else {
-      $this->message .= "Content-Type: message/rfc822\n\n";
-      $this->message .= $binary_data;
-    }
-    $this->message .= "\n";
 
-    return "";
+    if(strtolower($attach_type) != "message/rfc822") {
+      $headersout = "Content-Type: $attach_type; NAME=\"$attach_name\"\n";
+      $headersout .= "Content-Transfer-Encoding: BASE64\n";
+      $headersout .= "Content-Disposition: attachment; filename=\"$attach_name\"\n";
+      $bodyout = $this->encode_base64($binary_data);
+    } else {
+      $headersout = "Content-Type: message/rfc822\n";
+      $bodyout = $binary_data;
+    }
+    return array($headersout, $bodyout);
   }
 
-  function add_rfc822_message($separator, $num) {
+  function add_rfc822_message($num) {
     $folder = $this->rfc822_messages[$num]["folder"];
     $msgnum = $this->rfc822_messages[$num]["msgnum"];
-// //print "<pre>";
-// //print_r($this->rfc822_messages);
-// //print "</pre>";
     $body = $this->imap->retrieve_message_body($folder, $msgnum);
     $headers = $this->imap->retrieve_message_headers_text($folder, $msgnum);
 
@@ -93,123 +92,93 @@ class km_sendmail {
     $headers .= "\n";
     $body = preg_replace("/\r/", "", $body);
 
-    $this->message .= "--$separator\n";
-    $this->message .= "Content-Type: message/rfc822\n";
-//    $this->message .= "Content-Disposition: attachment\n";
-    $this->message .= "\n";
-    $this->message .= $headers . $body;
-    $this->message .= "\n\n";
-    return "";
+    $headersout = "Content-Type: message/rfc822\n";
+    $bodyout = $headers . $body;
+    return array($headersout, $bodyout);
   }
 
+
+  function add_text($i) {
+    $content_type = $this->texts[$i]['content_type'];
+    $headersout = "Content-Type: $content_type; charset=\"iso-8859-1\"\n";
+    $bodyout = $this->texts[$i]['message'];
+    return array($headersout, $bodyout);
+  }
 
   function build_msg_mixed() {
-
-    // Set the top level header
-    $this->email_headers = "MIME-Version: 1.0\n";
-    $unique_separator = $this->get_unique_separator();
-    $this->email_headers .= "Content-Type: multipart/mixed; boundary=\"$unique_separator\"";
-
-    // Add the apropriate header
-    $this->message = $this->non_mime . "\n\n";
-    $this->message .= "--$unique_separator\n";
-    $this->message .= "Content-Type: ".$this->email_type."; charset=\"iso-8859-1\"\n";
-//    $this->message .= "Content-Transfer-Encoding: base64\n";
-    $this->message .= "\n";
-//    $this->message .= $this->encode($this->body . "\n");
-    $this->message .= $this->body . "\n";
-    $this->message .= "\n\n";
-    for ($i = 0; $i < count($this->attachments); $i++)
-      $this->add_attachment($unique_separator, $i);
-    for ($i = 0; $i < count($this->rfc822_messages); $i++)
-      $this->add_rfc822_message($unique_separator, $i);
-
-    $this->message .= "--$unique_separator--";
-
-    return "";
-  }
-
-  function check_mime() {
-    $num = count($this->attachments) + count($this->rfc822_messages);
-
-    $this->build_msg_mixed();
-/*
-      if (($num == 0) && ($this->email_type == "text"))
-        $this->build_plain_text();
-      elseif (($num > 0) && ($this->email_type == "text"))
-        $this->build_plain_mixed();
-      elseif (($num == 0) && ($this->email_type == "html"))
-        $this->build_alternative();
-      elseif (($num > 0) && ($this->email_type == "html"))
-        $this->build_mixed();
-*/
-
-    return "";
-  }
-
-  /*-------------------------------------------------------------------------------------------------
-   * Function to send the E-mail
-   *
-   * parameters : IN : 	$email_body  : E-mail message body
-   *                    $recipient   : Array with the information of the recipient
-   *                    $ad_id       : Array with all the Advertisements
-   *                    $attach      : Array with all the filenames to attach
-   *                    $sender      : Information of the Sender
-   *                    $subject     : Subject of the E-mail, if any
-   *                    $email_type  : options -> "text" or "html"
-   *
-   * returned value :	"" if okay
-   *-----------------------------------------------------------------------------------------------*/
-  function build_message($email_body, $recipient, $cc, $attach, $sender, $subject, $email_type = '', $rfc822_messages = "") {
-    $this->body = $email_body;
-    $this->subject = $subject;
-    if($email_type == "html") {
-      $this->email_type = "text/html";
-    } else {
-      $this->email_type = "text/plain";
+    $separator = $this->get_unique_separator();
+    $headersout = "Content-Type: multipart/mixed; boundary=\"$separator\"\n";
+    $bodyout = $this->non_mime . "\n\n";
+    for ($i = 0; $i < count($this->texts); $i++) {
+      list($headers, $body) = $this->add_text($i);
+      $bodyout .= "--$separator\n" . $headers . "\n" . $body . "\n";
     }
-    if (is_array($attach))
-      $this->attachments = $attach;
-    if (is_array($rfc822_messages))
-      $this->rfc822_messages = $rfc822_messages;
-    $this->recipient = $recipient;
-    $this->cc = $cc;
-    $this->sender = $sender;
+    for ($i = 0; $i < count($this->attachments); $i++) {
+      list($headers, $body) = $this->add_attachment($i);
+      $bodyout .= "--$separator\n" . $headers . "\n" . $body . "\n";
+    }
+    for ($i = 0; $i < count($this->rfc822_messages); $i++) {
+      list($headers, $body) = $this->add_rfc822_message($i);
+      $bodyout .= "--$separator\n" . $headers . "\n" . $body . "\n";
+    }
+    $bodyout .= "--$separator--\n";
+    return array($headersout, $bodyout);
+  }
 
-    $this->check_mime();
+  function build_msg_single() {
+    for ($i = 0; $i < count($this->texts); $i++) {
+      list($headersout, $bodyout) = $this->add_text($i);
+    }
+    for ($i = 0; $i < count($this->attachments); $i++) {
+      list($headersout, $bodyout) = $this->add_attachment($i);
+    }
+    for ($i = 0; $i < count($this->rfc822_messages); $i++) {
+      list($headersout, $bodyout) = $this->add_rfc822_message($i);
+    }
+    return array($headersout, $bodyout);
+  }
 
-    return $this->send();
+  function build_message() {
+    global $REMOTE_ADDR;
 
-//    return "";
+    $num = count($this->attachments) + count($this->rfc822_messages) + count($this->texts);
+    if($num == 1) {
+      list($headers, $body) = $this->build_msg_single();
+    } else {
+      list($headers, $body) = $this->build_msg_mixed();
+    }
+    $topheaders = "From: ".$this->sender."\n";
+    $topheaders .= "Sender: ".$this->sender."\n";
+    if($this->cc) {
+      $topheaders .= "Cc: ".$this->cc."\n";
+    }
+    if($this->reply_referrer['msgnum']) {
+      $headers_array = $this->imap->retrieve_all_headers_array($this->reply_referrer['folder'], $this->reply_referrer['msgnum']);
+      $topheaders .= "In-Reply-To: ".$headers_array['message-id']."\n";
+    }
+    $topheaders .= "X-Sender: ".$this->config['title']." via kMmail version ".$this->config['version'].", build ".$this->config['build']."\n";
+    $topheaders .= "X-Originating-IP: ".$REMOTE_ADDR."\n";
+    $topheaders .= "MIME-Version: 1.0\n";
+    $headers = $topheaders . $headers;
+
+    $this->msgheaders = $headers;
+    $this->msgbody = $body;
   }
 
   function send() {
-    global $config, $REMOTE_ADDR;
-    $extra = "From: ".$this->sender."\n";
-    if($this->cc) {
-      $extra .= "Cc: ".$this->cc."\n";
-    }
-    $extra .= "Sender: ".$this->sender."\n";
-    if($this->reply_referrer['msgnum']) {
-      $headers = $this->imap->retrieve_all_headers_array($this->reply_referrer['folder'], $this->reply_referrer['msgnum']);
-      $extra .= "In-Reply-To: ".$headers['message-id']."\n";
-    }
-    $extra .= "X-Sender: ".$config['title']." via kMmail version ".$config['version'].", build ".$config['build']."\n";
-    $extra .= "X-Originating-IP: ".$REMOTE_ADDR."\n";
-    $this->email_headers = $extra . $this->email_headers;
-
-    mail($this->recipient, $this->subject, $this->message, $this->email_headers);
-
+    mail($this->recipient, $this->subject, $this->msgbody, $this->msgheaders);
   }
 
   function add_sent_mail() {
-    global $config;
-    $sent = "To: ".$this->recipient."\nSubject: ".$this->subject."\nDate: ".gmdate("D, j M Y h:i:s -0000")."\n" . $this->email_headers . "\n" . $this->message;
-    
-    if(!in_array($config[imap_sentbox], $this->imap->retrieve_mailboxes_short())) {
-      $this->imap->create_mailbox($config[imap_sentbox]);
+    $topheaders = "To: ".$this->recipient."\n";
+    $topheaders .= "Subject: ".$this->subject."\n";
+    $topheaders .= "Date: ".gmdate("D, j M Y h:i:s -0000")."\n";
+    $this->msgheaders = $topheaders . $this->msgheaders;
+
+    if(!in_array($this->config[imap_sentbox], $this->imap->retrieve_mailboxes_short())) {
+      $this->imap->create_mailbox($this->config[imap_sentbox]);
     }
-    $this->imap->append_mailbox($config[imap_sentbox], $sent);
+    $this->imap->append_mailbox($this->config[imap_sentbox], $this->msgheaders . "\n" . $this->msgbody);
   }
 }
 ?>

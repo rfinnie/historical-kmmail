@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.7 2001/04/01 06:16:42 ryan Exp $
+// @(#) $Id: compose.php,v 1.8 2001/04/02 06:06:48 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -13,9 +13,18 @@ $imap->connect($folder);
 
 if($submit) {
   include_once('include/sendmail.inc');
+  $texts_array = array();
+  $texts_array[] = array(
+    'content_type' => ($send_html ? 'text/html' : 'text/plain'),
+    'message' => $body
+  );
+
+  $rfc822_array = array();
   if($send_rfc822 != '') {
-    $rfc822[0][folder] = $folder;
-    $rfc822[0][msgnum] = $msgno;
+    $rfc822_array[] = array(
+      'folder' => $folder,
+      'msgnum' => $msgno
+    );
   }
   if($HTTP_POST_FILES['attach']['name'] == "") {
     $attach_array = array();
@@ -29,13 +38,22 @@ if($submit) {
   }
   $mail = new km_sendmail();
   $mail->imap = $imap;
+  $mail->recipient = $to;
+  $mail->sender = $from;
+  $mail->cc = $cc;
+  $mail->subject = $subject;
+  $mail->texts = $texts_array;
+  $mail->attachments = $attach_array;
+  $mail->rfc822_messages = $rfc822_array;
+
   if($msgno) {
     $mail->reply_referrer = array(
       'folder' => $folder,
       'msgnum' => $msgno
     );
   }
-  $mail->build_message($body, $to, $cc, $attach_array, $from, $subject, ($send_html ? 'html' : 'plain'), $rfc822);
+  $mail->build_message();
+  $mail->send();
   $mail->add_sent_mail();
   header("Location: mailbox.php");
   exit;
