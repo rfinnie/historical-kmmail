@@ -1,5 +1,5 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.1 2001/03/05 15:17:41 ryan Exp $
+// @(#) $Id: sendmail.inc,v 1.2 2001/03/06 03:03:14 ryan Exp $
 
 class km_sendmail {
 
@@ -78,7 +78,7 @@ class km_sendmail {
 // //print "</pre>";
     include_once('include/imap.inc');
 global $username, $password;
-    $imap = new imap($username, $password);
+    $imap = new km_imap($username, $password);
     $imap->connect($folder);
     $headers = imap_fetchheader($imap->mbox, $msgnum, FT_UID);
     $body = imap_body($imap->mbox, $msgnum, FT_UID);
