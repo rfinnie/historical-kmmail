@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: folders.php,v 1.11 2001/04/26 19:26:17 ryan Exp $
+// @(#) $Id: folders.php,v 1.12 2001/09/06 23:12:04 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -59,9 +59,9 @@ $imap->disconnect();
             <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center"> 
                 <td class="toolbar"> |
-                  <a href="mailbox.php">Mailbox</a> |
-                  <a href="folders.php">Folders</a> |
-                  <a href="compose.php">Compose</a> |
+                  <a href="mailbox.php?folder=<? echo urlencode($folder); ?>">Mailbox</a> |
+                  <a href="folders.php?folder=<? echo urlencode($folder); ?>">Folders</a> |
+                  <a href="compose.php?folder=<? echo urlencode($folder); ?>">Compose</a> |
                 </td>
               </tr>
             </table>

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.11 2001/08/24 22:15:44 ryanf Exp $
+// @(#) $Id: message.php,v 1.12 2001/09/06 23:12:04 ryanf Exp $
 include_once('include/message_show.inc');
 include_once('include/misc.inc');
 include_once('include/auth.inc');
@@ -51,11 +51,11 @@ function dlSentry() {
             <table width = "100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center"> 
                 <td class="toolbar"> |
-                  <a href="mailbox.php">Mailbox</a> |
+                  <a href="mailbox.php?folder=<? echo urlencode($folder); ?>">Mailbox</a> |
                   <? if(!$config['is_pop3']) { ?>
-                  <a href="folders.php">Folders</a> |
+                  <a href="folders.php?folder=<? echo urlencode($folder); ?>">Folders</a> |
                   <? } ?> 
-                  <a href="compose.php">Compose</a> |
+                  <a href="compose.php?folder=<? echo urlencode($folder); ?>">Compose</a> |
                   <a href="compose.php?action=reply&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Reply</a> |
                   <a href="compose.php?action=forward&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Forward</a> |
                 </td>
