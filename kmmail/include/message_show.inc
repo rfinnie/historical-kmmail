@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.3 2001/03/21 00:48:44 ryan Exp $
+// @(#) $Id: message_show.inc,v 1.4 2001/04/03 07:12:20 ryan Exp $
 
 class km_message_show {
   var $cid_list;
@@ -25,15 +25,6 @@ class km_message_show {
       }
     } else {
       $this->process_multipart_mixed(array($struct), $imap_part_base);
-/*
-      if($struct->subtype == "HTML") {
-        $this->process_text_html($struct, $imap_part_base);
-      } elseif($struct->subtype == "PLAIN") {
-        $this->process_text_plain($struct, $imap_part_base);
-      } else {
-        $this->process_attachment($struct, $imap_part_base);
-      }
-*/
     }
   }
 
@@ -132,11 +123,7 @@ class km_message_show {
     $mailbox = $this->mailbox;
     $msgnum = $this->msgnum;
     $folder = $this->folder;
-    if($imap_part == "") {
-      $text = imap_body($mailbox, $msgnum, FT_UID);
-    } else {
-      $text = imap_fetchbody($mailbox, $msgnum, $imap_part, FT_UID);
-    }
+    $text = imap_fetchbody($mailbox, $msgnum, $imap_part, FT_UID);
 
     $text = $this->convert_encoding($struct, $text);
 
@@ -155,7 +142,6 @@ class km_message_show {
       print "<hr size=\"1\" />";
     }
 
-//    $text = preg_replace("'mailto:([\w|-|.]+)@([\w|-|.]+)'", "compose.php?to=\\1@\\2" , $text);
     print "$text<br />\n";
     $this->messages_shown++;
   }
@@ -166,11 +152,7 @@ class km_message_show {
     if($imap_part == "") {
       $text = imap_body($mailbox, $msgnum, FT_UID);
     } else {
-//      if($struct->type) {
-        $text = imap_fetchbody($mailbox, $msgnum, $imap_part, FT_UID);
-//      } else {
-//        $text = imap_fetchbody($mailbox, $msgnum, "$imap_part.1", FT_UID);
-//      }
+      $text = imap_fetchbody($mailbox, $msgnum, $imap_part, FT_UID);
     }
 
     $text = $this->convert_encoding($struct, $text);
@@ -271,7 +253,7 @@ class km_message_show {
           $this->process_multipart_alternative($struct->parts, $imap_part);
         }
       } elseif($struct->type == 0) {
-        if($struct->disposition == "attachment") {
+        if(strtoupper($struct->disposition) == "ATTACHMENT") {
           $this->process_attachment($struct, $imap_part);
         } else {
           if($struct->subtype == "HTML") {
