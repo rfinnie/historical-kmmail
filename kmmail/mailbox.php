@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.17 2001/09/06 23:12:04 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.18 2001/09/07 05:54:36 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -29,7 +29,7 @@ if($action_delete) {
   header("Location: mailbox.php?folder=$folder");
 }
 $offset = ($offset ? $offset : 1);
-$return = 20;
+$return = $config['mailbox_page_size'];
 $count = $imap->retrieve_num_messages();
 $msgs = $imap->retrieve_message_list($offset, $return);
 $boxes = $imap->retrieve_mailboxes_short();
@@ -137,7 +137,7 @@ Displaying messages <? echo $offset; ?>-<? echo (($offset + $return) > $count ? 
 </td>
 <td align="right">
 <?
-if(($offset + $return) < $count) {
+if(($offset + $return) <= $count) {
   $newoffset = $offset + $return;
   ?>
 <a href="mailbox.php?folder=<? echo $folder; ?>&amp;offset=<? echo $newoffset; ?>">&gt;&gt;</a> 

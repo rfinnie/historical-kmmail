@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.14 2001/08/24 22:15:44 ryanf Exp $
+// @(#) $Id: settings.inc,v 1.15 2001/09/06 23:30:48 ryanf Exp $
 $config = array(
 
   // Version number.
@@ -38,6 +38,9 @@ $config = array(
   // Title of the program as seen by the end users.  This is for display
   // purposes only; you may use whatever you want here.
   'title' => 'kmMail',
+
+  // How many messages should be displayed in the mailbox per page?
+  'mailbox_page_size' => 30,
 
   // Set to 1 if you want to help by sending statistical data to the kmMail
   // servers.  This will send an empty UDP packet to stats.kmmail.org
