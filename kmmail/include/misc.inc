@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc,v 1.10 2001/04/23 01:54:23 ryan Exp $
+// @(#) $Id: misc.inc,v 1.11 2001/09/07 22:18:55 ryanf Exp $
 
 include_once('include/settings.inc');
 include_once('include/imap.inc');
@@ -108,6 +108,32 @@ function stripslashes_array(&$the_array_element, $the_array_element_key, $data) 
   $the_array_element = stripslashes($the_array_element); 
 } 
 
+function get_offset() {
+  global $config;
+  $os = date('Z') / 60;
+  if($os > 0 && $config{'west_of_utc'}) {
+    $os = 0 - $os;
+  }
+  if($os < 0) { 
+    $minus = "-";
+    $os = 0 - $os;
+  } else {
+    $minus = "";
+  }
+  $hours = intval($os / 60);
+  $minutes = $os - ($hours * 60);
+  return sprintf("%s%02d%02d", $minus, $hours, $minutes);
+}
+
+function get_offset_minutes() {
+  global $config;
+  $os = date('Z') / 60;
+  if($os > 0 && $config{'west_of_utc'}) {
+    $os = 0 - $os;
+  }
+  return $os;
+}
+
 if(get_magic_quotes_gpc() == 1) { 
   switch($REQUEST_METHOD) { 
     case "POST": 
@@ -136,5 +162,9 @@ if(get_magic_quotes_gpc() == 1) {
 $config['is_pop3'] = (preg_match("/\/pop3$/", $config['imap_host']) ? 1 : 0);
 if($config['is_pop3'] && ($config['display_folders'])) {
   $config['display_folders'] = 0;
+}
+
+if($config['imap_timezone_offset'] == 'real_timezone_offset') {
+  $config['imap_timezone_offset'] = get_offset_minutes();
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.10 2001/04/03 06:43:26 ryan Exp $
+// @(#) $Id: sendmail.inc,v 1.11 2001/08/24 04:30:59 ryanf Exp $
 
 class km_sendmail {
 
@@ -149,6 +149,8 @@ class km_sendmail {
     }
     $topheaders = "From: ".$this->sender."\n";
     $topheaders .= "Sender: ".$this->sender."\n";
+    $offset = get_offset();
+    $topheaders .= "Date: ".date('D, j M Y H:i:s ')."$offset\n";
     if($this->cc) {
       $topheaders .= "Cc: ".$this->cc."\n";
     }

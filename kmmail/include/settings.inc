@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: settings.inc,v 1.19 2001/09/08 20:43:04 ryanf Exp $
+// @(#) $Id: settings.inc,v 1.20 2001/09/10 17:48:56 ryanf Exp $
 $config = array(
 
   // Version number.
@@ -85,17 +85,23 @@ $config = array(
   // Text to use for disclaimer.
   'expunge_disclaimer_text' => 'Warning! Are you sure you want to remove all deleted messages in all mailboxes?  There is no way to undo this action.',
 
+  // Is your local time zone west of UTC?  This flag is not used if you
+  // have the latest version of PHP (IE, it's figured out automatically),
+  // but it doesn't hurt to set it anyways.
+  'west_of_utc' => 1,
+
   // Some IMAP servers (maybe all, maybe just my own copy of UWash) return
   // the received epoch time of the message as offset by your current
   // timezone.  For me, imapd is telling me that messages arrived 480 minutes
-  // after they really arrived.  You can use timezone_offset to adjust the
-  // received time of the messages.  
-  // For example:
-  //   New York:    -300 (GMT-5:00)
-  //   Los Angeles: -480 (GMT-8:00)
-  //   London:         0 (GMT)
-  //   Sydney:       600 (GMT+10:00)
-  'timezone_offset' => -480,
+  // (420 during DST) after they really arrived.  You can use timezone_offset
+  // to adjust the received time of the messages.  
+  // If you are not affected by this, set the value to 0.
+  // Set the value to 'real_timezone_offset' if you want kmMail to use the
+  // determined timezone offset (in minutes) using PHP and 'west_of_utc'
+  // above.
+  // In short, first try 'real_timezone_offset', then 0, then just try
+  // playing with numbers until the received time looks correct.
+  'imap_timezone_offset' => 'real_timezone_offset',
 
   // That's it!
   'the' => 'end'

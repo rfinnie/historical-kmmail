@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.23 2001/09/08 04:10:40 ryanf Exp $
+// @(#) $Id: imap.inc,v 1.24 2001/09/10 00:35:03 ryanf Exp $
 
 include_once('include/settings.inc');
 
@@ -149,7 +149,7 @@ class km_imap {
     }
     $out = array(
       'date' => $msg->date,
-      'udate' => $msg->udate + $config['timezone_offset'] * 60,
+      'udate' => $msg->udate + $config['imap_timezone_offset'] * 60,
       'subject' => ($msg->subject ? $this->decode_header_string($msg->subject) : '[No Subject]'),
       'from_name' => ($msg->from[0]->personal ? $this->decode_header_string($msg->from[0]->personal) : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
       'from_address' => ($msg->reply_to[0]->mailbox ? $msg->reply_to[0]->mailbox . '@' . $msg->reply_to[0]->host : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
@@ -227,7 +227,7 @@ class km_imap {
         'from' => ($msg->from[0]->personal ? $this->decode_header_string($msg->from[0]->personal) : $msg->from[0]->mailbox . '@' . $msg->from[0]->host),
         'to' => ($msg->to[0]->personal ? $this->decode_header_string($msg->to[0]->personal) : $msg->to[0]->mailbox . '@' . $msg->to[0]->host),
         'size' => $msg->Size,
-        'udate' => $msg->udate + $config['timezone_offset'] * 60,
+        'udate' => $msg->udate + $config['imap_timezone_offset'] * 60,
         'unread' => ($msg->Unseen == 'U' || $msg->Recent == 'N'),
         'deleted' => ($msg->Deleted == 'D'),
         'replied' => ($msg->Answered == 'A')
