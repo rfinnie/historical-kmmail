@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.18 2001/09/07 05:54:36 ryanf Exp $
+// @(#) $Id: mailbox.php,v 1.19 2001/09/07 07:15:40 ryanf Exp $
 include_once('include/misc.inc');
 include_once('include/auth.inc');
 include_once('include/imap.inc');
@@ -64,15 +64,22 @@ $imap->disconnect();
             <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center"> 
                 <td class="toolbar"> |
+                  <? if($offset > 1) { $newoffset = (($offset - $return) < 1 ? 0 : ($offset - $return)); ?>
+                  <a href="mailbox.php?folder=<? echo $folder; ?>&amp;offset=<? echo $newoffset; ?>">&lt;&lt;</a> |
+                  <? } ?>
                   <a href="mailbox.php?folder=<? echo urlencode($folder); ?>">Mailbox</a> |
                   <? if(!$config['is_pop3']) { ?>
+                  <a href="mailbox.php?action_expunge=1">Expunge</a> |
                   <a href="folders.php?folder=<? echo urlencode($folder); ?>">Folders</a> |
                   <? } ?> 
                   <a href="compose.php?folder=<? echo urlencode($folder); ?>">Compose</a> |
+                  <? if(($offset + $return) <= $count) { $newoffset = $offset + $return; ?>
+                  <a href="mailbox.php?folder=<? echo $folder; ?>&amp;offset=<? echo $newoffset; ?>">&gt;&gt;</a> |
+                  <? } ?>
                 </td>
               </tr>
             </table>
-            <p /> 
+            <p />
             <form method="post" action="<? echo $PHP_SELF; ?>">
               <input type="hidden" name="folder" value="<? echo $folder; ?>" />
               <table width="100%" border="0" cellpadding="2" cellspacing="1" class="backblack">
@@ -119,51 +126,22 @@ if($count == 0) {
 } else {
   ?> 
                 <tr class="messagelist-read">
-                  <td colspan="5">
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr>
-<td align="left">
-<?
-if($offset > 1) {
-  $newoffset = (($offset - $return) < 1 ? 0 : ($offset - $return));
-  ?>
-<a href="mailbox.php?folder=<? echo $folder; ?>&amp;offset=<? echo $newoffset; ?>">&lt;&lt;</a> 
-  <?
-}
-?>
-</td>
-<td align="center">
-Displaying messages <? echo $offset; ?>-<? echo (($offset + $return) > $count ? $count : ($offset + $return - 1)); ?> of <? echo $count; ?>
-</td>
-<td align="right">
-<?
-if(($offset + $return) <= $count) {
-  $newoffset = $offset + $return;
-  ?>
-<a href="mailbox.php?folder=<? echo $folder; ?>&amp;offset=<? echo $newoffset; ?>">&gt;&gt;</a> 
-  <?
-}
-?>
-</td>
-</tr>
-</table>
-</td>
-                </tr>
-                <tr class="messagelist-read"> 
-                  <td colspan="5"> 
-                    <input type="submit" name="action_delete" value="Delete" />
-                    <?
-  if(!$config['is_pop3']) {
-    ?> 
-                    <input type="submit" name="action_expunge" value="Remove Deleted Messages" />
+                  <td colspan="5" align="center">
+Messages <? echo $offset; ?>-<? echo (($offset + $return) > $count ? $count : ($offset + $return - 1)); ?> of <? echo $count; ?> in <? echo $folder; ?>
                     <br />
-                    Move to 
+                    <input type="submit" name="action_delete" value="Delete" /> checked messages
+                    <?
+  if(!$config['is_pop3'] && (count($boxes) > 1)) {
+    ?> 
+                    or move to 
                     <select name="move_folder">
                       <?
     for($i = 0; $i < count($boxes); $i++) {
-      ?> 
+      if($boxes[$i] != $folder) {
+        ?> 
                       <option value="<? echo $boxes[$i]; ?>"><? echo $boxes[$i]; ?></option>
                       <?
+      }
     }
     ?> 
                     </select>
@@ -177,6 +155,10 @@ if(($offset + $return) <= $count) {
 ?> 
               </table>
             </form>
+            <p /> 
+            <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
+            </table>
+
           </td>
         </tr>
       </table>
@@ -185,4 +167,5 @@ if(($offset + $return) <= $count) {
 </table>
 </body>
 </html>
+
 

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.13 2001/09/07 05:54:36 ryanf Exp $
+// @(#) $Id: message.php,v 1.14 2001/09/07 17:11:04 ryanf Exp $
 include_once('include/message_show.inc');
 include_once('include/misc.inc');
 include_once('include/auth.inc');
@@ -8,7 +8,7 @@ include_once('include/imap.inc');
 $folder = ($folder ? $folder : $config[imap_mainbox]);
 list($imap, $username) = check_imap_auth($folder);
 
-list($next, $prev) = $imap->find_next_prev_uid($msgno);
+list($next, $prev, $cur_pos, $num_msgs) = $imap->find_next_prev_uid($msgno);
 
 if($action == 'delete') {
   $imap->delete_messages(array($msgno));
@@ -30,6 +30,15 @@ $msginfo = $imap->retrieve_message_info($msgno);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
+<script language="javascript">
+<!--
+function pwin(url) {
+  w = window.open(url, 'popupwin', 'width=600,height=400,scrollbars,resizable');
+  if(w.focus) { w.focus(); }
+  return false;
+}
+// -->
+</script>
 <? if($config['use_download_disclaimer']) { ?>
 <script language="javascript">
 <!--
@@ -83,15 +92,18 @@ function dlSentry() {
             <table width="100%" border="0" cellpadding="3" cellspacing="1" class="backblack">
               <tr> 
                 <td class="light"> 
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr valign="top">
+    <td align="left">
                   <table border="0" cellpadding="0" cellspacing="0">
-                    <tr class="normal"> 
+                    <tr class="normal" valign="top"> 
                       <td><b>From: </b></td>
                       <td><a href="compose.php?to=<? echo $msginfo[from_address]; ?>"><? echo $msginfo[from_name]; ?></a></td>
                     </tr>
                     <?
 if(count($msginfo[to_array]) > 0) {
   ?> 
-                    <tr class="normal"> 
+                    <tr class="normal" valign="top"> 
                       <td><b>To: </b></td>
                       <td> <?
   for($i = 0; $i < count($msginfo[to_array]); $i++) {
@@ -105,7 +117,7 @@ if(count($msginfo[to_array]) > 0) {
 
 if(count($msginfo[cc_array]) > 0) {
   ?> 
-                    <tr class="normal"> 
+                    <tr class="normal" valign="top"> 
                       <td><b>Cc: </b></td>
                       <td> <?
   for($i = 0; $i < count($msginfo[cc_array]); $i++) {
@@ -117,15 +129,33 @@ if(count($msginfo[cc_array]) > 0) {
                     <?
 }
 ?> 
-                    <tr class="normal"> 
+                    <tr class="normal" valign="top"> 
                       <td><b>Subject: </b></td>
                       <td><? echo $msginfo[subject]; ?></td>
                     </tr>
-                    <tr class="normal"> 
+                    <tr class="normal" valign="top"> 
                       <td><b>Date: </b></td>
                       <td><? echo $msginfo[date]; ?></td>
                     </tr>
                   </table>
+    </td>
+    <td align="right">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                    <tr class="normal" align="right"> 
+                      <td><nobr>Message <? echo $cur_pos; ?> of <? echo $num_msgs; ?></nobr></td>
+                    </tr>
+                    <tr class="normal" align="right"> 
+                      <td><nobr>Folder: <? echo $folder; ?></nobr></td>
+                    </tr>
+                    <tr class="normal" align="right"> 
+                      <td><nobr><a href="#" onClick="return pwin('popup.php?action=show_headers&folder=<? echo urlencode($folder); ?>&msgno=<? echo $msgno; ?>');">Show Headers</a></nobr></td>
+                    </tr>
+                  </table>
+
+
+    </td>
+  </tr>
+</table>
                 </td>
               </tr>
               <tr class="white"> 
@@ -134,25 +164,6 @@ $struct = imap_fetchstructure($imap->mbox, $msgno, FT_UID);
 $message_show = new km_message_show();
 $message_show->display_message($imap->mbox, $folder, $msgno, $struct);
 ?></td>
-              </tr>
-              <tr class="white"> 
-                <td> <? if($show_headers != "on") { ?><a href="<? echo $PHP_SELF; ?>?folder=<? echo $folder; ?>&amp;msgno=<? echo $msgno; ?>&amp;show_headers=on">Show 
-                  Headers</a><br />
-                  <? } ?> <?
-if($show_headers == "on") {
-  $link = "$PHP_SELF?folder=$folder&amp;msgno=$msgno&amp;show_headers=off";
-  ?> 
-                  <table width="100%" border="0" cellpadding="3" cellspacing="1" class="backblack">
-                    <tr> 
-                      <td class="toolbar"><b>Message Headers (<a href="<? echo $link; ?>">Hide</a>)</b></td>
-                    </tr>
-                    <tr> 
-                      <td class="light"><tt><? echo nl2br(htmlentities($imap->retrieve_message_headers_text($folder, $msgno))); ?></tt></td>
-                    </tr>
-                  </table>
-                  <?
-}
-?> </td>
               </tr>
             </table>
           </td>

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.19 2001/09/07 00:16:24 ryanf Exp $
+// @(#) $Id: imap.inc,v 1.20 2001/09/07 17:11:04 ryanf Exp $
 
 include_once('include/settings.inc');
 
@@ -186,6 +186,7 @@ class km_imap {
 
   function find_next_prev_uid($nowuid) {
     $msg_array = imap_sort($this->mbox, SORTARRIVAL, 1, SE_UID);
+    $num_messages = count($msg_array);
     $res = array_search($nowuid, $msg_array);
     if(($res == 0) && ($msg_array[$res] != $nowuid)) {
       return false;
@@ -200,7 +201,7 @@ class km_imap {
     } else {
       $next = $msg_array[$res + 1];
     }
-    return array($next, $prev);
+    return array($next, $prev, $res + 1, $num_messages);
   }
 
   function retrieve_message_list($offset = 1, $return = 5) {
