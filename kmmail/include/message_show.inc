@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.13 2001/09/24 01:38:29 ryanf Exp $
+// @(#) $Id: message_show.inc,v 1.14 2001/11/26 18:00:13 ryanf Exp $
 
 class km_message_show {
   var $cid_list;
@@ -60,6 +60,61 @@ class km_message_show {
       $text = $this->quoted_printable_decode($text);
     }
     return $text;
+  }
+
+  function process_image($struct, $imap_part) {
+    $folder = $this->folder;
+    $msgnum = $this->msgnum;
+
+    $types = array(
+      0 => "TEXT",
+      1 => "MULTIPART",
+      2 => "MESSAGE",
+      3 => "APPLICATION",
+      4 => "AUDIO",
+      5 => "IMAGE",
+      6 => "VIDEO",
+      7 => "OTHER"
+    );
+    if($struct->type) {
+      $type = $types[$struct->type];
+    } else {
+      $type = "IMAGE";
+    }
+    if($struct->subtype) {
+      $subtype = $struct->subtype;
+    } else {
+      $subtype = "JPEG";
+    }
+
+    if($struct->ifdparameters == 1) {
+      for($i = 0; $i < count($struct->dparameters); $i++) {
+        if(strtolower($struct->dparameters[$i]->attribute) == "filename") {
+          $filename = $struct->dparameters[$i]->value;
+        }
+      }
+    }
+    if($filename == "") {
+      $filename = "unknown";
+    }
+    if($struct->encoding == 3) {
+      $encoding = "base64";
+    } elseif($struct->encoding == 4) {
+      $encoding = "qprint";
+    } else {
+      $encoding = "other";
+    }
+
+    $urlbase = "get_attach.php?folder=$folder&amp;msgnum=$msgnum&amp;part_no=$imap_part&amp;type=$type&amp;subtype=$subtype";
+    $urlnoinline = $urlbase . "&amp;encoding=$encoding&amp;name=" . urlencode($filename);
+    $url = $urlbase . "&amp;action=inline";
+    print "<br /><table align=\"center\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" class=\"backblack\"><tr><td class=\"toolbar\"><img src=\"images/img_file.gif\" width=\"11\" height=\"15\" alt=\"*\" class=\"normal\"/> <b>Image (<a href=\"$urlnoinline\">Download</a>)</b></td></tr><tr><td class=\"light\" align=\"center\">";
+    ?>
+      <img src="<? echo $url; ?>" border="0" />
+    <?
+
+    print "</td></tr></table>\n";
+
   }
 
   function process_attachment($struct, $imap_part) {
@@ -159,9 +214,7 @@ class km_message_show {
       print "<hr />";
     }
 
-    $text = preg_replace("'(\s+)http://(.*?)(\s+)'", "\\1<a href=\"http://\\2\" target=\"_blank\">http://\\2</a>\\3" , $text);
-    $text = preg_replace("'(\s+)https://(.*?)(\s+)'", "\\1<a href=\"https://\\2\" target=\"_blank\">https://\\2</a>\\3" , $text);
-    $text = preg_replace("'(\s+)www.(.*?)(\s+)'", "\\1<a href=\"http://www.\\2\" target=\"_blank\">www.\\2</a>\\3" , $text);
+    $text = preg_replace("'(\w+)://([\w\+\-\=\?\.\%\/\:\&\;]+)'", "<a href=\"\\1://\\2\" target=\"_blank\">http://\\2</a>" , $text);
     $text = preg_replace("'([\w\-\.]+)@([\w\-\.]+)'", "<a href=\"compose.php?to=\\0\">\\0</a>" , $text);
     print "<tt>$text</tt><br />\n";
     $this->messages_shown++;
@@ -255,6 +308,12 @@ class km_message_show {
           $this->process_multipart_related($struct->parts, $imap_part);
         } elseif($struct->subtype == "ALTERNATIVE") {
           $this->process_multipart_alternative($struct->parts, $imap_part);
+        }
+      } elseif($struct->type == 5) {
+        if(strtoupper($struct->disposition) == "ATTACHMENT") {
+          $this->process_attachment($struct, $imap_part);
+        } else {
+          $this->process_image($struct, $imap_part);
         }
       } elseif($struct->type == 0) {
         if(strtoupper($struct->disposition) == "ATTACHMENT") {
