@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc.php,v 1.1.1.1.8.1 2002/11/25 07:49:18 ryanf Exp $
+// @(#) $Id: misc.inc.php,v 1.1.1.1.8.2 2002/11/25 08:09:22 ryanf Exp $
 
 function stripslashes_array(&$the_array_element, $the_array_element_key, $data) {
   $the_array_element = stripslashes($the_array_element);
@@ -139,6 +139,21 @@ function pre_print_r($array) {
   print "</pre><hr>\n";
 }
 
+function splitbigwords($text, $l) {
+  $a = explode(' ', $text);
+  for($i = 0; $i < count($a); $i++) {
+    if(strlen($a[$i]) > $l) {
+      $x = $a[$i];
+      $a[$i] = '';
+      while(strlen($x) >= $l) {
+        $a[$i] .= substr($x, 0, $l) . ' ';
+        $x = substr($x, $l);
+      }
+      $a[$i] .= $x;
+    }
+  }
+  return implode(' ', $a);
+}
 
 $config['is_pop3'] = (preg_match("/\/pop3$/", $config['imap_host']) ? 1 : 0);
 if($config['is_pop3'] && ($config['display_folders'])) {

@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.2.8.1 2002/11/25 07:49:17 ryanf Exp $
+// @(#) $Id: message.php,v 1.2.8.2 2002/11/25 22:02:50 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
@@ -137,7 +137,7 @@ if(count($msginfo[cc_array]) > 0) {
 ?> 
                     <tr class="normal" valign="top"> 
                       <td><b>Subject: </b></td>
-                      <td><? echo htmlentities($msginfo[subject]); ?></td>
+                      <td><? echo htmlentities(splitbigwords($msginfo[subject], 35)); ?></td>
                     </tr>
                     <tr class="normal" valign="top"> 
                       <td><b>Date: </b></td>
