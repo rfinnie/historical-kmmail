@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: folders.php,v 1.14 2001/09/08 01:06:28 ryanf Exp $
+// @(#) $Id: folders.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
 include_once('include/misc.inc.php');
 include_once('include/auth.inc.php');
 include_once('include/imap.inc.php');
@@ -62,6 +62,7 @@ $imap->disconnect();
                   <a href="mailbox.php">Mailbox</a> |
                   <a href="folders.php">Folders</a> |
                   <a href="compose.php">Compose</a> |
+                  <a href="addressbook.php">Address Book</a> |
                   <a href="mailbox.php?mainlogout=true">Logout</a> |
                 </td>
               </tr>
