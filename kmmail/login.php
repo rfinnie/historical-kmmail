@@ -1,10 +1,10 @@
 <?
-// @(#) $Id: login.php,v 1.8 2001/04/23 02:02:24 ryan Exp $
+// @(#) $Id: login.php,v 1.9 2001/04/26 19:34:39 ryan Exp $
 include_once('include/misc.inc');
 
 if($username) {
   $imap = new km_imap($username, $password, $config[imap_mainbox]);
-  if($imap->check_login()) {
+  if($imap->check_login($error)) {
     km_session_start($username, $password);
 
     if($config[send_udp_stat_packet]) {
@@ -48,6 +48,7 @@ if($username) {
 <?
 if($login_failed) {
   ?>
+            <!-- <? echo $error; ?> -->
             <p><b>The username and/or password you entered is incorrect.  Please try again.</b></p>
   <?
 }

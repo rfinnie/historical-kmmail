@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.15 2001/04/26 19:34:41 ryan Exp $
+// @(#) $Id: imap.inc,v 1.16 2001/04/27 20:32:43 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -47,11 +47,12 @@ class km_imap {
     return $array;
   }
 
-  function check_login() {
+  function check_login(&$error) {
     if($this->connect("INBOX")) {
       $this->disconnect();
       return true;
     } else {
+      $error = imap_last_error();
       return false;
     }
   }
