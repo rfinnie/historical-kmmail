@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.14 2001/11/26 18:00:13 ryanf Exp $
+// @(#) $Id: message_show.inc,v 1.15 2001/11/27 23:39:06 ryanf Exp $
 
 class km_message_show {
   var $cid_list;
@@ -189,6 +189,7 @@ class km_message_show {
         $text = ereg_replace("cid:$cid", $cid_imgsrc, $text);
       }
     }
+    $text = preg_replace("/cid:\w+/", "", $text);
     if($this->messages_shown > 0) {
       print "<hr size=\"1\" />";
     }
