@@ -1,5 +1,5 @@
 <?php
-// @(#) $Id: sendmail.inc,v 1.5 2001/04/01 05:53:07 ryan Exp $
+// @(#) $Id: sendmail.inc,v 1.6 2001/04/01 05:58:41 ryan Exp $
 
 class km_sendmail {
 
@@ -25,6 +25,8 @@ class km_sendmail {
   var $attachments;
   // Array of folders and uids to be included at message/rfc822 attachments
   var $rfc822_messages;
+  // imap.inc class object
+  var $imap;
 
   function get_unique_separator() {
     return "--=_" . md5(microtime());
