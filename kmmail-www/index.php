@@ -28,6 +28,7 @@
               <tr align="center"> 
                 <td class="toolbar"> | <a href="http://www.sourceforge.net/">SourceForge</a> 
                   | <a href="https://sourceforge.net/projects/kmmail/">Project</a> 
+                  | <a href="https://sourceforge.net/project/showfiles.php?group_id=32721"><b>Download</b></a> 
                   | <a href="#sshots">Screen Shots</a> | <a href="#announce">Announcements</a> 
                   | <a href="#users">Users</a> |</td>
               </tr>
