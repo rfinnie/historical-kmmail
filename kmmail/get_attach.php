@@ -1,11 +1,12 @@
 <?
-// @(#) $Id: get_attach.php,v 1.3 2001/03/20 22:20:08 ryan Exp $
+// @(#) $Id: get_attach.php,v 1.4 2001/04/19 06:20:33 ryan Exp $
+include_once('include/message_show.inc');
 include_once('include/misc.inc');
-check_cookie($username, $password);
-
+include_once('include/auth.inc');
 include_once('include/imap.inc');
-$imap = new km_imap($username, $password);
-$imap->connect($folder);
+
+$folder = ($folder ? $folder : $config[imap_mainbox]);
+list($imap, $username) = check_imap_auth($folder);
 
 header("Content-type: $type/$subtype");
 if($action != "inline") {
