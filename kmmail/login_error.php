@@ -1,11 +1,11 @@
 <?
-// @(#) $Id: login.php,v 1.10 2001/05/09 00:03:24 ryan Exp $
+// @(#) $Id: login_error.php,v 1.1 2001/09/06 23:12:04 ryanf Exp $
 include_once('include/settings.inc');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title><? echo $config[title]; ?> - Login</title>
+<title><? echo $config[title]; ?> - Login Error</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <link rel="stylesheet" href="css/style-xhtml-strict.css" type="text/css" />
