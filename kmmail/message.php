@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message.php,v 1.8 2001/04/19 06:20:33 ryan Exp $
+// @(#) $Id: message.php,v 1.9 2001/04/21 19:24:17 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 
@@ -22,13 +22,13 @@ $msginfo = $imap->retrieve_message_info($msgno);
 </head>
 <body class="normal">
 <table border="0" cellpadding="1" cellspacing="0" width="600" class="backblack">
-  <tr>
-    <td>
+  <tr> 
+    <td> 
       <table border="0" cellpadding="5" cellspacing="0" width="598" class="main">
-        <tr>
-          <td class="titleheader">
+        <tr> 
+          <td class="titleheader"> 
             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
-              <tr>
+              <tr> 
                 <td align="left"><img src="images/titleleft.gif" width="48" height="26" alt="*" class="normal" /></td>
                 <td class="titleheader"><? echo $config[title]; ?> - Read Message</td>
                 <td align="right"><img src="images/titleright.gif" width="48" height="26" alt="*" class="normal" /></td>
@@ -36,12 +36,14 @@ $msginfo = $imap->retrieve_message_info($msgno);
             </table>
           </td>
         </tr>
-        <tr>
-          <td class="normal">
+        <tr> 
+          <td class="normal"> 
             <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
-              <tr align="center">
+              <tr align="center"> 
                 <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <? if(!$config['is_pop3']) { ?><td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td><? } ?>
+                <? if(!$config['is_pop3']) { ?>
+                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
+                <? } ?> 
                 <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
                 <td class="toolbar">&nbsp;<a href="compose.php?action=reply&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Reply</a>&nbsp;</td>
                 <td class="toolbar">&nbsp;<a href="compose.php?action=forward&amp;folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgno; ?>">Forward</a>&nbsp;</td>
@@ -105,24 +107,23 @@ $message_show->display_message($imap->mbox, $folder, $msgno, $struct);
 ?></td>
               </tr>
               <tr class="white"> 
-                <td>
-                  <? if($show_headers != "on") { ?><a href="<? echo $PHP_SELF; ?>?folder=<? echo $folder; ?>&amp;msgno=<? echo $msgno; ?>&amp;show_headers=on">Show Headers</a><br /><? } ?>
-<?
+                <td> <? if($show_headers != "on") { ?><a href="<? echo $PHP_SELF; ?>?folder=<? echo $folder; ?>&amp;msgno=<? echo $msgno; ?>&amp;show_headers=on">Show 
+                  Headers</a><br />
+                  <? } ?> <?
 if($show_headers == "on") {
   $link = "$PHP_SELF?folder=$folder&amp;msgno=$msgno&amp;show_headers=off";
-  ?>
+  ?> 
                   <table width="100%" border="0" cellpadding="3" cellspacing="1" class="backblack">
-                    <tr>
+                    <tr> 
                       <td class="toolbar"><b>Message Headers (<a href="<? echo $link; ?>">Hide</a>)</b></td>
                     </tr>
-                    <tr>
+                    <tr> 
                       <td class="light"><tt><? echo nl2br(htmlentities($imap->retrieve_message_headers_text($folder, $msgno))); ?></tt></td>
                     </tr>
                   </table>
-  <?
+                  <?
 }
-?>
-                </td>
+?> </td>
               </tr>
             </table>
           </td>

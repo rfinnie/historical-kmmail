@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: logout.php,v 1.4 2001/03/21 01:24:17 ryan Exp $
+// @(#) $Id: logout.php,v 1.5 2001/04/19 06:20:33 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 clear_cookie();
@@ -14,13 +14,13 @@ clear_cookie();
 </head>
 <body class="normal">
 <table border="0" cellpadding="1" cellspacing="0" width="300" class="backblack">
-  <tr>
-    <td>
+  <tr> 
+    <td> 
       <table border="0" cellpadding="5" cellspacing="0" width="298" class="main">
-        <tr>
-          <td class="titleheader">
+        <tr> 
+          <td class="titleheader"> 
             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
-              <tr>
+              <tr> 
                 <td align="left"><img src="images/titleleft.gif" width="48" height="26" alt="*" class="normal" /></td>
                 <td class="titleheader"><? echo $config[title]; ?> - Logout</td>
                 <td align="right"><img src="images/titleright.gif" width="48" height="26" alt="*" class="normal" /></td>
@@ -28,10 +28,10 @@ clear_cookie();
             </table>
           </td>
         </tr>
-        <tr>
-          <td class="normal">
-            <p>Thank you for using <? echo $config[title]; ?>. You are now logged off. To log in again, 
-              <a href="login.php">click here</a>.</p>
+        <tr> 
+          <td class="normal"> 
+            <p>Thank you for using <? echo $config[title]; ?>. You are now logged 
+              off. To log in again, <a href="login.php">click here</a>.</p>
           </td>
         </tr>
       </table>

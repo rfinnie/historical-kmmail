@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.12 2001/04/21 19:24:17 ryan Exp $
+// @(#) $Id: mailbox.php,v 1.13 2001/04/21 21:20:03 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 
@@ -40,13 +40,13 @@ $count = count($msgs);
 </head>
 <body class="normal">
 <table border="0" cellpadding="1" cellspacing="0" width="600" class="backblack">
-  <tr>
-    <td>
+  <tr> 
+    <td> 
       <table border="0" cellpadding="5" cellspacing="0" width="598" class="main">
-        <tr>
-          <td class="titleheader">
+        <tr> 
+          <td class="titleheader"> 
             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
-              <tr>
+              <tr> 
                 <td align="left"><img src="images/titleleft.gif" width="48" height="26" alt="*" class="normal" /></td>
                 <td class="titleheader"><? echo $config[title]; ?> - Messages</td>
                 <td align="right"><img src="images/titleright.gif" width="48" height="26" alt="*" class="normal" /></td>
@@ -54,12 +54,14 @@ $count = count($msgs);
             </table>
           </td>
         </tr>
-        <tr>
-          <td class="normal">
+        <tr> 
+          <td class="normal"> 
             <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
               <tr align="center"> 
                 <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <? if(!$config['is_pop3']) { ?><td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td><? } ?>
+                <? if(!$config['is_pop3']) { ?>
+                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
+                <? } ?> 
                 <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
                 <td class="toolbar">&nbsp;Reply&nbsp;</td>
                 <td class="toolbar">&nbsp;Forward&nbsp;</td>
@@ -67,9 +69,9 @@ $count = count($msgs);
               </tr>
             </table>
             <p /> 
-              <form method="post" action="<? echo $PHP_SELF; ?>">
+            <form method="post" action="<? echo $PHP_SELF; ?>">
               <input type="hidden" name="folder" value="<? echo $folder; ?>" />
-            <table width="100%" border="0" cellpadding="2" cellspacing="1" class="backblack">
+              <table width="100%" border="0" cellpadding="2" cellspacing="1" class="backblack">
                 <tr align="center" class="messagelist-top"> 
                   <td><b>&nbsp;</b></td>
                   <td><b>From</b></td>
@@ -91,14 +93,12 @@ for($i = 0; $i < $count; $i++) {
   ?> 
                 <tr class="<? echo $bgclass; ?>"> 
                   <td> 
-                      <input type="checkbox" name="<? echo ($msgs[$i][deleted] ? 'un' : ''); ?>delete_msg[<? echo $msgs[$i][msgno]; ?>]" />
+                    <input type="checkbox" name="<? echo ($msgs[$i][deleted] ? 'un' : ''); ?>delete_msg[<? echo $msgs[$i][msgno]; ?>]" />
                   </td>
                   <td><a href="message.php?folder=<? echo urlencode($folder); ?>&amp;msgno=<? echo $msgs[$i][msgno]; ?>"><? echo $msgs[$i][from]; ?></a></td>
-                  <td>
-                    <? echo ($msgs[$i]['count_mime']['message/rfc822'] ? '<img src="images/img_envelope.gif" width="15" height="11" alt="*" class="normal" />' : ''); ?>
+                  <td> <? echo ($msgs[$i]['count_mime']['message/rfc822'] ? '<img src="images/img_envelope.gif" width="15" height="11" alt="*" class="normal" />' : ''); ?> 
                     <? echo ($msgs[$i]['count_disposition']['attachment'] ? '<img src="images/img_file.gif" width="11" height="15" alt="*" class="normal" />' : ''); ?> 
-                    <? echo $msgs[$i][subject]; ?>
-                  </td>
+                    <? echo $msgs[$i][subject]; ?> </td>
                   <td><? echo km_human_readable_size($msgs[$i][size], 1); ?></td>
                   <td><? echo date("m/d/Y", $msgs[$i][udate]); ?></td>
                 </tr>
@@ -115,29 +115,31 @@ if($count == 0) {
                 <tr class="messagelist-read"> 
                   <td colspan="5"> 
                     <input type="submit" name="action_delete" value="Delete" />
-  <?
+                    <?
   if(!$config['is_pop3']) {
-    ?>
-                    <input type="submit" name="action_expunge" value="Remove Deleted Messages" /><br />
-                    Move to <select name="move_folder">
-    <?
+    ?> 
+                    <input type="submit" name="action_expunge" value="Remove Deleted Messages" />
+                    <br />
+                    Move to 
+                    <select name="move_folder">
+                      <?
     for($i = 0; $i < count($boxes); $i++) {
-      ?>
+      ?> 
                       <option value="<? echo $boxes[$i]; ?>"><? echo $boxes[$i]; ?></option>
-      <?
+                      <?
     }
-    ?>
-                    </select> <input type="submit" name="action_move" value="Move" />
-    <?
+    ?> 
+                    </select>
+                    <input type="submit" name="action_move" value="Move" />
+                    <?
   }
-  ?>
-                  </td>
+  ?> </td>
                 </tr>
-  <?
+                <?
 }
-?>
-            </table>
-              </form>
+?> 
+              </table>
+            </form>
           </td>
         </tr>
       </table>

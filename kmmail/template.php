@@ -23,8 +23,7 @@
           </td>
         </tr>
         <tr> 
-          <td class="normal">
-            Info goes here.  Be sure to change the title bars.
+          <td class="normal"> Info goes here. Be sure to change the title bars. 
           </td>
         </tr>
       </table>

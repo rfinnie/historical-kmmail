@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: compose.php,v 1.10 2001/04/19 06:20:33 ryan Exp $
+// @(#) $Id: compose.php,v 1.11 2001/04/21 19:24:17 ryan Exp $
 include_once('include/misc.inc');
 check_cookie($username, $password);
 
@@ -81,13 +81,13 @@ $imap->disconnect();
 </head>
 <body class="normal">
 <table border="0" cellpadding="1" cellspacing="0" width="600" class="backblack">
-  <tr>
-    <td>
+  <tr> 
+    <td> 
       <table border="0" cellpadding="5" cellspacing="0" width="598" class="main">
-        <tr>
-          <td class="titleheader">
+        <tr> 
+          <td class="titleheader"> 
             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="titlebar">
-              <tr>
+              <tr> 
                 <td align="left"><img src="images/titleleft.gif" width="48" height="26" alt="*" class="normal" /></td>
                 <td class="titleheader"><? echo $config[title]; ?> - Compose</td>
                 <td align="right"><img src="images/titleright.gif" width="48" height="26" alt="*" class="normal" /></td>
@@ -95,12 +95,14 @@ $imap->disconnect();
             </table>
           </td>
         </tr>
-        <tr>
-          <td class="normal">
+        <tr> 
+          <td class="normal"> 
             <table width="100%" border="0" cellpadding="1" cellspacing="1" class="backblack">
-              <tr align="center">
+              <tr align="center"> 
                 <td class="toolbar">&nbsp;<a href="mailbox.php">Mailbox</a>&nbsp;</td>
-                <? if(!$config['is_pop3']) { ?><td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td><? } ?>
+                <? if(!$config['is_pop3']) { ?>
+                <td class="toolbar">&nbsp;<a href="folders.php">Folders</a>&nbsp;</td>
+                <? } ?> 
                 <td class="toolbar">&nbsp;<a href="compose.php">Compose</a>&nbsp;</td>
                 <td class="toolbar">&nbsp;Reply&nbsp;</td>
                 <td class="toolbar">&nbsp;Forward&nbsp;</td>
@@ -108,53 +110,47 @@ $imap->disconnect();
               </tr>
             </table>
             <p /> 
-              <form enctype="multipart/form-data" method="post" action="<? echo $PHP_SELF; ?>">
-            <table width="100%" border="0" cellspacing="1" cellpadding="3" class="backblack">
-<?
+            <form enctype="multipart/form-data" method="post" action="<? echo $PHP_SELF; ?>">
+              <table width="100%" border="0" cellspacing="1" cellpadding="3" class="backblack">
+                <?
 if($msgno) {
-  ?>
+  ?> 
                 <input type="hidden" name="msgno" value="<? echo $msgno; ?>" />
                 <input type="hidden" name="folder" value="<? echo $folder; ?>" />
-  <?
+                <?
 }
-?>
+?> 
                 <tr> 
                   <td class="light"> 
                     <table border="0" cellspacing="0" cellpadding="1">
                       <tr class="normal"> 
                         <td><b>From:</b></td>
-                        <td>
-<?
+                        <td> <?
 if($rn) {
-  ?>
-                          "<? echo $rn; ?>" &lt;<? echo $fromaddr; ?>&gt;
-  <?
+  ?> "<? echo $rn; ?>" &lt;<? echo $fromaddr; ?>&gt; <?
 } else {
-  ?>
-                          &lt;<? echo $fromaddr; ?>&gt;
-  <?
+  ?> &lt;<? echo $fromaddr; ?>&gt; <?
 }
-?>
-                        </td>
+?> </td>
                         <td rowspan="4" align="center" valign="middle"> 
                           <input type="submit" name="submit" value="Send" />
                         </td>
                       </tr>
                       <tr class="normal"> 
                         <td><b>To:</b></td>
-                        <td>
+                        <td> 
                           <input name="to" size="40" value="<? echo $to; ?>" />
                         </td>
                       </tr>
                       <tr class="normal"> 
                         <td><b>Cc:</b></td>
-                        <td>
+                        <td> 
                           <input name="cc" size="40" />
                         </td>
                       </tr>
                       <tr class="normal"> 
                         <td><b>Subject:</b></td>
-                        <td>
+                        <td> 
                           <input name="subject" size="40" value="<? echo $subject; ?>" />
                         </td>
                       </tr>
@@ -164,20 +160,24 @@ if($rn) {
                           <input type="file" name="attach" size="40" />
                         </td>
                       </tr>
-                      <tr class="normal">
-                        <td align="right"><input type="checkbox" name="send_html" /></td>
+                      <tr class="normal"> 
+                        <td align="right">
+                          <input type="checkbox" name="send_html" />
+                        </td>
                         <td>Send message in HTML</td>
                       </tr>
-<?
+                      <?
 if($msgno) {
-  ?>
-                      <tr class="normal">
-                        <td align="right"><input type="checkbox" name="send_rfc822" /></td>
+  ?> 
+                      <tr class="normal"> 
+                        <td align="right">
+                          <input type="checkbox" name="send_rfc822" />
+                        </td>
                         <td>Send original message as attachment</td>
                       </tr>
-  <?
+                      <?
 }
-?>
+?> 
                     </table>
                   </td>
                 </tr>
@@ -186,8 +186,8 @@ if($msgno) {
                     <textarea name="body" cols="69" rows="15"><? echo $body; ?></textarea>
                   </td>
                 </tr>
-            </table>
-              </form>
+              </table>
+            </form>
           </td>
         </tr>
       </table>
