@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.4 2001/04/03 07:12:20 ryan Exp $
+// @(#) $Id: message_show.inc,v 1.5 2001/04/05 22:49:17 ryan Exp $
 
 class km_message_show {
   var $cid_list;
@@ -60,8 +60,7 @@ class km_message_show {
     if($struct->encoding == 3) {
       $text = base64_decode($text);
     } elseif($struct->encoding == 4) {
-      $text = preg_replace("/=(\r*)\n/", "", $text);
-      $text = quoted_printable_decode($text);
+      $text = $this->quoted_printable_decode($text);
     }
     return $text;
   }
@@ -372,8 +371,7 @@ if(count($msginfo[cc_array]) > 0) {
         if($struct->encoding == 3) {
           $text = base64_decode($text);
         } elseif($struct->encoding == 4) {
-          $text = preg_replace("/=(\r*)\n/", "", $text);
-          $text = quoted_printable_decode($text);
+          $text = $this->quoted_printable_decode($text);
         }
         return $text;
       }
@@ -399,8 +397,7 @@ if(count($msginfo[cc_array]) > 0) {
           if($struct->encoding == 3) {
             $text = base64_decode($text);
           } elseif($struct->encoding == 4) {
-            $text = preg_replace("/=(\r*)\n/", "", $text);
-            $text = quoted_printable_decode($text);  
+            $text = $this->quoted_printable_decode($text);  
           }
           return $text;
         } 
@@ -441,6 +438,11 @@ if(count($msginfo[cc_array]) > 0) {
         }
   }
 
+  function quoted_printable_decode($text) {
+    $text = preg_replace("/=(\r*)\n/", "", $text);
+    $text = preg_replace("/=([A-Fa-f0-9]{2})/e", "pack('H2', '\\1')", $text);
+    return $text;
+  }
 }
 
 
