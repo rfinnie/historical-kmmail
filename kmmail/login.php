@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: login.php,v 1.7 2001/03/22 07:36:35 ryan Exp $
+// @(#) $Id: login.php,v 1.8 2001/04/23 02:02:24 ryan Exp $
 include_once('include/misc.inc');
 
 if($username) {
@@ -45,13 +45,20 @@ if($username) {
           <td class="normal"> 
             <p>Welcome to <? echo $config[title]; ?>! Please enter your username 
               and password to continue.</p>
+<?
+if($login_failed) {
+  ?>
+            <p><b>The username and/or password you entered is incorrect.  Please try again.</b></p>
+  <?
+}
+?>
             <form method="post" action="<? echo $PHP_SELF; ?>">
               <div class="center"> 
                 <table border="0">
                   <tr class="normal"> 
                     <td><b>Username</b></td>
                     <td> 
-                      <input type="text" name="username" size="12" />
+                      <input type="text" name="username" size="12" value="<? echo $username; ?>" />
                     </td>
                   </tr>
                   <tr class="normal"> 

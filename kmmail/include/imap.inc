@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: imap.inc,v 1.13 2001/04/23 02:53:31 ryan Exp $
+// @(#) $Id: imap.inc,v 1.14 2001/04/23 02:54:44 ryan Exp $
 
 include_once('include/settings.inc');
 
@@ -75,7 +75,7 @@ class km_imap {
   }
 
   function connect($folder) {
-    $this->mbox = imap_open($this->create_imap_string($folder), $this->username, $this->password);
+    $this->mbox = @imap_open($this->create_imap_string($folder), $this->username, $this->password);
     if($this->mbox) {
       return true;
     } else {
