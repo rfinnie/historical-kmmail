@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: message_show.inc,v 1.13 2001/09/24 01:38:29 ryanf Exp $
+// @(#) $Id: message_show.inc.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
 
 class km_message_show {
   var $cid_list;
@@ -163,7 +163,7 @@ class km_message_show {
     $text = preg_replace("'(\s+)http://(.*?)(\s+)'", "\\1<a href=\"http://\\2\" target=\"_blank\">http://\\2</a>\\3" , $text);
     $text = preg_replace("'(\s+)https://(.*?)(\s+)'", "\\1<a href=\"https://\\2\" target=\"_blank\">https://\\2</a>\\3" , $text);
     $text = preg_replace("'(\s+)www.(.*?)(\s+)'", "\\1<a href=\"http://www.\\2\" target=\"_blank\">www.\\2</a>\\3" , $text);
-    $text = preg_replace("'([\w|-|.]+)@([\w|-|.]+)'", "<a href=\"compose.php?to=\\0\">\\0</a>" , $text);
+    $text = preg_replace("'([\w|\-|.]+)@([\w|\-|.]+)'", "<a href=\"compose.php?to=\\0\">\\0</a>" , $text);
     print "<tt>$text</tt><br />\n";
     $this->messages_shown++;
   }
