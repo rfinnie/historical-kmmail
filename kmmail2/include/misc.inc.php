@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: misc.inc.php,v 1.1.1.1 2002/11/25 04:05:53 ryanf Exp $
+// @(#) $Id: misc.inc.php,v 1.1.1.1.8.1 2002/11/25 07:49:18 ryanf Exp $
 
 function stripslashes_array(&$the_array_element, $the_array_element_key, $data) {
   $the_array_element = stripslashes($the_array_element);
@@ -40,6 +40,7 @@ if(get_magic_quotes_gpc() == 1) {
     $$key = $val;
   }
 }
+ini_set("magic_quotes_gpc",0);
 
 include_once('include/settings.inc.php');
 
