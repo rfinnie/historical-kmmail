@@ -1,4 +1,5 @@
 <?
+// @(#) $Id: sendmail.inc,v 1.2 2001/03/06 03:03:14 ryan Exp $
 $config = array(
   'version' => '1.0pre1',
   'build' => 'BUILDTAG',
