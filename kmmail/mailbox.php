@@ -1,5 +1,5 @@
 <?
-// @(#) $Id: mailbox.php,v 1.8 2001/04/01 07:46:46 ryan Exp $
+// @(#) $Id: mailbox.php,v 1.9 2001/04/01 20:47:19 ryan Exp $
 include_once('include/misc.inc');
 check_cookie(&$username, &$password);
 
@@ -26,7 +26,7 @@ if($action_delete) {
   header("Location: mailbox.php?folder=$folder");
 }
 $msgs = $imap->retrieve_message_list();
-$boxes = $imap->retrieve_mailboxes();
+$boxes = $imap->retrieve_mailboxes_short();
 $imap->disconnect();
 $count = count($msgs);
   ?>
@@ -114,7 +114,7 @@ if($count == 0) {
   <?
   for($i = 0; $i < count($boxes); $i++) {
     ?>
-                      <option value="<? echo $boxes[$i]['name']; ?>"><? echo $boxes[$i]['name']; ?></option>
+                      <option value="<? echo $boxes[$i]; ?>"><? echo $boxes[$i]; ?></option>
     <?
   }
   ?>
