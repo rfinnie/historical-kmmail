@@ -11,21 +11,58 @@ client, but a framework for adding into existing functionality.  However,
 kmMail is complete enough that it can be used standalone with no problem.
 
 
+REQUIREMENTS
+
+ * PHP 4.0 or later, compiled with IMAP support.
+ * A compatible web server.  See the compatibility section below.  Apache 
+for UNIX-ish systems will work best.
+ * Secure/SSL connection.  While this is not a specific "you must have 
+this or the software will not work" requirement, it is ESSENTIAL to use 
+kmMail over a SSL connection.  kmMail uses HTTP authentication, which 
+means the password is transmitted (though with slight obfusication) EVERY 
+TIME a page is loaded.  You owe it to your users to use SSL.
+ * An IMAP/POP3 server.  kmMail will work out of the box with UWash IMAPd.  
+Cyrus and Courier will work, but you must tweak the folder settings.  I 
+haven't found a POP3 server so far that does not work with kmMail.
+
+
+SERVER COMPATIBILITY
+
+|--------------------------------------------|
+| Server Name               | UNIX | Windows |
+|---------------------------|------|---------|
+| Apache                    | Y    | Y       |
+| Microsoft IIS(1)          | N/A  | N       |
+| Zeus (CGI)                | Y(2) | ?       |
+| Zeus (ISAPI)              | ?    | ?       |
+| Zeus (FastCGI)            | ?    | ?       |
+| iPlanet                   | ?    | ?       |
+|--------------------------------------------|
+
+* (1) Microsoft IIS does not handle HTTP authentication correctly.
+* (2) See http://support.zeus.com/products/v3/php.html#auth for 
+information on how to turn on HTTP authentication passthru with Zeus.
+
+Cells marked with an "?" are unknown.  If you have or have not gotten 
+kmMail to work on those combinations, please let me know!
+
+
 INSTALLATION
 
   1. Unpack the tarball and move the files somewhere in your document root.
   2. Make sure .inc files are parsed by PHP.  This is not absolutely
-necessary to get kmMail run, rather it prevents .inc code files from being
-read from the web browser (most importantly, include/settings.inc).
+necessary to get kmMail running, rather it prevents .inc code files from
+being read from the web browser (most importantly, include/settings.inc).
   3. Edit include/settings.inc.  This file is decently documented and can
 get you up and running in minutes.
   4. That's it!  You should now be able to go to where you placed the
 files and log in.  If you are unable to log in, check include/settings.inc
 again (most importantly 'imap_host' and 'imap_port').
-  5. Please go to http://kmmail.sourceforge.net/ and fill out the survey.  
-You cannot imagine how helpful your comments are.  Also, please be sure to 
-mention your orginazation's name and URL so you may be listed in the 
+  5. Please go to http://www.kmmail.org/ and fill out the survey.  You
+cannot imagine how helpful your comments are.  Also, please be sure to
+mention your orginazation's name and URL so you may be listed in the
 kmMail users section.
+
 
 KMMAIL AND POP3
 
@@ -97,4 +134,4 @@ was released.
 However, kmMail contributions have come from developers both in and out of
 Kefta.
 
-@(#) $Id: README,v 1.1 2001/09/07 06:57:53 ryanf Exp $
+@(#) $Id: README,v 1.2 2001/09/25 21:08:14 ryanf Exp $
