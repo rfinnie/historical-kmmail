@@ -1,5 +1,7 @@
 <?
-// @(#) $Id: sendmail.inc,v 1.3 2001/03/06 05:49:28 ryan Exp $
+// @(#) $Id: misc.inc,v 1.1 2001/03/20 06:01:27 ryan Exp $
+
+include_once('include/settings.inc');
 
 // Retrieves a full name using calls to passwd
 function passwd_real_name($username) {
@@ -17,5 +19,25 @@ function passwd_real_name($username) {
   } else {
     return $config[passwd_map][$username];
   }
+}
+
+function check_cookie(&$username, &$password) {
+  global $config;
+  global $kmauth;
+  session_start();
+  session_register("kmauth");
+  if(!$kmauth || !$kmauth[username]) {
+    if($config[default_login]) {
+      $username = $config[default_login_username];
+      $password = $config[default_login_password];
+    } else {
+      header("Location: login.php");
+      exit;
+    }
+  } else {
+    $username = $kmauth[username];
+    $password = $kmauth[password];
+  }
+
 }
 ?>

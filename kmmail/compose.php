@@ -1,19 +1,8 @@
 <?
-// @(#) $Id: compose.php,v 1.2 2001/03/06 03:03:11 ryan Exp $
-include_once('include/settings.inc');
-
-session_start();
-session_register("kmauth");
-if(!$kmauth) {
-  exit;
-}
-$username = $kmauth[username];
-$password = $kmauth[password];
-if(!$username) {
-  exit;
-}
-
+// @(#) $Id: compose.php,v 1.3 2001/03/20 06:01:19 ryan Exp $
 include_once('include/misc.inc');
+check_cookie(&$username, &$password);
+
 $rn = passwd_real_name($username);
 
 include_once('include/imap.inc');

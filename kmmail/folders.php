@@ -1,17 +1,7 @@
 <?
-// @(#) $Id: folders.php,v 1.2 2001/03/03 08:36:56 ryan Exp $
-include_once('include/settings.inc');
-
-session_start();
-session_register("kmauth");
-if(!$kmauth) {
-  exit;
-}
-$username = $kmauth[username];
-$password = $kmauth[password];
-if(!$username) {
-  exit;
-}
+// @(#) $Id: folders.php,v 1.3 2001/03/05 15:17:32 ryan Exp $
+include_once('include/misc.inc');
+check_cookie(&$username, &$password);
 
 include_once('include/imap.inc');
 $imap = new km_imap($username, $password);

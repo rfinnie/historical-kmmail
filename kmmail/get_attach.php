@@ -1,15 +1,7 @@
 <?
-// @(#) $Id: get_attach.php,v 1.1 2001/03/03 07:38:28 ryan Exp $
-session_start();
-session_register("kmauth");
-if(!$kmauth) {
-  exit;
-}
-$username = $kmauth[username];
-$password = $kmauth[password];
-if(!$username) {
-  exit;
-}
+// @(#) $Id: get_attach.php,v 1.2 2001/03/05 15:17:32 ryan Exp $
+include_once('include/misc.inc');
+check_cookie(&$username, &$password);
 
 include_once('include/imap.inc');
 $imap = new km_imap($username, $password);
